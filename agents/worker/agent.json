@@ -1,0 +1,32 @@
+{
+  "name": "worker",
+  "description": "A worker agent that performs specific background tasks.",
+  "supportedInterfaces": [
+    {
+      "url": "http://localhost:8001/a2a/worker",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "1.0"
+    }
+  ],
+  "version": "0.0.1",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false
+  },
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "text/plain"
+  ],
+  "skills": [
+    {
+      "id": "worker",
+      "name": "model",
+      "description": "A worker agent that performs specific background tasks. \n    I am a diligent worker agent. When asked to perform a task, I do it carefully\n    and report back the exact result.\n    ",
+      "tags": [
+        "llm"
+      ]
+    }
+  ]
+}

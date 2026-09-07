@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google ADK — Agent Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: {
+      primaryColor: '#1e1e2e', primaryTextColor: '#cdd6f4', primaryBorderColor: '#45475a',
+      lineColor: '#7f849c', secondaryColor: '#181825', tertiaryColor: '#313244',
+      background: '#1e1e2e', mainBkg: '#313244', nodeBorder: '#45475a',
+      clusterBkg: '#181825', titleColor: '#cdd6f4', edgeLabelBackground: '#1e1e2e',
+      fontFamily: 'Inter, sans-serif',
+    }});
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f1117; --surface: #161b27; --surface-2: #1e2536; --surface-3: #252d3d;
+      --border: rgba(255,255,255,0.07); --text: #e2e8f0; --text-muted: #8892a4; --text-dim: #4a5568;
+      --purple: #a78bfa; --purple-dim: rgba(167,139,250,0.12);
+      --blue: #60a5fa; --blue-dim: rgba(96,165,250,0.12);
+      --amber: #fbbf24; --amber-dim: rgba(251,191,36,0.10);
+      --teal: #34d399; --teal-dim: rgba(52,211,153,0.10);
+      --rose: #f87171; --rose-dim: rgba(248,113,113,0.10);
+      --orange: #fb923c; --orange-dim: rgba(251,146,60,0.10);
+      --green: #4ade80; --green-dim: rgba(74,222,128,0.10);
+      --radius: 12px; --radius-sm: 8px; --font-mono: 'JetBrains Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; min-height: 100vh; }
+    .layout { display: grid; grid-template-columns: 248px 1fr; min-height: 100vh; }
+    .sidebar { position: sticky; top: 0; height: 100vh; overflow-y: auto; background: var(--surface); border-right: 1px solid var(--border); padding: 2rem 1.25rem; display: flex; flex-direction: column; gap: 0.2rem; }
+    .sidebar-logo { display: flex; align-items: center; gap: 0.625rem; margin-bottom: 1.75rem; padding-left: 0.25rem; }
+    .sidebar-logo .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, #4285f4, #34d399); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .sidebar-logo span { font-size: 0.875rem; font-weight: 600; color: var(--text); line-height: 1.3; }
+    .nav-section-label { font-size: 0.63rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); padding: 0.75rem 0.5rem 0.25rem; margin-top: 0.25rem; }
+    .nav-link { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.625rem; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--text-muted); text-decoration: none; transition: background 0.15s, color 0.15s; }
+    .nav-link:hover { background: var(--surface-2); color: var(--text); }
+    .nav-link .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .main { padding: 3rem 3.5rem; max-width: 900px; }
+    .hero { margin-bottom: 3rem; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 0.375rem; background: var(--blue-dim); border: 1px solid rgba(96,165,250,0.25); color: var(--blue); font-size: 0.75rem; font-weight: 500; padding: 0.25rem 0.75rem; border-radius: 999px; margin-bottom: 1rem; }
+    .hero h1 { font-size: 2.1rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.03em; margin-bottom: 0.875rem; }
+    .hero p { font-size: 0.95rem; color: var(--text-muted); max-width: 620px; line-height: 1.8; }
+    .tech-stack { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.25rem; }
+    .tech-pill { font-size: 0.75rem; font-weight: 500; padding: 0.25rem 0.75rem; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-muted); font-family: var(--font-mono); }
+    section { margin-bottom: 3.5rem; scroll-margin-top: 2rem; }
+    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .section-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    h2 { font-size: 1.2rem; font-weight: 600; letter-spacing: -0.02em; }
+    h3 { font-size: 0.9375rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+    p { color: var(--text-muted); font-size: 0.875rem; line-height: 1.8; margin-bottom: 0.75rem; }
+    p:last-child { margin-bottom: 0; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+    .agent-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.75rem; }
+    .agent-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; position: relative; overflow: hidden; transition: transform 0.18s; }
+    .agent-card::before { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+    .agent-card:hover { transform: translateY(-2px); }
+    .agent-card:hover::before { opacity: 1; }
+    .agent-card.purple { border-top: 2px solid var(--purple); } .agent-card.purple::before { background: var(--purple-dim); }
+    .agent-card.blue { border-top: 2px solid var(--blue); } .agent-card.blue::before { background: var(--blue-dim); }
+    .agent-card.amber { border-top: 2px solid var(--amber); } .agent-card.amber::before { background: var(--amber-dim); }
+    .agent-card.teal { border-top: 2px solid var(--teal); } .agent-card.teal::before { background: var(--teal-dim); }
+    .agent-card.rose { border-top: 2px solid var(--rose); } .agent-card.rose::before { background: var(--rose-dim); }
+    .agent-card.green { border-top: 2px solid var(--green); } .agent-card.green::before { background: var(--green-dim); }
+    .agent-card-header { display: flex; align-items: center; gap: 0.625rem; margin-bottom: 0.5rem; }
+    .agent-card-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+    .agent-card h3 { margin: 0; font-size: 0.875rem; }
+    .agent-card p { font-size: 0.8rem; margin: 0; margin-top: 0.25rem; }
+    .agent-meta { margin-top: 0.75rem; display: flex; gap: 0.375rem; flex-wrap: wrap; }
+    .meta-tag { font-size: 0.68rem; font-family: var(--font-mono); padding: 0.15rem 0.5rem; border-radius: 4px; background: var(--surface-3); color: var(--text-muted); border: 1px solid var(--border); }
+    .diagram-wrapper { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem 1.5rem; overflow-x: auto; }
+    .diagram-wrapper .mermaid { display: flex; justify-content: center; }
+    .callout { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid; border-radius: var(--radius-sm); padding: 0.875rem 1.125rem; margin: 1rem 0; display: flex; gap: 0.75rem; }
+    .callout.info { border-left-color: var(--blue); }
+    .callout.tip { border-left-color: var(--teal); }
+    .callout.warn { border-left-color: var(--amber); }
+    .callout .callout-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.05rem; }
+    .callout p { margin: 0; font-size: 0.82rem; }
+    .snippet-block { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1.75rem; }
+    .snippet-header { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 1.1rem; background: var(--surface-2); border-bottom: 1px solid var(--border); }
+    .snippet-badge { font-size: 0.63rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 4px; flex-shrink: 0; }
+    .snippet-title { font-size: 0.8rem; font-weight: 600; color: var(--text); font-family: var(--font-mono); flex: 1; }
+    .snippet-file { font-size: 0.7rem; color: var(--text-dim); }
+    .snippet-body { display: grid; grid-template-columns: 1fr 1fr; }
+    .snippet-code { border-right: 1px solid var(--border); overflow-x: auto; }
+    .snippet-code pre { padding: 1.1rem 1.25rem; font-size: 0.775rem; line-height: 1.75; color: var(--text); font-family: var(--font-mono); margin: 0; }
+    .snippet-explain { padding: 1.1rem 1.25rem; background: var(--surface); display: flex; flex-direction: column; gap: 0.6rem; }
+    .explain-item { display: flex; gap: 0.6rem; align-items: flex-start; }
+    .explain-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 0.45rem; flex-shrink: 0; }
+    .explain-text { font-size: 0.8rem; color: var(--text-muted); line-height: 1.65; }
+    .explain-text strong { color: var(--text); font-weight: 600; }
+    .explain-text code { font-family: var(--font-mono); font-size: 0.71rem; background: var(--surface-3); padding: 0.1rem 0.35rem; border-radius: 3px; color: var(--text-muted); }
+    .kw { color: #c792ea; } .fn { color: #82aaff; } .st { color: #c3e88d; } .cm { color: #546e7a; font-style: italic; } .cl { color: #ffcb6b; } .nb { color: #f78c6c; }
+    .mini-flow { display: flex; align-items: center; flex-wrap: wrap; padding: 0.8rem 1.25rem; background: var(--surface-2); border-top: 1px solid var(--border); overflow-x: auto; gap: 0; }
+    .mini-flow-node { display: flex; align-items: center; justify-content: center; padding: 0.28rem 0.65rem; border-radius: 6px; font-size: 0.71rem; font-weight: 500; border: 1px solid var(--border); background: var(--surface-3); color: var(--text-muted); white-space: nowrap; font-family: var(--font-mono); }
+    .mini-flow-node.active { color: var(--text); font-weight: 600; }
+    .mini-flow-arrow { font-size: 0.7rem; color: var(--text-dim); padding: 0 0.3rem; flex-shrink: 0; }
+    .agent-section-header { display: flex; align-items: center; gap: 1rem; padding: 1.25rem 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 1.75rem; }
+    .agent-section-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .agent-section-meta { flex: 1; }
+    .agent-section-meta h2 { font-size: 1.15rem; margin-bottom: 0.2rem; }
+    .agent-section-meta p { margin: 0; font-size: 0.82rem; }
+    .agent-section-pills { display: flex; gap: 0.375rem; flex-wrap: wrap; margin-top: 0.5rem; }
+    table { border-collapse: collapse; width: 100%; font-size: 0.83rem; margin-top: 0.75rem; }
+    th { text-align: left; padding: 0.5rem 0.75rem; color: var(--text-muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); }
+    td { padding: 0.6rem 0.75rem; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+    td.mono { font-family: var(--font-mono); color: var(--blue); font-size: 0.8rem; }
+    .code-plain { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-top: 0.5rem; }
+    .code-plain pre { font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.8; color: var(--text); }
+    .footer { padding: 2rem 0; color: var(--text-dim); font-size: 0.75rem; border-top: 1px solid var(--border); margin-top: 1rem; }
+    @media (max-width: 800px) {
+      .layout { grid-template-columns: 1fr; } .sidebar { display: none; } .main { padding: 2rem 1.25rem; }
+      .agent-grid { grid-template-columns: 1fr; } .snippet-body { grid-template-columns: 1fr; }
+      .snippet-code { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">&#x1F916;</div>
+      <span>Google ADK<br>Agent Docs</span>
+    </div>
+    <span class="nav-section-label">Overview</span>
+    <a class="nav-link" href="#overview"><span class="dot" style="background:var(--blue)"></span>Introduction</a>
+    <a class="nav-link" href="#architecture"><span class="dot" style="background:var(--purple)"></span>Architecture</a>
+    <a class="nav-link" href="#shared"><span class="dot" style="background:var(--teal)"></span>Shared Utilities</a>
+    <span class="nav-section-label">Agents</span>
+    <a class="nav-link" href="#hello-world"><span class="dot" style="background:var(--purple)"></span>hello_world</a>
+    <a class="nav-link" href="#weather"><span class="dot" style="background:var(--blue)"></span>weather_agent</a>
+    <a class="nav-link" href="#github"><span class="dot" style="background:var(--teal)"></span>github_agent</a>
+    <a class="nav-link" href="#ollama"><span class="dot" style="background:var(--amber)"></span>ollama_agent</a>
+    <a class="nav-link" href="#dota"><span class="dot" style="background:var(--rose)"></span>dota_draft_analyzer</a>
+    <a class="nav-link" href="#notes"><span class="dot" style="background:var(--green)"></span>note_taking_agent</a>
+    <span class="nav-section-label">Multi-Agent</span>
+    <a class="nav-link" href="#a2a"><span class="dot" style="background:var(--blue)"></span>A2A System</a>
+    <span class="nav-section-label">Internals</span>
+    <a class="nav-link" href="#fallback"><span class="dot" style="background:var(--orange)"></span>FallbackLlm</a>
+    <a class="nav-link" href="#primitives"><span class="dot" style="background:var(--text-dim)"></span>ADK Primitives</a>
+  </aside>
+
+  <main class="main">
+
+    <!-- Hero -->
+    <div class="hero" id="overview">
+      <div class="hero-badge">&#x1F916; Google ADK &middot; Phase 1, 2 &amp; 3 Agents</div>
+      <h1>ADK Agent<br>Documentation</h1>
+      <p>Code walkthroughs for all six agents built during the Google ADK curriculum (Phases 1&ndash;3). Each section covers what the agent does, how it is wired together, the full execution workflow, and the key ADK patterns it demonstrates.</p>
+      <div class="tech-stack">
+        <span class="tech-pill">google-adk 2.5.0</span>
+        <span class="tech-pill">gemini-2.5-flash</span>
+        <span class="tech-pill">gemini-2.0-flash</span>
+        <span class="tech-pill">litellm</span>
+        <span class="tech-pill">ollama</span>
+        <span class="tech-pill">open-meteo</span>
+        <span class="tech-pill">github-mcp-server</span>
+        <span class="tech-pill">A2A Protocol</span>
+        <span class="tech-pill">session.state</span>
+        <span class="tech-pill">python 3.12</span>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- Architecture -->
+    <section id="architecture">
+      <div class="section-header">
+        <div class="section-icon" style="background:var(--purple-dim)">&#x1F3D7;&#xFE0F;</div>
+        <h2>Project Architecture</h2>
+      </div>
+      <p>All agents live under <code>agents/</code>, each in its own folder. Shared code lives in <code>shared/</code> so it can be reused without duplication. Every agent must export a <code>root_agent</code> variable &mdash; that is ADK&apos;s entry-point convention.</p>
+
+      <div class="diagram-wrapper" style="margin-top:1rem">
+        <div class="mermaid">
+graph TD
+    subgraph Project["google-adk/"]
+      subgraph A["agents/"]
+        hw["hello_world/\nagent.py + tools/calculator.py"]
+        wa["weather_agent/\nagent.py + tools/weather.py"]
+        ga["github_agent/\nagent.py"]
+        oa["ollama_agent/\nagent.py"]
+        da["dota_draft_analyzer/\nagent.py"]
+        na["note_taking_agent/\nagent.py + tools/notes.py"]
+        co["coordinator/\nagent.py"]
+        wo["worker/\nagent.py + agent.json"]
+      end
+      subgraph S["shared/"]
+        fb["utils/fallback_model.py\nFallbackLlm"]
+      end
+    end
+    hw --> fb
+    oa --> fb
+    da --> fb
+    na --> fb
+    co --> fb
+    wo --> fb
+    co -.->|"A2A Protocol\nRemoteA2aAgent"| wo
+        </div>
+      </div>
+
+      <div class="agent-grid" style="margin-top:1.25rem">
+        <div class="agent-card purple">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--purple-dim)">&#x1F9EE;</div>
+            <h3>hello_world</h3>
+          </div>
+          <p>Starter calculator. Demonstrates tool-calling basics and FallbackLlm.</p>
+          <div class="agent-meta"><span class="meta-tag">FallbackLlm</span><span class="meta-tag">3 tools</span></div>
+        </div>
+        <div class="agent-card blue">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--blue-dim)">&#x26C5;</div>
+            <h3>weather_agent</h3>
+          </div>
+          <p>Two-tool chaining with Open-Meteo REST API. No API key required.</p>
+          <div class="agent-meta"><span class="meta-tag">REST API</span><span class="meta-tag">tool chaining</span></div>
+        </div>
+        <div class="agent-card teal">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--teal-dim)">&#x1F419;</div>
+            <h3>github_agent</h3>
+          </div>
+          <p>MCP-powered GitHub assistant. One McpToolset gives access to 6 GitHub APIs.</p>
+          <div class="agent-meta"><span class="meta-tag">MCP</span><span class="meta-tag">tool_filter</span></div>
+        </div>
+        <div class="agent-card amber">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--amber-dim)">&#x1F999;</div>
+            <h3>ollama_agent</h3>
+          </div>
+          <p>100% local, offline inference via LiteLLM to Ollama. Model-swappable.</p>
+          <div class="agent-meta"><span class="meta-tag">LiteLlm</span><span class="meta-tag">offline</span></div>
+        </div>
+        <div class="agent-card rose">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--rose-dim)">&#x2694;&#xFE0F;</div>
+            <h3>dota_draft_analyzer</h3>
+          </div>
+          <p>LLM-only agent, no tools. Pure structured prompt engineering for domain expertise.</p>
+          <div class="agent-meta"><span class="meta-tag">FallbackLlm</span><span class="meta-tag">prompt-only</span></div>
+        </div>
+        <div class="agent-card green">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--green-dim)">&#x1F4DD;</div>
+            <h3>note_taking_agent</h3>
+          </div>
+          <p>Stateful notes across turns via session.state. Introduces ToolContext injection.</p>
+          <div class="agent-meta"><span class="meta-tag">session.state</span><span class="meta-tag">ToolContext</span><span class="meta-tag">5 tools</span></div>
+        </div>
+        <div class="agent-card blue">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--blue-dim)">&#x1F577;&#xFE0F;</div>
+            <h3>coordinator &amp; worker (A2A)</h3>
+          </div>
+          <p>Multi-agent system communicating over the Agent-to-Agent (A2A) protocol via RemoteA2aAgent.</p>
+          <div class="agent-meta"><span class="meta-tag">A2A</span><span class="meta-tag">RemoteA2aAgent</span><span class="meta-tag">AgentCard</span></div>
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- Shared -->
+    <section id="shared">
+      <div class="section-header">
+        <div class="section-icon" style="background:var(--teal-dim)">&#x1F527;</div>
+        <h2>Shared Utilities</h2>
+      </div>
+      <p>The <code>shared/</code> folder holds reusable code any agent can import. Currently one utility: <code>FallbackLlm</code> in <code>shared/utils/fallback_model.py</code>.</p>
+      <div class="callout tip">
+        <span class="callout-icon">&#x1F4A1;</span>
+        <p>Keeping shared code in <code>shared/</code> is the Week 8 ADK Skills pattern &mdash; applied ahead of schedule. As you build more agents, reusable tools (search, formatting, etc.) will live here too.</p>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- AGENT 1 — hello_world -->
+    <section id="hello-world">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--purple-dim)">&#x1F9EE;</div>
+        <div class="agent-section-meta">
+          <h2>hello_world</h2>
+          <p>Your first ADK agent. A math assistant with calculator tools. Demonstrates the core tool-calling loop and FallbackLlm.</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">agents/hello_world/agent.py</span>
+            <span class="meta-tag">FallbackLlm</span>
+            <span class="meta-tag">add &middot; subtract &middot; multiply</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Execution workflow</h3>
+      <p>User sends a math question &rarr; ADK passes it to Gemini with the system instruction &rarr; Gemini decides which tool to call &rarr; ADK executes the Python function &rarr; the result is injected back into context &rarr; Gemini formats a friendly reply.</p>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant ADK as ADK Runner
+    participant G as "Gemini 2.0 Flash"
+    participant T as calculator tools
+    U->>ADK: "What is 42 x 17?"
+    ADK->>G: system prompt + user message
+    G->>ADK: tool_call: multiply(a=42, b=17)
+    ADK->>T: multiply(42, 17)
+    T-->>ADK: {"result": 714}
+    ADK->>G: tool result injected into context
+    G-->>ADK: "42 x 17 = 714"
+    ADK-->>U: final reply
+        </div>
+      </div>
+
+      <h3 style="margin-top:1.5rem">Code walkthrough</h3>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--purple-dim);color:var(--purple)">Step 1</span>
+          <span class="snippet-title">Agent definition</span>
+          <span class="snippet-file">agent.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">from</span> google.adk.agents <span class="kw">import</span> <span class="cl">Agent</span>
+<span class="kw">from</span> shared.utils.fallback_model <span class="kw">import</span> <span class="cl">FallbackLlm</span>
+<span class="kw">from</span> .tools.calculator <span class="kw">import</span> add, multiply, subtract
+
+root_agent = <span class="cl">Agent</span>(
+    name=<span class="st">"hello_world"</span>,
+    model=<span class="cl">FallbackLlm</span>(
+        primary=<span class="st">"gemini-2.0-flash"</span>,
+        fallback=<span class="st">"ollama_chat/qwen2.5:7b"</span>,
+    ),
+    description=<span class="st">"A friendly greeting agent..."</span>,
+    instruction=<span class="st">"""
+    You are a math assistant. Greet the
+    user warmly and help them with any
+    questions on mathematics. You also
+    have access to calculator tools -
+    use them when asked for arithmetic.
+    """</span>,
+    tools=[add, subtract, multiply],
+)</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--purple)"></span><span class="explain-text"><strong>root_agent</strong> is mandatory &mdash; ADK discovers this variable by convention when you run <code>adk run agents/hello_world</code>.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--purple)"></span><span class="explain-text"><strong>FallbackLlm</strong> wraps Gemini with an automatic Ollama fallback on rate limits. Transparent to the rest of the agent code.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--purple)"></span><span class="explain-text"><strong>instruction</strong> is the system prompt. It shapes personality and tells the LLM when to reach for tools.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--purple)"></span><span class="explain-text"><strong>tools=[...]</strong> takes plain Python functions. ADK reads their signatures and docstrings to auto-generate the JSON schema the LLM uses.</span></div>
+          </div>
+        </div>
+        <div class="mini-flow">
+          <div class="mini-flow-node">import Agent</div>
+          <span class="mini-flow-arrow">&rarr;</span>
+          <div class="mini-flow-node active">root_agent = Agent(...)</div>
+          <span class="mini-flow-arrow">&rarr;</span>
+          <div class="mini-flow-node">tools=[add, subtract, multiply]</div>
+        </div>
+      </div>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--purple-dim);color:var(--purple)">Step 2</span>
+          <span class="snippet-title">Tool functions &mdash; type hints + docstrings are load-bearing</span>
+          <span class="snippet-file">tools/calculator.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">def</span> <span class="fn">add</span>(a: <span class="cl">float</span>, b: <span class="cl">float</span>) -&gt; <span class="cl">dict</span>:
+    <span class="st">"""Adds two numbers together.
+
+    Args:
+        a: The first number.
+        b: The second number.
+    Returns:
+        A dict with the sum result.
+    """</span>
+    <span class="kw">return</span> {<span class="st">"result"</span>: a + b}
+
+<span class="kw">def</span> <span class="fn">subtract</span>(a: <span class="cl">float</span>, b: <span class="cl">float</span>) -&gt; <span class="cl">dict</span>:
+    <span class="st">"""Subtracts two numbers."""</span>
+    <span class="kw">return</span> {<span class="st">"result"</span>: a - b}
+
+<span class="kw">def</span> <span class="fn">multiply</span>(a: <span class="cl">float</span>, b: <span class="cl">float</span>) -&gt; <span class="cl">dict</span>:
+    <span class="st">"""Multiplies two numbers together."""</span>
+    <span class="kw">return</span> {<span class="st">"result"</span>: a * b}</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>Type hints</strong> (<code>float</code>, <code>dict</code>) are mandatory. ADK uses them to build the JSON schema passed to the LLM &mdash; without them, tool calling breaks silently.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>Docstrings</strong> are the tool&apos;s contract with the LLM. Quality directly determines how reliably the LLM calls the tool and with what arguments.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>Return a dict</strong> &mdash; ADK serializes it to JSON and feeds it back to the LLM so Gemini can reason about the result.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <span class="callout-icon">&#x1F41B;</span>
+        <p><strong>Bug caught during Week 2:</strong> Model was initially <code>gemini-3.1-flash-lite</code> (does not exist). Fixed to <code>gemini-2.0-flash</code>. Always verify model names &mdash; invalid names fail silently with a confusing error.</p>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- AGENT 2 — weather_agent -->
+    <section id="weather">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--blue-dim)">&#x26C5;</div>
+        <div class="agent-section-meta">
+          <h2>weather_agent</h2>
+          <p>Real-time weather for any city. Shows sequential two-tool chaining with a live REST API &mdash; no key required.</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">agents/weather_agent/agent.py</span>
+            <span class="meta-tag">Open-Meteo API</span>
+            <span class="meta-tag">no API key</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Execution workflow</h3>
+      <p>The instruction tells Gemini to <em>always</em> call <code>get_coordinates</code> before <code>get_weather</code>. The system prompt is the control flow &mdash; no code orchestration needed.</p>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant ADK as ADK Runner
+    participant G as "Gemini 2.0 Flash"
+    participant C as get_coordinates
+    participant W as get_weather
+    U->>ADK: "Weather in Mumbai?"
+    ADK->>G: system prompt + user message
+    G->>ADK: tool_call: get_coordinates("Mumbai")
+    ADK->>C: geocoding-api.open-meteo.com/v1/search
+    C-->>ADK: {lat: 19.07, lon: 72.87, name: "Mumbai"}
+    ADK->>G: tool result injected
+    G->>ADK: tool_call: get_weather(19.07, 72.87)
+    ADK->>W: api.open-meteo.com/v1/forecast
+    W-->>ADK: {temp: 29, condition: "Partly cloudy", is_day: true}
+    ADK->>G: tool result injected
+    G-->>ADK: "Mumbai is 29 C, partly cloudy..."
+    ADK-->>U: final reply
+        </div>
+      </div>
+
+      <h3 style="margin-top:1.5rem">Code walkthrough</h3>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--blue-dim);color:var(--blue)">Step 1</span>
+          <span class="snippet-title">Agent &mdash; enforcing tool order via instruction text</span>
+          <span class="snippet-file">agent.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre>root_agent = <span class="cl">Agent</span>(
+    name=<span class="st">"weather_agent"</span>,
+    model=<span class="st">"gemini-2.0-flash"</span>,
+    instruction=<span class="st">"""
+    You are a helpful weather assistant.
+
+    Step 1 - Always call get_coordinates
+             first with the city name.
+    Step 2 - Then call get_weather with
+             those coordinates.
+    Step 3 - Present results in a friendly
+             readable format. Include temp,
+             condition, wind, day/night.
+
+    If city not found, apologise and ask
+    the user to double-check the spelling.
+    """</span>,
+    tools=[get_coordinates, get_weather],
+)</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>Tool order via instruction</strong> &mdash; &ldquo;Step 1&hellip; Step 2&hellip;&rdquo; in the system prompt is all you need for sequential execution. The LLM is the orchestrator.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>No FallbackLlm here</strong> &mdash; uses the plain model string. Rate-limit resilience is only added where it matters for your workflow.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>Error handling in instruction</strong> &mdash; &ldquo;apologise and ask to double-check&rdquo; handles the case where the tool returns an <code>error</code> key instead of coordinates.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--blue-dim);color:var(--blue)">Step 2</span>
+          <span class="snippet-title">get_coordinates &mdash; geocoding via Open-Meteo (no key)</span>
+          <span class="snippet-file">tools/weather.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">def</span> <span class="fn">get_coordinates</span>(city: <span class="cl">str</span>) -&gt; <span class="cl">dict</span>:
+    <span class="st">"""Gets lat/lon for a city name.
+
+    Always call this FIRST before
+    calling get_weather.
+
+    Args:
+        city: City name (e.g. "Mumbai").
+    Returns:
+        Dict with latitude, longitude,
+        name, country. Or 'error' key.
+    """</span>
+    encoded = urllib.parse.<span class="fn">quote</span>(city)
+    url = (
+        <span class="st">f"https://geocoding-api"</span>
+        <span class="st">f".open-meteo.com/v1/search"</span>
+        <span class="st">f"?name={encoded}&amp;count=1"</span>
+    )
+    <span class="kw">with</span> urllib.request.<span class="fn">urlopen</span>(url) <span class="kw">as</span> r:
+        data = json.<span class="fn">loads</span>(r.<span class="fn">read</span>())
+    <span class="kw">if not</span> data.<span class="fn">get</span>(<span class="st">"results"</span>):
+        <span class="kw">return</span> {<span class="st">"error"</span>: <span class="st">f"'{city}' not found"</span>}
+    result = data[<span class="st">"results"</span>][<span class="nb">0</span>]
+    <span class="kw">return</span> {
+        <span class="st">"latitude"</span>: result[<span class="st">"latitude"</span>],
+        <span class="st">"longitude"</span>: result[<span class="st">"longitude"</span>],
+        <span class="st">"name"</span>: result[<span class="st">"name"</span>],
+        <span class="st">"country"</span>: result.<span class="fn">get</span>(<span class="st">"country"</span>),
+    }</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>No extra libraries</strong> &mdash; uses Python&apos;s built-in <code>urllib</code> only. Zero extra dependencies beyond ADK itself.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>Error key pattern</strong> &mdash; returning <code>{"error": "..."}</code> instead of raising lets the LLM receive the failure and handle it gracefully.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>Docstring carries usage contract</strong> &mdash; &ldquo;Always call this FIRST before calling get_weather&rdquo; is in the docstring so the tool enforces its own ordering rule.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--blue-dim);color:var(--blue)">Step 3</span>
+          <span class="snippet-title">get_weather &mdash; WMO codes to human-readable conditions</span>
+          <span class="snippet-file">tools/weather.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="cm"># WMO Weather Condition Codes</span>
+WMO_CODES = {
+    <span class="nb">0</span>: <span class="st">"Clear sky"</span>,
+    <span class="nb">2</span>: <span class="st">"Partly cloudy"</span>,
+    <span class="nb">3</span>: <span class="st">"Overcast"</span>,
+    <span class="nb">63</span>: <span class="st">"Moderate rain"</span>,
+    <span class="nb">95</span>: <span class="st">"Thunderstorm"</span>,
+    <span class="cm"># ... 20+ more WMO codes</span>
+}
+
+<span class="kw">def</span> <span class="fn">get_weather</span>(latitude: <span class="cl">float</span>,
+               longitude: <span class="cl">float</span>) -&gt; <span class="cl">dict</span>:
+    url = (
+        <span class="st">f"https://api.open-meteo.com"</span>
+        <span class="st">f"/v1/forecast"</span>
+        <span class="st">f"?latitude={latitude}"</span>
+        <span class="st">f"&amp;longitude={longitude}"</span>
+        <span class="st">f"&amp;current_weather=true"</span>
+    )
+    <span class="kw">with</span> urllib.request.<span class="fn">urlopen</span>(url) <span class="kw">as</span> r:
+        data = json.<span class="fn">loads</span>(r.<span class="fn">read</span>())
+    current = data[<span class="st">"current_weather"</span>]
+    wmo = <span class="cl">int</span>(current[<span class="st">"weathercode"</span>])
+    <span class="kw">return</span> {
+        <span class="st">"temperature_celsius"</span>: current[<span class="st">"temperature"</span>],
+        <span class="st">"wind_speed_kmh"</span>: current[<span class="st">"windspeed"</span>],
+        <span class="st">"weather_condition"</span>: WMO_CODES.<span class="fn">get</span>(wmo),
+        <span class="st">"is_day"</span>: <span class="cl">bool</span>(current[<span class="st">"is_day"</span>]),
+    }</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>WMO_CODES dict</strong> translates numeric codes (like <code>63</code>) from the API into readable strings. The LLM gets <code>"Moderate rain"</code>, not <code>63</code>.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>Descriptive return keys</strong> &mdash; <code>temperature_celsius</code>, <code>weather_condition</code>, <code>is_day</code> let the LLM describe weather precisely without guessing units.</span></div>
+          </div>
+        </div>
+        <div class="mini-flow">
+          <div class="mini-flow-node">User asks</div>
+          <span class="mini-flow-arrow">&rarr;</span>
+          <div class="mini-flow-node">get_coordinates</div>
+          <span class="mini-flow-arrow">&rarr;</span>
+          <div class="mini-flow-node active">get_weather</div>
+          <span class="mini-flow-arrow">&rarr;</span>
+          <div class="mini-flow-node">LLM formats reply</div>
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- AGENT 3 — github_agent -->
+    <section id="github">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--teal-dim)">&#x1F419;</div>
+        <div class="agent-section-meta">
+          <h2>github_agent</h2>
+          <p>Access any GitHub repo, file, issue, or commit using MCP instead of hand-writing each tool function.</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">agents/github_agent/agent.py</span>
+            <span class="meta-tag">McpToolset</span>
+            <span class="meta-tag">github-mcp-server</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Execution workflow</h3>
+      <p>ADK spawns the GitHub MCP server as a subprocess on startup, communicating over stdin/stdout. At query time, Gemini selects a GitHub tool from the filtered list, the MCP server calls the real GitHub REST API, and the result flows back through ADK into the LLM context.</p>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant ADK as ADK Runner
+    participant G as "Gemini 2.5 Flash"
+    participant MCP as "github-mcp-server (subprocess)"
+    participant GH as GitHub REST API
+    U->>ADK: "List open issues on my google-adk repo"
+    ADK->>MCP: spawn process (stdio) + inject GITHUB_TOKEN
+    ADK->>G: system prompt + filtered tool schemas (6 tools)
+    G->>ADK: tool_call: list_issues(owner="BigBro2454", repo="google-adk")
+    ADK->>MCP: JSON-RPC call over stdin
+    MCP->>GH: GET /repos/BigBro2454/google-adk/issues
+    GH-->>MCP: [{title, number, state, ...}]
+    MCP-->>ADK: JSON-RPC response over stdout
+    ADK->>G: tool result injected
+    G-->>ADK: formatted issue list
+    ADK-->>U: final reply
+        </div>
+      </div>
+
+      <h3>The key insight: MCP vs hand-written tools</h3>
+      <p>Instead of writing <code>def search_repos(...)</code>, <code>def list_issues(...)</code> etc., one <code>McpToolset</code> connects to the GitHub MCP server binary and imports <em>all its tools automatically</em>. One line of code gives you an entire platform&apos;s APIs.</p>
+
+      <div class="callout tip">
+        <span class="callout-icon">&#x1F4A1;</span>
+        <p><strong>MCP (Model Context Protocol)</strong> is an open standard for exposing tools to LLMs. Any platform with an MCP server &mdash; GitHub, Slack, Notion, Postgres &mdash; plugs into any ADK agent with the same pattern.</p>
+      </div>
+
+      <h3 style="margin-top:1rem">Code walkthrough</h3>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--teal-dim);color:var(--teal)">Step 1</span>
+          <span class="snippet-title">McpToolset &mdash; spawns the MCP server as a subprocess</span>
+          <span class="snippet-file">agent.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">from</span> google.adk.tools.mcp_tool.mcp_toolset <span class="kw">import</span> (
+    <span class="cl">McpToolset</span>, <span class="cl">StdioServerParameters</span>
+)
+
+<span class="fn">load_dotenv</span>()
+github_token = os.<span class="fn">getenv</span>(
+    <span class="st">"GITHUB_PERSONAL_ACCESS_TOKEN"</span>
+)
+
+github_toolset = <span class="cl">McpToolset</span>(
+    connection_params=<span class="cl">StdioServerParameters</span>(
+        command=<span class="st">"github-mcp-server"</span>,
+        args=[<span class="st">"stdio"</span>],
+        env={
+          <span class="st">"GITHUB_PERSONAL_ACCESS_TOKEN"</span>:
+          github_token
+        },
+    ),
+    tool_filter=[
+        <span class="st">"search_repositories"</span>,
+        <span class="st">"get_file_contents"</span>,
+        <span class="st">"list_issues"</span>,
+        <span class="st">"get_issue"</span>,
+        <span class="st">"search_code"</span>,
+        <span class="st">"list_commits"</span>,
+    ],
+)</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>StdioServerParameters</strong> &mdash; ADK launches <code>github-mcp-server stdio</code> as a subprocess and communicates over stdin/stdout. No HTTP server or port needed.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>env injection</strong> &mdash; the token goes into the MCP server subprocess&apos;s environment, never into the LLM context. Secrets stay out of the prompt.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>tool_filter whitelist</strong> &mdash; without it the agent gets all 30+ GitHub MCP tools, wasting context tokens and confusing the LLM. Expose only what you need.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--teal-dim);color:var(--teal)">Step 2</span>
+          <span class="snippet-title">Agent definition &mdash; a toolset as a single tools entry</span>
+          <span class="snippet-file">agent.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre>root_agent = <span class="cl">Agent</span>(
+    name=<span class="st">"github_agent"</span>,
+    model=<span class="st">"gemini-2.5-flash"</span>,
+    instruction=<span class="st">"""
+    You are a helpful GitHub assistant
+    for the user BigBro2454.
+
+    When asked about their own repos,
+    search for user:BigBro2454.
+
+    Always use owner/repo format
+    (e.g. BigBro2454/google-adk).
+    Present results clearly.
+    """</span>,
+    tools=[github_toolset],  <span class="cm"># whole MCP server</span>
+)</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>tools=[github_toolset]</strong> &mdash; a single <code>McpToolset</code> expands to all 6 filtered tools at runtime. ADK handles the expansion transparently.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>Instruction shapes query format</strong> &mdash; &ldquo;search for user:BigBro2454&rdquo; makes the LLM produce correct GitHub search syntax automatically.</span></div>
+          </div>
+        </div>
+        <div class="mini-flow">
+          <div class="mini-flow-node">User question</div>
+          <span class="mini-flow-arrow">&rarr;</span>
+          <div class="mini-flow-node">Gemini picks tool</div>
+          <span class="mini-flow-arrow">&rarr;</span>
+          <div class="mini-flow-node active">McpToolset &rarr; github-mcp-server</div>
+          <span class="mini-flow-arrow">&rarr;</span>
+          <div class="mini-flow-node">GitHub REST API</div>
+          <span class="mini-flow-arrow">&rarr;</span>
+          <div class="mini-flow-node">Gemini replies</div>
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- AGENT 4 — ollama_agent -->
+    <section id="ollama">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--amber-dim)">&#x1F999;</div>
+        <div class="agent-section-meta">
+          <h2>ollama_agent</h2>
+          <p>100% offline. Swapping one string is all it takes to switch from Gemini to any local model.</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">agents/ollama_agent/agent.py</span>
+            <span class="meta-tag">LiteLlm</span>
+            <span class="meta-tag">ollama localhost:11434</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Execution workflow</h3>
+      <p>ADK&apos;s <code>LiteLlm</code> adapter translates ADK&apos;s internal <code>LlmRequest</code> format into the OpenAI-compatible API that Ollama speaks. All inference runs on-device &mdash; no data ever leaves the machine.</p>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant ADK as ADK Runner
+    participant LL as LiteLlm adapter
+    participant OL as "Ollama (localhost:11434)"
+    participant M as "qwen2.5:7b (on-device)"
+    U->>ADK: "What is 15 + 27?"
+    ADK->>LL: LlmRequest (messages + tool schemas)
+    LL->>OL: POST /api/chat (OpenAI-compatible)
+    OL->>M: on-device inference
+    M-->>OL: tool_call: add(a=15, b=27)
+    OL-->>LL: response with tool_call
+    LL-->>ADK: LlmResponse
+    ADK->>ADK: execute add(15, 27) -> {"result": 42}
+    ADK->>LL: LlmRequest with tool result
+    LL->>OL: POST /api/chat
+    OL->>M: on-device inference
+    M-->>OL: "15 + 27 = 42"
+    OL-->>LL: final text response
+    LL-->>ADK: LlmResponse
+    ADK-->>U: "15 + 27 = 42"
+        </div>
+      </div>
+
+      <h3 style="margin-top:1rem">Architecture</h3>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+graph LR
+    A["ADK Agent"] --> B["LiteLlm\nadapter"]
+    B --> C["Ollama\nlocalhost:11434"]
+    C --> D["qwen2.5:7b\non-device"]
+        </div>
+      </div>
+
+      <h3 style="margin-top:1.5rem">Code walkthrough</h3>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--amber-dim);color:var(--amber)">Full file</span>
+          <span class="snippet-title">Complete agent &mdash; the only difference from Gemini is one import</span>
+          <span class="snippet-file">agent.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">from</span> google.adk.agents <span class="kw">import</span> <span class="cl">Agent</span>
+<span class="kw">from</span> google.adk.models.lite_llm <span class="kw">import</span> <span class="cl">LiteLlm</span>
+<span class="kw">from</span> agents.hello_world.tools.calculator <span class="kw">import</span> (
+    add, subtract, multiply
+)
+
+<span class="cm"># Change this one line to switch models</span>
+MODEL = <span class="st">"ollama_chat/qwen2.5:7b"</span>
+<span class="cm"># MODEL = "ollama_chat/llama3.1:8b"</span>
+<span class="cm"># MODEL = "ollama_chat/qwen3.5:9b"</span>
+<span class="cm"># MODEL = "ollama_chat/qwen2.5-coder:7b"</span>
+
+os.environ[<span class="st">"OLLAMA_API_BASE"</span>] = <span class="st">"http://localhost:11434"</span>
+
+root_agent = <span class="cl">Agent</span>(
+    name=<span class="st">"ollama_agent"</span>,
+    model=<span class="cl">LiteLlm</span>(model=MODEL),  <span class="cm"># only difference</span>
+    description=<span class="st">"A fully local agent..."</span>,
+    instruction=<span class="st">"""
+    You are a helpful local assistant
+    running entirely on the user's machine.
+    Be honest that you are qwen2.5,
+    not Gemini.
+    """</span>,
+    tools=[add, subtract, multiply],
+)</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--amber)"></span><span class="explain-text"><strong>LiteLlm(model=MODEL)</strong> &mdash; the only difference vs a Gemini agent. Tools, instruction, sessions &mdash; everything else works identically.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--amber)"></span><span class="explain-text"><strong>MODEL constant at the top</strong> &mdash; swapping local models is a 1-line edit, not a hunt through the code.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--amber)"></span><span class="explain-text"><strong>OLLAMA_API_BASE</strong> &mdash; tells LiteLLM where Ollama is. Set via env var so the model URL is not hardcoded into the class.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--amber)"></span><span class="explain-text"><strong>Reuses hello_world tools</strong> &mdash; imports calculator functions directly from another agent&apos;s package. Tools can be shared freely across agents.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <span class="callout-icon">&#x1F4A1;</span>
+        <p><strong>Models installed on your machine:</strong> <code>qwen2.5:7b</code> (best tool-calling) &middot; <code>llama3.1:8b</code> (general) &middot; <code>qwen2.5-coder:7b</code> (coding) &middot; <code>qwen3.5:9b</code> (most capable) &middot; <code>gemma4:12b</code> (Google&apos;s own, locally)</p>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- AGENT 5 — dota_draft_analyzer -->
+    <section id="dota">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--rose-dim)">&#x2694;&#xFE0F;</div>
+        <div class="agent-section-meta">
+          <h2>dota_draft_analyzer</h2>
+          <p>LLM-only agent with zero tools. All intelligence comes from a densely structured system prompt.</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">agents/dota_draft_analyzer/agent.py</span>
+            <span class="meta-tag">prompt engineering</span>
+            <span class="meta-tag">tools=[]</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Execution workflow</h3>
+      <p>No tool calls. No API calls. The entire execution is a single round-trip: user provides heroes &rarr; Gemini applies the structured INSTRUCTIONS prompt &rarr; structured 12-section analysis is returned immediately.</p>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant ADK as ADK Runner
+    participant G as "Gemini 2.5 Flash (FallbackLlm)"
+    participant OL as "Ollama (fallback only)"
+    U->>ADK: "I am playing Axe. Heroes: Axe CM DP vs PA Tide Puck"
+    ADK->>G: INSTRUCTIONS system prompt + hero list
+    Note over G: All reasoning in LLM weights. No tools, no API calls.
+    G-->>ADK: 12-section pre-match analysis
+    ADK-->>U: Strategy, Laning, Skill Build, Items, Timings...
+    Note over G,OL: If rate-limited, FallbackLlm retries via Ollama silently
+        </div>
+      </div>
+
+      <h3>The pattern: structured prompt as the product</h3>
+      <p>This agent has <code>tools=[]</code>. It shows that when domain knowledge is the differentiator, not API access, the prompt itself <em>is</em> the feature. The <code>INSTRUCTIONS</code> constant enforces a strict 12-section output the LLM must produce every time.</p>
+
+      <h3 style="margin-top:1rem">Code walkthrough</h3>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--rose-dim);color:var(--rose)">Prompt</span>
+          <span class="snippet-title">INSTRUCTIONS &mdash; output schema enforced in natural language</span>
+          <span class="snippet-file">agent.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre>INSTRUCTIONS = <span class="st">"""
+You are a high-level Dota 2 Coach.
+
+CRITICAL RULES:
+1. Exactly one bullet point per section.
+2. Keep it punchy - readable before horn.
+3. GUARDIAN MENTALITY: Write knowing
+   all players tunnel-vision on kills
+   and fail to coordinate combos.
+   Frame all advice around exploiting
+   this chaos and surviving your own
+   team's mistakes.
+
+Include exactly these sections:
+* Strategy
+* Laning Behavior
+* Skill Build
+* Item Progression
+  * Laning (0-10m)
+  * Mid Game (10-25m)
+  * Late Game (25m+)
+* Timings
+* Threats
+* Fighting Rules
+* Map Focus
+* Damage Distribution
+* Metrics Targets
+* Win Condition
+* Solo Carry Backup Plan
+"""</span></pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>Module-level constant</strong> &mdash; separates the long prompt from the <code>Agent(...)</code> call. Keeps agent definition clean; the prompt is its own thing to edit.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>&ldquo;CRITICAL RULES&rdquo; in all-caps</strong> &mdash; a known prompting pattern. All-caps headers receive more attention from the LLM, enforcing non-negotiable constraints.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>Domain context baked in</strong> &mdash; &ldquo;GUARDIAN MENTALITY&rdquo; encodes the specific player profile (low-skill bracket, chaotic play). Makes output actionable vs generic.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>12 mandatory sections</strong> &mdash; constraining the output schema makes responses consistent and scannable. Crucial when the user has 30 seconds before a match starts.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--rose-dim);color:var(--rose)">Agent</span>
+          <span class="snippet-title">Agent definition &mdash; tools=[] is intentional</span>
+          <span class="snippet-file">agent.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre>root_agent = <span class="cl">Agent</span>(
+    name=<span class="st">"dota_draft_analyzer"</span>,
+    model=<span class="cl">FallbackLlm</span>(
+        primary=<span class="st">"gemini-2.5-flash"</span>,
+        fallback=<span class="st">"ollama_chat/qwen2.5:7b"</span>,
+    ),
+    description=(
+        <span class="st">"Analyzes Dota 2 drafts and provides"</span>
+        <span class="st">" rapid pre-game coaching."</span>
+    ),
+    instruction=INSTRUCTIONS,
+    tools=[],  <span class="cm"># intentionally empty</span>
+)</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>tools=[]</strong> &mdash; explicitly empty. All hero/item knowledge comes from Gemini&apos;s training data. No external data source needed.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>FallbackLlm</strong> &mdash; used because this runs live during a match draft. Rate limit fallback to local Ollama ensures it works even at peak API hours.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>instruction=INSTRUCTIONS</strong> &mdash; passes the constant defined above. Separating prompt from agent config is good practice for maintainability.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <span class="callout-icon">&#x1F3AE;</span>
+        <p>This agent is a preview of <strong>Capstone Option B</strong>. The full Dota 2 Match Analyst would add OpenDota API tools to fetch real match data &mdash; turning it from a pure LLM agent into a proper multi-tool pipeline.</p>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- AGENT 6 — note_taking_agent -->
+    <section id="notes">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--green-dim)">&#x1F4DD;</div>
+        <div class="agent-section-meta">
+          <h2>note_taking_agent</h2>
+          <p>Stateful personal notes that persist across conversation turns. Introduces session.state and ToolContext injection &mdash; ADK&apos;s dependency-injection pattern for stateful tools.</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">agents/note_taking_agent/agent.py</span>
+            <span class="meta-tag">session.state</span>
+            <span class="meta-tag">ToolContext</span>
+            <span class="meta-tag">add &middot; get &middot; list &middot; delete &middot; clear</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Execution workflow</h3>
+      <p>Every tool function receives a <code>ToolContext</code> object injected by ADK. Tools read and write to <code>tool_context.state["notes"]</code> &mdash; a dict that survives for the entire conversation. No database, no files &mdash; just an in-memory session dict wired through ADK&apos;s state machinery.</p>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant ADK as ADK Runner
+    participant G as "Gemini 2.5 Flash (FallbackLlm)"
+    participant T as notes tools
+    participant S as session.state
+    U->>ADK: "Save a note called 'ideas' about ADK patterns"
+    ADK->>G: system prompt + user message
+    G->>ADK: tool_call: add_note(title="ideas", content="ADK patterns")
+    ADK->>T: add_note(title, content, tool_context=injected)
+    T->>S: state["notes"]["ideas"] = "ADK patterns"
+    S-->>T: write confirmed
+    T-->>ADK: {"message": "Saved note 'ideas'. You now have 1 note(s)."}
+    ADK->>G: tool result injected
+    G-->>ADK: "Done! Saved your note 'ideas'."
+    ADK-->>U: confirmation
+    U->>ADK: "What notes do I have?"
+    ADK->>G: user message (session.state persists)
+    G->>ADK: tool_call: list_notes()
+    ADK->>T: list_notes(tool_context=injected)
+    T->>S: reads state["notes"]
+    S-->>T: {"ideas": "ADK patterns"}
+    T-->>ADK: {"count": 1, "notes": [{title, preview}]}
+    ADK->>G: tool result injected
+    G-->>ADK: "You have 1 note: 'ideas' - ADK patterns"
+    ADK-->>U: note list
+        </div>
+      </div>
+
+      <h3 style="margin-top:1rem">The key concept: ToolContext injection</h3>
+      <p>ADK automatically injects <code>ToolContext</code> when it detects a parameter named <code>tool_context</code> in the function signature. The LLM never sees this parameter &mdash; it only sees <code>title</code> and <code>content</code> in the tool&apos;s JSON schema. This is ADK&apos;s dependency injection pattern for stateful tools.</p>
+
+      <div class="callout tip">
+        <span class="callout-icon">&#x1F4A1;</span>
+        <p><strong>State scope:</strong> Keys without a prefix (<code>state["notes"]</code>) are <em>session-scoped</em> &mdash; they live for the current conversation only. Prefix with <code>"user:"</code> for user-scoped state that persists across sessions, or <code>"app:"</code> for app-scoped state shared by all users.</p>
+      </div>
+
+      <h3 style="margin-top:1rem">Code walkthrough</h3>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--green-dim);color:var(--green)">Step 1</span>
+          <span class="snippet-title">Agent definition &mdash; FallbackLlm + 5 state-aware tools</span>
+          <span class="snippet-file">agent.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">from</span> google.adk.agents <span class="kw">import</span> <span class="cl">Agent</span>
+<span class="kw">from</span> shared.utils.fallback_model <span class="kw">import</span> <span class="cl">FallbackLlm</span>
+<span class="kw">from</span> .tools.notes <span class="kw">import</span> (
+    add_note, get_note, list_notes,
+    delete_note, clear_all_notes
+)
+
+root_agent = <span class="cl">Agent</span>(
+    name=<span class="st">"note_taking_agent"</span>,
+    model=<span class="cl">FallbackLlm</span>(
+        primary=<span class="st">"gemini-2.5-flash"</span>,
+        fallback=<span class="st">"ollama_chat/qwen2.5:7b"</span>,
+    ),
+    description=<span class="st">"A personal note-taking assistant..."</span>,
+    instruction=<span class="st">"""
+    You are a helpful personal note-taking
+    assistant. Map user intent to tools:
+
+    Save / add / create  -&gt; add_note(title, content)
+    Read / show / get    -&gt; get_note(title)
+    List / show all      -&gt; list_notes()
+    Delete / remove      -&gt; delete_note(title)
+    Clear / delete all   -&gt; clear_all_notes()
+    """</span>,
+    tools=[add_note, get_note, list_notes,
+           delete_note, clear_all_notes],
+)</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--green)"></span><span class="explain-text"><strong>Intent mapping in instruction</strong> &mdash; the explicit &ldquo;Save &rarr; add_note&rdquo; mapping removes ambiguity. The LLM does not have to infer which tool handles &ldquo;jot down&rdquo; vs &ldquo;remember&rdquo; vs &ldquo;save&rdquo;.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--green)"></span><span class="explain-text"><strong>gemini-2.5-flash</strong> &mdash; upgraded from 2.0-flash. Better instruction following leads to more reliable tool selection across all five note operations.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--green)"></span><span class="explain-text"><strong>FallbackLlm</strong> &mdash; same pattern as hello_world. Gemini first; if rate-limited, silently falls back to local Ollama without losing the session state.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--green-dim);color:var(--green)">Step 2</span>
+          <span class="snippet-title">add_note &mdash; ToolContext injection pattern</span>
+          <span class="snippet-file">tools/notes.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">from</span> google.adk.tools <span class="kw">import</span> <span class="cl">ToolContext</span>
+
+<span class="kw">def</span> <span class="fn">add_note</span>(
+    title: <span class="cl">str</span>,
+    content: <span class="cl">str</span>,
+    tool_context: <span class="cl">ToolContext</span>  <span class="cm"># injected by ADK</span>
+) -&gt; <span class="cl">dict</span>:
+    <span class="st">"""Saves a new note (or updates an existing
+    one) with the given title and content.
+
+    Args:
+        title: A short label for the note.
+        content: The full text of the note.
+        tool_context: Injected by ADK -
+            provides access to session state.
+    Returns:
+        A dict with 'message' confirming save.
+    """</span>
+    notes: <span class="cl">dict</span> = <span class="cl">dict</span>(
+        tool_context.state.<span class="fn">get</span>(<span class="st">"notes"</span>, {})
+    )
+    action = <span class="st">"Updated"</span> <span class="kw">if</span> title <span class="kw">in</span> notes <span class="kw">else</span> <span class="st">"Saved"</span>
+    notes[title] = content
+    tool_context.state[<span class="st">"notes"</span>] = notes
+    <span class="kw">return</span> {
+        <span class="st">"message"</span>: <span class="st">f"{action} note '{title}'."</span>
+                    <span class="st">f" You now have {len(notes)} note(s)."</span>
+    }</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--green)"></span><span class="explain-text"><strong>ToolContext parameter</strong> &mdash; ADK detects this by parameter name at registration time. It injects the live session context automatically; the LLM never passes it.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--green)"></span><span class="explain-text"><strong>dict(state.get(...))</strong> &mdash; creates a copy before mutating. ADK&apos;s state is a proxy; you must reassign to trigger a write: <code>state["notes"] = notes</code>.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--green)"></span><span class="explain-text"><strong>Upsert pattern</strong> &mdash; checks if title exists first to report &ldquo;Updated&rdquo; vs &ldquo;Saved&rdquo;. Useful feedback for the LLM to include in its confirmation message.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--green-dim);color:var(--green)">Step 3</span>
+          <span class="snippet-title">Remaining tools &mdash; get, list, delete, clear</span>
+          <span class="snippet-file">tools/notes.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">def</span> <span class="fn">get_note</span>(title: <span class="cl">str</span>, tool_context: <span class="cl">ToolContext</span>) -&gt; <span class="cl">dict</span>:
+    notes = tool_context.state.<span class="fn">get</span>(<span class="st">"notes"</span>, {})
+    <span class="kw">if</span> title <span class="kw">not in</span> notes:
+        <span class="kw">return</span> {
+            <span class="st">"error"</span>: <span class="st">f"No note '{title}' found."</span>,
+            <span class="st">"available_notes"</span>: <span class="cl">list</span>(notes.<span class="fn">keys</span>()),
+        }
+    <span class="kw">return</span> {<span class="st">"title"</span>: title, <span class="st">"content"</span>: notes[title]}
+
+
+<span class="kw">def</span> <span class="fn">list_notes</span>(tool_context: <span class="cl">ToolContext</span>) -&gt; <span class="cl">dict</span>:
+    notes = tool_context.state.<span class="fn">get</span>(<span class="st">"notes"</span>, {})
+    <span class="kw">if not</span> notes:
+        <span class="kw">return</span> {<span class="st">"count"</span>: <span class="nb">0</span>, <span class="st">"notes"</span>: [],
+                <span class="st">"message"</span>: <span class="st">"No notes yet."</span>}
+    previews = [
+        {<span class="st">"title"</span>: t,
+         <span class="st">"preview"</span>: c[:<span class="nb">80</span>] + (<span class="st">"..."</span> <span class="kw">if</span> <span class="cl">len</span>(c) &gt; <span class="nb">80</span> <span class="kw">else</span> <span class="st">""</span>)}
+        <span class="kw">for</span> t, c <span class="kw">in</span> notes.<span class="fn">items</span>()
+    ]
+    <span class="kw">return</span> {<span class="st">"count"</span>: <span class="cl">len</span>(notes), <span class="st">"notes"</span>: previews}
+
+
+<span class="kw">def</span> <span class="fn">delete_note</span>(title: <span class="cl">str</span>, tool_context: <span class="cl">ToolContext</span>) -&gt; <span class="cl">dict</span>:
+    notes = <span class="cl">dict</span>(tool_context.state.<span class="fn">get</span>(<span class="st">"notes"</span>, {}))
+    <span class="kw">if</span> title <span class="kw">not in</span> notes:
+        <span class="kw">return</span> {<span class="st">"error"</span>: <span class="st">f"No note '{title}' found."</span>,
+                <span class="st">"available_notes"</span>: <span class="cl">list</span>(notes.<span class="fn">keys</span>())}
+    <span class="kw">del</span> notes[title]
+    tool_context.state[<span class="st">"notes"</span>] = notes
+    <span class="kw">return</span> {<span class="st">"message"</span>: <span class="st">f"Deleted '{title}'. {len(notes)} left."</span>}
+
+
+<span class="kw">def</span> <span class="fn">clear_all_notes</span>(tool_context: <span class="cl">ToolContext</span>) -&gt; <span class="cl">dict</span>:
+    <span class="st">"""Deletes ALL notes. Only call if user
+    explicitly asks to clear everything."""</span>
+    count = <span class="cl">len</span>(tool_context.state.<span class="fn">get</span>(<span class="st">"notes"</span>, {}))
+    tool_context.state[<span class="st">"notes"</span>] = {}
+    <span class="kw">return</span> {<span class="st">"message"</span>: <span class="st">f"Cleared all {count} note(s)."</span>}</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--green)"></span><span class="explain-text"><strong>available_notes in error</strong> &mdash; when a title is not found, returning all known titles gives the LLM the information to ask &ldquo;did you mean X?&rdquo; instead of a dead-end error.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--green)"></span><span class="explain-text"><strong>80-char preview</strong> &mdash; <code>list_notes</code> returns truncated previews, not full content. Keeps tool responses small so they do not overflow the context window in long sessions.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--green)"></span><span class="explain-text"><strong>Docstring guard on clear_all</strong> &mdash; &ldquo;Only call if user explicitly asks&rdquo; in the docstring prevents the LLM from nuking all notes on vague requests like &ldquo;clean up&rdquo;.</span></div>
+          </div>
+        </div>
+        <div class="mini-flow">
+          <div class="mini-flow-node">User intent</div>
+          <span class="mini-flow-arrow">&rarr;</span>
+          <div class="mini-flow-node">Gemini picks tool</div>
+          <span class="mini-flow-arrow">&rarr;</span>
+          <div class="mini-flow-node active">tool(tool_context injected)</div>
+          <span class="mini-flow-arrow">&rarr;</span>
+          <div class="mini-flow-node">session.state mutated</div>
+          <span class="mini-flow-arrow">&rarr;</span>
+          <div class="mini-flow-node">Gemini confirms</div>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <span class="callout-icon">&#x1F4CC;</span>
+        <p><strong>Week 4 project (Sessions and State).</strong> The follow-on would add <code>"user:"</code>-prefixed state keys so notes survive across sessions, and a <code>search_notes(query)</code> tool for substring search across all stored notes.</p>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- AGENT 6 — A2A System -->
+    <section id="a2a">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--blue-dim)">&#x1F577;&#xFE0F;</div>
+        <div class="agent-section-meta">
+          <h2>coordinator &amp; worker (A2A System)</h2>
+          <p>A multi-agent architecture utilizing the Agent-to-Agent (A2A) protocol. The coordinator delegates tasks to a remote worker acting as a sub-agent.</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">agents/coordinator/agent.py</span>
+            <span class="meta-tag">agents/worker/agent.json</span>
+            <span class="meta-tag">RemoteA2aAgent</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Execution workflow</h3>
+      <p>The <code>coordinator</code> agent acts as the main entry point for the user. When a task requires background work, it delegates the instruction over HTTP using the standard A2A protocol (JSON-RPC + SSE) to the <code>worker</code> agent, which is running as a separate service.</p>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant ADK as Coordinator (ADK)
+    participant W as Worker (A2A Endpoint)
+    U->>ADK: "Can you analyze this background data?"
+    ADK->>ADK: Coordinator decides to delegate to worker
+    ADK->>W: JSON-RPC over HTTP (A2A Protocol)
+    W-->>ADK: Streamed response (SSE)
+    ADK->>ADK: Integrates worker result
+    ADK-->>U: Final response
+        </div>
+      </div>
+
+      <h3 style="margin-top:1.5rem">Code walkthrough</h3>
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--blue-dim);color:var(--blue)">Step 1</span>
+          <span class="snippet-title">RemoteA2aAgent Integration</span>
+          <span class="snippet-file">agents/coordinator/agent.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">from</span> google.adk.agents.remote_a2a_agent <span class="kw">import</span> <span class="cl">RemoteA2aAgent</span>
+
+worker_a2a_agent = <span class="cl">RemoteA2aAgent</span>(
+    name=<span class="st">"worker_a2a"</span>,
+    agent_card=os.path.<span class="fn">join</span>(
+        os.path.<span class="fn">dirname</span>(__file__),
+        <span class="st">"../worker/agent.json"</span>
+    ),
+    description=<span class="st">"A remote worker agent capable of background tasks."</span>,
+)
+
+root_agent = <span class="cl">Agent</span>(
+    name=<span class="st">"coordinator"</span>,
+    model=<span class="st">"gemini-2.5-flash"</span>,
+    sub_agents=[worker_a2a_agent],
+)</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>RemoteA2aAgent</strong> &mdash; This class allows ADK to treat any A2A-compliant remote agent exactly like a local tool or sub-agent, parsing its exposed Agent Card.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>Agent Card (agent.json)</strong> &mdash; The worker agent publishes an Agent Card that defines its <code>rpc_url</code>, capabilities, and skills. The coordinator uses this to know how to call the worker.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>sub_agents parameter</strong> &mdash; The A2A agent is passed to <code>sub_agents</code> rather than <code>tools</code>, allowing ADK to handle multi-turn delegation transparently.</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="snippet-block" style="margin-top: 1.5rem;">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--blue-dim);color:var(--blue)">Step 2</span>
+          <span class="snippet-title">The Agent Card (Discovery & capabilities)</span>
+          <span class="snippet-file">agents/worker/agent.json</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre>{
+  <span class="st">"name"</span>: <span class="st">"worker"</span>,
+  <span class="st">"description"</span>: <span class="st">"A worker agent..."</span>,
+  <span class="st">"supportedInterfaces"</span>: [
+    {
+      <span class="st">"url"</span>: <span class="st">"http://localhost:8001/a2a/worker"</span>,
+      <span class="st">"protocolBinding"</span>: <span class="st">"JSONRPC"</span>,
+      <span class="st">"protocolVersion"</span>: <span class="st">"1.0"</span>
+    }
+  ],
+  <span class="st">"skills"</span>: [
+    {
+      <span class="st">"id"</span>: <span class="st">"worker"</span>,
+      <span class="st">"name"</span>: <span class="st">"model"</span>,
+      <span class="st">"description"</span>: <span class="st">"..."</span>,
+      <span class="st">"tags"</span>: [<span class="st">"llm"</span>]
+    }
+  ]
+}</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>Agent Card definition</strong> &mdash; Just like a digital business card, this JSON defines who the agent is, what it can do (its <code>skills</code>), and exactly where to find it (<code>supportedInterfaces</code>).</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>protocolBinding</strong> &mdash; A2A relies heavily on standard HTTP POST requests with <code>JSONRPC 1.0</code> payload structures to send the instruction and parse the result. Streaming is done via Server-Sent Events (SSE).</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>Dynamic A2A routing</strong> &mdash; When you run <code>adk api_server --a2a agents</code>, ADK scans the folder for <code>agent.json</code>. If found, it parses the card and automatically maps the A2A endpoints at the specified <code>url</code>!</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="snippet-block" style="margin-top: 1.5rem;">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--blue-dim);color:var(--blue)">Step 3</span>
+          <span class="snippet-title">Generating Agent Cards Automatically</span>
+          <span class="snippet-file">build_card.py (example script)</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">import</span> asyncio
+<span class="kw">from</span> google.adk.a2a.utils.agent_card_builder <span class="kw">import</span> <span class="cl">AgentCardBuilder</span>
+<span class="kw">from</span> google.protobuf.json_format <span class="kw">import</span> <span class="cl">MessageToJson</span>
+<span class="kw">from</span> agents.worker.agent <span class="kw">import</span> root_agent
+
+<span class="kw">async def</span> <span class="fn">main</span>():
+    builder = <span class="cl">AgentCardBuilder</span>(
+        agent=root_agent, 
+        rpc_url=<span class="st">"http://localhost:8001/a2a/worker"</span>
+    )
+    card = <span class="kw">await</span> builder.<span class="fn">build</span>()
+    <span class="kw">with</span> <span class="cl">open</span>(<span class="st">"agents/worker/agent.json"</span>, <span class="st">"w"</span>) <span class="kw">as</span> f:
+        f.<span class="fn">write</span>(<span class="cl">MessageToJson</span>(card))
+
+<span class="kw">if</span> __name__ == <span class="st">"__main__"</span>:
+    asyncio.<span class="fn">run</span>(main())</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>AgentCardBuilder</strong> &mdash; Instead of hand-coding the JSON, ADK provides a builder that statically analyzes your <code>root_agent</code> to extract its name, description, and sub-tools/skills.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>Protobuf Under the Hood</strong> &mdash; The <code>AgentCard</code> model inside ADK A2A SDK is a Protobuf message, not a standard Pydantic model. That's why we use <code>MessageToJson(card)</code> to serialize it perfectly.</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="snippet-block" style="margin-top: 1.5rem;">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--blue-dim);color:var(--blue)">Step 4</span>
+          <span class="snippet-title">Under the hood: The JSON-RPC request</span>
+          <span class="snippet-file">HTTP POST Payload</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre>{
+  <span class="st">"jsonrpc"</span>: <span class="st">"2.0"</span>,
+  <span class="st">"method"</span>: <span class="st">"execute"</span>,
+  <span class="st">"params"</span>: {
+    <span class="st">"agent_id"</span>: <span class="st">"worker"</span>,
+    <span class="st">"task"</span>: <span class="st">"Please analyze this dataset..."</span>,
+    <span class="st">"context_id"</span>: <span class="st">"session-12345"</span>,
+    <span class="st">"stream"</span>: <span class="kw">true</span>
+  },
+  <span class="st">"id"</span>: <span class="st">"req-8f92-4b2a"</span>
+}</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>Standardized envelope</strong> &mdash; Rather than ad-hoc REST schemas, A2A encapsulates every interaction as a <code>JSON-RPC 2.0</code> call to the <code>execute</code> method.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>Context propagation</strong> &mdash; <code>context_id</code> enables agents to remember state across multiple interactions in a single overarching session without sending full chat history every time.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>Streaming support</strong> &mdash; If <code>stream: true</code> is passed, the worker will respond with <code>text/event-stream</code> (Server-Sent Events), allowing the coordinator to receive tokens in real-time.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- FallbackLlm deep-dive -->
+    <section id="fallback">
+      <div class="section-header">
+        <div class="section-icon" style="background:var(--orange-dim)">&#x1F504;</div>
+        <h2>FallbackLlm &mdash; How It Works</h2>
+      </div>
+      <p>Used by <code>hello_world</code>, <code>dota_draft_analyzer</code>, and <code>note_taking_agent</code>. Lives in <code>shared/utils/fallback_model.py</code> and subclasses ADK&apos;s <code>BaseLlm</code>.</p>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+graph TD
+    A["generate_content_async()"] --> B["Try primary\ngemini-2.5-flash"]
+    B -->|Success| C["yield LlmResponse"]
+    B -->|"429 / RateLimitError\nAPIConnectionError"| D["_should_fallback() True"]
+    D --> E["Print warning to stderr"]
+    E --> F["Try fallback\nollama_chat/qwen2.5:7b"]
+    F --> G["yield LlmResponse"]
+    B -->|Other errors| H["re-raise"]
+        </div>
+      </div>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--orange-dim);color:var(--orange)">Core</span>
+          <span class="snippet-title">generate_content_async &mdash; try primary, catch rate limits, route to fallback</span>
+          <span class="snippet-file">shared/utils/fallback_model.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">class</span> <span class="cl">FallbackLlm</span>(<span class="cl">BaseLlm</span>):
+    primary_model_name: <span class="cl">str</span>
+    fallback_model_name: <span class="cl">str</span>
+
+    <span class="kw">async def</span> <span class="fn">generate_content_async</span>(
+        self,
+        llm_request: <span class="cl">LlmRequest</span>,
+        stream: <span class="cl">bool</span> = <span class="kw">False</span>,
+    ) -&gt; <span class="cl">AsyncGenerator</span>[<span class="cl">LlmResponse</span>, <span class="kw">None</span>]:
+        primary = self.<span class="fn">_get_primary</span>()
+        <span class="kw">try</span>:
+            <span class="kw">async for</span> response <span class="kw">in</span> \
+              primary.<span class="fn">generate_content_async</span>(
+                llm_request, stream=stream):
+                <span class="kw">yield</span> response
+        <span class="kw">except</span> <span class="cl">Exception</span> <span class="kw">as</span> e:
+            <span class="kw">if</span> self.<span class="fn">_should_fallback</span>(e):
+                <span class="fn">print</span>(<span class="st">f"switching to fallback"</span>,
+                      file=sys.stderr)
+                fallback = self.<span class="fn">_get_fallback</span>()
+                <span class="kw">async for</span> response <span class="kw">in</span> \
+                  fallback.<span class="fn">generate_content_async</span>(
+                    llm_request, stream=stream):
+                    <span class="kw">yield</span> response
+            <span class="kw">else</span>:
+                <span class="kw">raise</span>  <span class="cm"># non-rate-limit errors bubble up</span></pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--orange)"></span><span class="explain-text"><strong>async generator</strong> &mdash; matches ADK&apos;s streaming interface exactly. Works for both streaming and non-streaming without branching.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--orange)"></span><span class="explain-text"><strong>_should_fallback()</strong> checks for: <code>ResourceExhausted</code>, <code>RateLimitError</code>, <code>APIConnectionError</code> plus string matching on &ldquo;429&rdquo;, &ldquo;rate limit&rdquo;, &ldquo;quota&rdquo;, &ldquo;resource exhausted&rdquo;.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--orange)"></span><span class="explain-text"><strong>Silent to the user</strong> &mdash; warning goes to stderr only. The conversation continues uninterrupted; the user never sees the switch happen.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--orange)"></span><span class="explain-text"><strong>re-raise on other errors</strong> &mdash; auth failures, bad JSON, etc. should surface to the developer. Only rate-limit / availability issues silently fallback.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- ADK Primitives -->
+    <section id="primitives">
+      <div class="section-header">
+        <div class="section-icon" style="background:var(--surface-2)">&#x1F4D0;</div>
+        <h2>ADK Core Primitives Reference</h2>
+      </div>
+      <p>Quick reference for the building blocks used across all agents.</p>
+
+      <table>
+        <thead>
+          <tr><th>Class / Concept</th><th>Role</th><th>Used in</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="mono">Agent</td><td>Main definition &mdash; model + instruction + tools</td><td>All agents</td></tr>
+          <tr><td class="mono">LiteLlm</td><td>Adapter for non-Google models (Ollama, OpenAI...)</td><td>ollama_agent, FallbackLlm</td></tr>
+          <tr><td class="mono">McpToolset</td><td>Connects to MCP server, auto-imports its tools</td><td>github_agent</td></tr>
+          <tr><td class="mono">BaseLlm</td><td>Base class for custom model wrappers</td><td>FallbackLlm extends it</td></tr>
+          <tr><td class="mono">ToolContext</td><td>Injected by ADK into stateful tools; exposes session.state</td><td>note_taking_agent tools</td></tr>
+          <tr><td class="mono">session.state</td><td>Per-conversation key-value store; persists across turns</td><td>note_taking_agent</td></tr>
+          <tr><td class="mono">root_agent</td><td>Module-level var; ADK&apos;s CLI entry-point convention</td><td>All agents</td></tr>
+          <tr><td class="mono">tool_filter</td><td>Whitelist of MCP tools to expose to the agent</td><td>github_agent</td></tr>
+          <tr><td class="mono">FallbackLlm</td><td>Custom BaseLlm: primary Gemini + Ollama fallback on 429</td><td>hello_world, dota, notes</td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin-top:1.5rem">CLI cheat sheet</h3>
+      <div class="code-plain">
+        <pre><span class="cm"># Chat with an agent in the terminal</span>
+adk run agents/hello_world
+adk run agents/weather_agent
+adk run agents/github_agent
+adk run agents/ollama_agent
+adk run agents/dota_draft_analyzer
+adk run agents/note_taking_agent
+
+<span class="cm"># Launch the web UI at localhost:8000</span>
+adk web
+
+<span class="cm"># Run a specific agent in the web UI</span>
+adk web agents/note_taking_agent
+
+<span class="cm"># Scaffold a new agent folder</span>
+adk create agents/my_new_agent</pre>
+      </div>
+
+      <h3 style="margin-top:1.5rem">State scope cheat sheet</h3>
+      <div class="code-plain">
+        <pre><span class="cm"># Session-scoped (resets each new conversation)</span>
+tool_context.state["notes"]         <span class="cm"># no prefix</span>
+
+<span class="cm"># User-scoped (survives across sessions, tied to user)</span>
+tool_context.state["user:notes"]    <span class="cm"># user: prefix</span>
+
+<span class="cm"># App-scoped (global, shared across all users)</span>
+tool_context.state["app:config"]    <span class="cm"># app: prefix</span></pre>
+      </div>
+    </section>
+
+    <div class="footer">
+      Google ADK 2.5.0 &middot; Gemini 2.5 Flash &middot; Phase 1, 2 &amp; 3 complete &middot; 6 agents &middot; Aug 2026
+    </div>
+
+  </main>
+</div>
+</body>
+</html>
