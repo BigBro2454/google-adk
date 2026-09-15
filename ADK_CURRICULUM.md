@@ -230,16 +230,16 @@ session.state["user_name"] = "Ishan"
 
 #### Topics to Study
 
-- [ ] SessionService — in-memory vs. database-backed sessions
-- [ ] Reading and writing session.state from inside tools
-- [ ] State prefix scopes: app:, user:, temp:
-- [ ] Building multi-turn conversations that maintain context
+- [x] SessionService — in-memory vs. database-backed sessions
+- [x] Reading and writing session.state from inside tools
+- [x] State prefix scopes: app:, user:, temp:
+- [x] Building multi-turn conversations that maintain context
 
 #### Hands-On Projects
 
-- [ ] Project 3.1 — Build a note_taking_agent that saves notes to session state
-- [ ] Project 3.2 — Build a multi-turn quiz_agent that tracks score in state
-- [ ] Project 3.3 — Persist sessions to SQLite with DatabaseSessionService
+- [x] Project 3.1 — Build a note_taking_agent that saves notes to session state
+- [x] Project 3.2 — Build a multi-turn quiz_agent that tracks score in state
+- [x] Project 3.3 — Persist sessions to SQLite with DatabaseSessionService
 
 ---
 
@@ -606,12 +606,12 @@ adk deploy cloud_run          # Deploy to Google Cloud Run
 ## Progress Tracker
 
 ### Phase 1 — Foundations (Weeks 1-2)
-- [ ] Week 1: Understand the agent loop and ADK mental model
-- [ ] Week 2: First agent running locally, hello_world complete
+- [x] Week 1: Understand the agent loop and ADK mental model
+- [x] Week 2: First agent running locally, hello_world complete
 
 ### Phase 2 — Core Capabilities (Weeks 3-5)
-- [ ] Week 3: Tools and MCP integration
-- [ ] Week 4: Sessions and State management
+- [x] Week 3: Tools and MCP integration
+- [x] Week 4: Sessions and State management
 - [ ] Week 5: Memory and Callbacks with guardrails
 
 ### Phase 3 — Multi-Agent Systems (Weeks 6-8)

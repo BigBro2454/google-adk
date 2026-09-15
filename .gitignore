@@ -27,6 +27,8 @@ env/
 logs/
 *.log
 *.sqlite3
+*.db
+data/*.db
 
 # macOS
 .DS_Store

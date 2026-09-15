@@ -50,6 +50,8 @@ graph TB
         A_Git["GitHub MCP Agent<br/>(Platform Automation)"]
         A_Weather["Weather Agent<br/>(2-Step Tool Chainer)"]
         A_Notes["Stateful Notes Agent<br/>(Session CRUD)"]
+        A_Quiz["Interactive Quiz Agent<br/>(Multi-turn State & Streaks)"]
+        A_Persist["Persistent State Agent<br/>(DatabaseSessionService)"]
         A_Dota["Dota Tactical Coach<br/>(Structured Prompt Agent)"]
         A_Local["Local Ollama Agent<br/>(Offline / Private Agent)"]
     end
@@ -65,6 +67,7 @@ graph TB
         MCPClient["GitHub MCP Server<br/>(Stdio Subprocess Protocol)"]
         RestTools["Open-Meteo REST API<br/>(Geocoding + Forecast)"]
         SessionTools["Session State Memory<br/>(tool_context.state dict)"]
+        SQLiteStore["Relational SQLite DB<br/>(DatabaseSessionService: data/sessions.db)"]
     end
 
     %% Wiring
@@ -152,6 +155,16 @@ Rather than writing bespoke wrappers for enterprise SaaS APIs, the `github_agent
 - **Dynamically Discovered Schemas:** Agent discovers tools dynamically (`search_repositories`, `get_file_contents`, `list_issues`, `search_code`, `list_commits`).
 - **Tool Filtering:** Whitelisting only 6 necessary tools from 25+ exposed endpoints reduces the system prompt token footprint by **~68%**.
 
+### Pattern D: Relational State Persistence & Multi-Tier Scoping (`DatabaseSessionService`)
+
+Conversations and agent scratchpads cannot rely solely on process memory in production. `DatabaseSessionService` maps ADK conversations directly to an SQLite or PostgreSQL database across five distinct tables:
+
+1. **`sessions` (Session Scope):** Unprefixed keys (`tasks`, quiz score) live in the active conversation thread and survive process restarts for that `session_id`.
+2. **`user_states` (User Scope):** Keys prefixed with `user:` (`user:preferences`) persist across **all distinct sessions** created for that user ID.
+3. **`app_states` (App Scope):** Keys prefixed with `app:` (`app:stats`) persist globally across all users and all sessions.
+4. **`events` (Audit Trail):** Full append-only log of every user message, model thought, tool call, and tool response in JSON.
+5. **`temp:` (Transient Scope):** Ephemeral values are automatically stripped before writing to storage.
+
 ---
 
 ## 4. Agent Showcase & Implementation Catalog
@@ -162,7 +175,9 @@ Rather than writing bespoke wrappers for enterprise SaaS APIs, the `github_agent
 | **`worker`** | Gemini 2.5 Flash + Fallback | Autonomous Background Worker | Microservice agent exposing an A2A interface for distributed compute. |
 | **`github_agent`** | Gemini 2.5 Flash | `McpToolset` (Stdio Protocol) | Standardized MCP tool ingestion with strict token-optimized tool filtering. |
 | **`weather_agent`** | Gemini 2.5 Flash | Open-Meteo REST API (2 Tools) | Deterministic two-step tool chaining (`get_coordinates` → `get_weather`) without hardcoded loops. |
+| **`persistent_agent`**| Gemini 2.5 Flash + Fallback| `DatabaseSessionService` (SQLite) | Relational multi-tier state scoping (session, `user:`, `app:`) persisting across process restarts. |
 | **`note_taking_agent`** | Gemini 2.5 Flash + Fallback | Injected `ToolContext` | Multi-turn CRUD state engine persisting data in `tool_context.state` across turns. |
+| **`quiz_agent`** | Gemini 2.5 Flash + Fallback | Injected `ToolContext` | Interactive quiz master tracking scores, questions, streaks, and history across turns. |
 | **`dota_draft_analyzer`**| Gemini 2.5 Flash + Fallback | Structured Prompt Engineering | Zero-tool tactical coaching agent enforcing Guardian-tier heuristics and strict markdown specs. |
 | **`ollama_agent`** | Local Qwen 2.5:7b / Gemma | Local Calculator Tools | 100% offline, zero-latency, private execution via LiteLLM and local Ollama daemon. |
 | **`hello_world`** | Gemini 2.5 Flash + Fallback | Custom Calculator (`add`, `sub`, `mul`) | Baseline sanity agent used for integration testing and runtime diagnostics. |
@@ -265,6 +280,15 @@ adk run agents/weather_agent
 # Test multi-turn session state notes agent
 adk run agents/note_taking_agent
 
+# Test multi-turn interactive quiz agent
+adk run agents/quiz_agent
+
+# Test SQLite persistent session agent via ADK CLI
+adk run agents/persistent_agent --session_service_uri sqlite:///data/sessions.db
+
+# Run automated multi-session restart & scoping verification demo
+python runners/sqlite_session_runner.py --demo
+
 # Test Dota 2 tactical analysis
 adk run agents/dota_draft_analyzer
 ```
@@ -311,9 +335,15 @@ google-adk/
 │   ├── weather_agent/             # Production REST API tool chaining
 │   │   ├── agent.py
 │   │   └── tools/weather.py       # get_coordinates & get_weather (Open-Meteo)
+│   ├── persistent_agent/          # SQLite-backed relational persistence agent
+│   │   ├── agent.py               # Implements session, user, and app scoping
+│   │   └── tools/persistent_tools.py # CRUD and prefix-scoped state tools
 │   ├── note_taking_agent/         # Stateful session memory agent
 │   │   ├── agent.py
 │   │   └── tools/notes.py         # CRUD tools using ToolContext injection
+│   ├── quiz_agent/                # Multi-turn interactive trivia & quiz agent
+│   │   ├── agent.py
+│   │   └── tools/quiz.py          # Gamified tools with score & streak state
 │   ├── dota_draft_analyzer/       # Structured tactical reasoning engine
 │   │   └── agent.py
 │   ├── ollama_agent/              # Fully offline private agent
@@ -321,11 +351,18 @@ google-adk/
 │   └── hello_world/               # Foundational agent & arithmetic tools
 │       ├── agent.py
 │       └── tools/calculator.py
+├── runners/
+│   ├── __init__.py
+│   └── sqlite_session_runner.py   # DatabaseSessionService runner & demo suite
+├── tests/
+│   └── test_sqlite_sessions.py    # Unit tests for SQLite schema & state scopes
 ├── shared/
 │   └── utils/
 │       └── fallback_model.py      # Resilient FallbackLlm circuit-breaker class
 ├── docs/
 │   └── agents_documentation.html  # Interactive visual documentation suite
+├── data/
+│   └── sessions.db                # SQLite database (sessions, events, states)
 ├── .env.example                   # Sanitized environment variable template
 ├── .gitignore                     # Zero-leak pattern definitions
 ├── ADK_CURRICULUM.md              # 12-Week Zero-to-Production Learning Path
@@ -339,9 +376,9 @@ google-adk/
 
 This project is part of a 12-week comprehensive mastery of **Google Cloud AI & Vertex AI Agent Development**:
 
-- **Phase 1: Foundations (Weeks 1–2):** Agent loop primitives, tool calling, CLI/Web UI workflows. *(Completed)*
-- **Phase 2: Core Capabilities (Weeks 3–5):** REST API tool chaining, MCP integrations, stateful sessions, and `FallbackLlm` architecture. *(Completed / In Progress)*
-- **Phase 3: Multi-Agent Systems (Weeks 6–8):** Agent-to-Agent (A2A) protocol, Agent-as-a-Tool, and graph orchestration. *(Underway)*
+- **Phase 1: Foundations (Weeks 1–2):** Agent loop primitives, tool calling, CLI/Web UI workflows. *(Completed ✅)*
+- **Phase 2: Core Capabilities (Weeks 3–5):** REST API tool chaining, MCP integrations, stateful sessions, SQLite relational persistence (`DatabaseSessionService`), and `FallbackLlm` architecture. *(Weeks 3 & 4 Complete ✅; Week 5 Next Up)*
+- **Phase 3: Multi-Agent Systems (Weeks 6–8):** Agent-to-Agent (A2A) protocol, Agent-as-a-Tool, and graph orchestration.
 - **Phase 4: Production & Scale (Weeks 9–12):** Evals, Cloud Run deployment, OpenTelemetry tracing, and guardrails.
 
 For the exhaustive curriculum and weekly progress logs, see [`ADK_CURRICULUM.md`](./ADK_CURRICULUM.md) and [`LEARNING_PROGRESS.md`](./LEARNING_PROGRESS.md).

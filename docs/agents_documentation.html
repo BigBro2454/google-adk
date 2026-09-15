@@ -32,9 +32,9 @@
       --radius: 12px; --radius-sm: 8px; --font-mono: 'JetBrains Mono', monospace;
     }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; min-height: 100vh; }
-    .layout { display: grid; grid-template-columns: 248px 1fr; min-height: 100vh; }
-    .sidebar { position: sticky; top: 0; height: 100vh; overflow-y: auto; background: var(--surface); border-right: 1px solid var(--border); padding: 2rem 1.25rem; display: flex; flex-direction: column; gap: 0.2rem; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; min-height: 100vh; overflow-x: hidden; }
+    .layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); min-height: 100vh; width: 100%; }
+    .sidebar { position: sticky; top: 0; height: 100vh; overflow-y: auto; background: var(--surface); border-right: 1px solid var(--border); padding: 2rem 1.25rem; display: flex; flex-direction: column; gap: 0.2rem; flex-shrink: 0; }
     .sidebar-logo { display: flex; align-items: center; gap: 0.625rem; margin-bottom: 1.75rem; padding-left: 0.25rem; }
     .sidebar-logo .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, #4285f4, #34d399); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
     .sidebar-logo span { font-size: 0.875rem; font-weight: 600; color: var(--text); line-height: 1.3; }
@@ -42,14 +42,14 @@
     .nav-link { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.625rem; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--text-muted); text-decoration: none; transition: background 0.15s, color 0.15s; }
     .nav-link:hover { background: var(--surface-2); color: var(--text); }
     .nav-link .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-    .main { padding: 3rem 3.5rem; max-width: 900px; }
+    .main { padding: 3rem 4rem; width: 100%; min-width: 0; box-sizing: border-box; }
     .hero { margin-bottom: 3rem; }
     .hero-badge { display: inline-flex; align-items: center; gap: 0.375rem; background: var(--blue-dim); border: 1px solid rgba(96,165,250,0.25); color: var(--blue); font-size: 0.75rem; font-weight: 500; padding: 0.25rem 0.75rem; border-radius: 999px; margin-bottom: 1rem; }
     .hero h1 { font-size: 2.1rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.03em; margin-bottom: 0.875rem; }
-    .hero p { font-size: 0.95rem; color: var(--text-muted); max-width: 620px; line-height: 1.8; }
+    .hero p { font-size: 0.95rem; color: var(--text-muted); max-width: 1100px; line-height: 1.8; }
     .tech-stack { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.25rem; }
     .tech-pill { font-size: 0.75rem; font-weight: 500; padding: 0.25rem 0.75rem; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-muted); font-family: var(--font-mono); }
-    section { margin-bottom: 3.5rem; scroll-margin-top: 2rem; }
+    section { margin-bottom: 3.5rem; scroll-margin-top: 2rem; width: 100%; }
     .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
     .section-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
     h2 { font-size: 1.2rem; font-weight: 600; letter-spacing: -0.02em; }
@@ -57,7 +57,7 @@
     p { color: var(--text-muted); font-size: 0.875rem; line-height: 1.8; margin-bottom: 0.75rem; }
     p:last-child { margin-bottom: 0; }
     hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
-    .agent-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.75rem; }
+    .agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem; margin-top: 0.75rem; }
     .agent-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; position: relative; overflow: hidden; transition: transform 0.18s; }
     .agent-card::before { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
     .agent-card:hover { transform: translateY(-2px); }
@@ -74,23 +74,24 @@
     .agent-card p { font-size: 0.8rem; margin: 0; margin-top: 0.25rem; }
     .agent-meta { margin-top: 0.75rem; display: flex; gap: 0.375rem; flex-wrap: wrap; }
     .meta-tag { font-size: 0.68rem; font-family: var(--font-mono); padding: 0.15rem 0.5rem; border-radius: 4px; background: var(--surface-3); color: var(--text-muted); border: 1px solid var(--border); }
-    .diagram-wrapper { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem 1.5rem; overflow-x: auto; }
-    .diagram-wrapper .mermaid { display: flex; justify-content: center; }
+    .diagram-wrapper { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem 1.5rem; overflow-x: auto; width: 100%; box-sizing: border-box; }
+    .diagram-wrapper .mermaid { display: flex; justify-content: center; width: 100%; }
+    .diagram-wrapper .mermaid svg { max-width: 100%; height: auto; }
     .callout { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid; border-radius: var(--radius-sm); padding: 0.875rem 1.125rem; margin: 1rem 0; display: flex; gap: 0.75rem; }
     .callout.info { border-left-color: var(--blue); }
     .callout.tip { border-left-color: var(--teal); }
     .callout.warn { border-left-color: var(--amber); }
     .callout .callout-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.05rem; }
     .callout p { margin: 0; font-size: 0.82rem; }
-    .snippet-block { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1.75rem; }
+    .snippet-block { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1.75rem; width: 100%; }
     .snippet-header { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 1.1rem; background: var(--surface-2); border-bottom: 1px solid var(--border); }
     .snippet-badge { font-size: 0.63rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 4px; flex-shrink: 0; }
     .snippet-title { font-size: 0.8rem; font-weight: 600; color: var(--text); font-family: var(--font-mono); flex: 1; }
     .snippet-file { font-size: 0.7rem; color: var(--text-dim); }
-    .snippet-body { display: grid; grid-template-columns: 1fr 1fr; }
-    .snippet-code { border-right: 1px solid var(--border); overflow-x: auto; }
+    .snippet-body { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); width: 100%; }
+    .snippet-code { border-right: 1px solid var(--border); overflow-x: auto; min-width: 0; }
     .snippet-code pre { padding: 1.1rem 1.25rem; font-size: 0.775rem; line-height: 1.75; color: var(--text); font-family: var(--font-mono); margin: 0; }
-    .snippet-explain { padding: 1.1rem 1.25rem; background: var(--surface); display: flex; flex-direction: column; gap: 0.6rem; }
+    .snippet-explain { padding: 1.1rem 1.25rem; background: var(--surface); display: flex; flex-direction: column; gap: 0.6rem; min-width: 0; }
     .explain-item { display: flex; gap: 0.6rem; align-items: flex-start; }
     .explain-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 0.45rem; flex-shrink: 0; }
     .explain-text { font-size: 0.8rem; color: var(--text-muted); line-height: 1.65; }
@@ -101,23 +102,69 @@
     .mini-flow-node { display: flex; align-items: center; justify-content: center; padding: 0.28rem 0.65rem; border-radius: 6px; font-size: 0.71rem; font-weight: 500; border: 1px solid var(--border); background: var(--surface-3); color: var(--text-muted); white-space: nowrap; font-family: var(--font-mono); }
     .mini-flow-node.active { color: var(--text); font-weight: 600; }
     .mini-flow-arrow { font-size: 0.7rem; color: var(--text-dim); padding: 0 0.3rem; flex-shrink: 0; }
-    .agent-section-header { display: flex; align-items: center; gap: 1rem; padding: 1.25rem 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 1.75rem; }
+    .agent-section-header { display: flex; align-items: center; gap: 1rem; padding: 1.25rem 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 1.75rem; width: 100%; box-sizing: border-box; }
     .agent-section-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
     .agent-section-meta { flex: 1; }
     .agent-section-meta h2 { font-size: 1.15rem; margin-bottom: 0.2rem; }
     .agent-section-meta p { margin: 0; font-size: 0.82rem; }
     .agent-section-pills { display: flex; gap: 0.375rem; flex-wrap: wrap; margin-top: 0.5rem; }
-    table { border-collapse: collapse; width: 100%; font-size: 0.83rem; margin-top: 0.75rem; }
+    .table-container { width: 100%; overflow-x: auto; margin-top: 0.75rem; -webkit-overflow-scrolling: touch; }
+    table { border-collapse: collapse; width: 100%; font-size: 0.83rem; }
     th { text-align: left; padding: 0.5rem 0.75rem; color: var(--text-muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); }
     td { padding: 0.6rem 0.75rem; color: var(--text-muted); border-bottom: 1px solid var(--border); }
     td.mono { font-family: var(--font-mono); color: var(--blue); font-size: 0.8rem; }
-    .code-plain { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-top: 0.5rem; }
-    .code-plain pre { font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.8; color: var(--text); }
-    .footer { padding: 2rem 0; color: var(--text-dim); font-size: 0.75rem; border-top: 1px solid var(--border); margin-top: 1rem; }
-    @media (max-width: 800px) {
-      .layout { grid-template-columns: 1fr; } .sidebar { display: none; } .main { padding: 2rem 1.25rem; }
-      .agent-grid { grid-template-columns: 1fr; } .snippet-body { grid-template-columns: 1fr; }
+    .code-plain { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-top: 0.5rem; width: 100%; box-sizing: border-box; }
+    .code-plain pre { font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.8; color: var(--text); overflow-x: auto; }
+    .footer { padding: 2rem 0; color: var(--text-dim); font-size: 0.75rem; border-top: 1px solid var(--border); margin-top: 1rem; width: 100%; }
+    .mobile-nav { display: none; }
+
+    @media (max-width: 1280px) {
+      .main { padding: 2.5rem 3rem; }
+      .snippet-body { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); }
+    }
+    @media (max-width: 1024px) {
+      .snippet-body { grid-template-columns: 1fr; }
       .snippet-code { border-right: none; border-bottom: 1px solid var(--border); }
+      .main { padding: 2.5rem 2rem; }
+    }
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .mobile-nav {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        overflow-x: auto;
+        padding: 0.75rem 1.25rem;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        -webkit-overflow-scrolling: touch;
+        margin: -2rem -1.25rem 2rem -1.25rem;
+      }
+      .mobile-nav::-webkit-scrollbar { display: none; }
+      .mobile-nav a {
+        white-space: nowrap;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        text-decoration: none;
+        padding: 0.35rem 0.7rem;
+        background: var(--surface-2);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        font-family: var(--font-mono);
+      }
+      .mobile-nav a:hover { color: var(--text); border-color: var(--blue); }
+      .main { padding: 2rem 1.25rem; }
+    }
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.65rem; }
+      .agent-grid { grid-template-columns: 1fr; }
+      .agent-section-header { flex-direction: column; align-items: flex-start; }
+      .main { padding: 1.5rem 1rem; }
+      .mobile-nav { margin: -1.5rem -1rem 1.5rem -1rem; }
     }
   </style>
 </head>
@@ -140,6 +187,8 @@
     <a class="nav-link" href="#ollama"><span class="dot" style="background:var(--amber)"></span>ollama_agent</a>
     <a class="nav-link" href="#dota"><span class="dot" style="background:var(--rose)"></span>dota_draft_analyzer</a>
     <a class="nav-link" href="#notes"><span class="dot" style="background:var(--green)"></span>note_taking_agent</a>
+    <a class="nav-link" href="#quiz"><span class="dot" style="background:var(--amber)"></span>quiz_agent</a>
+    <a class="nav-link" href="#persistent"><span class="dot" style="background:var(--teal)"></span>persistent_agent</a>
     <span class="nav-section-label">Multi-Agent</span>
     <a class="nav-link" href="#a2a"><span class="dot" style="background:var(--blue)"></span>A2A System</a>
     <span class="nav-section-label">Internals</span>
@@ -148,18 +197,35 @@
   </aside>
 
   <main class="main">
+    <nav class="mobile-nav">
+      <a href="#overview">Overview</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#hello-world">hello_world</a>
+      <a href="#weather">weather</a>
+      <a href="#github">github</a>
+      <a href="#ollama">ollama</a>
+      <a href="#dota">dota</a>
+      <a href="#notes">notes</a>
+      <a href="#quiz">quiz</a>
+      <a href="#persistent">persistent</a>
+      <a href="#a2a">a2a</a>
+      <a href="#fallback">fallback</a>
+      <a href="#primitives">primitives</a>
+    </nav>
 
     <!-- Hero -->
     <div class="hero" id="overview">
       <div class="hero-badge">&#x1F916; Google ADK &middot; Phase 1, 2 &amp; 3 Agents</div>
       <h1>ADK Agent<br>Documentation</h1>
-      <p>Code walkthroughs for all six agents built during the Google ADK curriculum (Phases 1&ndash;3). Each section covers what the agent does, how it is wired together, the full execution workflow, and the key ADK patterns it demonstrates.</p>
+      <p>Code walkthroughs for the autonomous and multi-agent systems built during the Google ADK curriculum (Phases 1&ndash;3). Each section covers agent capabilities, topology, execution workflows, and key ADK patterns.</p>
       <div class="tech-stack">
         <span class="tech-pill">google-adk 2.5.0</span>
         <span class="tech-pill">gemini-2.5-flash</span>
         <span class="tech-pill">gemini-2.0-flash</span>
         <span class="tech-pill">litellm</span>
         <span class="tech-pill">ollama</span>
+        <span class="tech-pill">DatabaseSessionService</span>
+        <span class="tech-pill">SQLite (aiosqlite)</span>
         <span class="tech-pill">open-meteo</span>
         <span class="tech-pill">github-mcp-server</span>
         <span class="tech-pill">A2A Protocol</span>
@@ -189,17 +255,25 @@ graph TD
         oa["ollama_agent/\nagent.py"]
         da["dota_draft_analyzer/\nagent.py"]
         na["note_taking_agent/\nagent.py + tools/notes.py"]
+        qa["quiz_agent/\nagent.py + tools/quiz.py"]
+        pa["persistent_agent/\nagent.py + tools/persistent_tools.py"]
         co["coordinator/\nagent.py"]
         wo["worker/\nagent.py + agent.json"]
       end
       subgraph S["shared/"]
         fb["utils/fallback_model.py\nFallbackLlm"]
       end
+      subgraph Storage["Persistence Layer"]
+        db[("SQLite Database\ndata/sessions.db\n(sessions, events, states)")]
+      end
     end
     hw --> fb
     oa --> fb
     da --> fb
     na --> fb
+    qa --> fb
+    pa --> fb
+    pa -->|"DatabaseSessionService"| db
     co --> fb
     wo --> fb
     co -.->|"A2A Protocol\nRemoteA2aAgent"| wo
@@ -255,6 +329,22 @@ graph TD
           <p>Stateful notes across turns via session.state. Introduces ToolContext injection.</p>
           <div class="agent-meta"><span class="meta-tag">session.state</span><span class="meta-tag">ToolContext</span><span class="meta-tag">5 tools</span></div>
         </div>
+        <div class="agent-card amber">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--amber-dim)">&#x1F393;</div>
+            <h3>quiz_agent</h3>
+          </div>
+          <p>Multi-turn trivia master tracking questions, scores, and answer streaks in session.state.</p>
+          <div class="agent-meta"><span class="meta-tag">session.state</span><span class="meta-tag">ToolContext</span><span class="meta-tag">5 tools</span></div>
+        </div>
+        <div class="agent-card teal">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--teal-dim)">&#x1F4BE;</div>
+            <h3>persistent_agent</h3>
+          </div>
+          <p>Relational SQLite persistence via DatabaseSessionService. Supports session, user, and app state scoping.</p>
+          <div class="agent-meta"><span class="meta-tag">DatabaseSessionService</span><span class="meta-tag">SQLite</span><span class="meta-tag">user: scope</span><span class="meta-tag">7 tools</span></div>
+        </div>
         <div class="agent-card blue">
           <div class="agent-card-header">
             <div class="agent-card-icon" style="background:var(--blue-dim)">&#x1F577;&#xFE0F;</div>
@@ -306,7 +396,7 @@ graph TD
 sequenceDiagram
     participant U as User
     participant ADK as ADK Runner
-    participant G as "Gemini 2.0 Flash"
+    participant G as "Gemini 2.5 Flash (FallbackLlm)"
     participant T as calculator tools
     U->>ADK: "What is 42 x 17?"
     ADK->>G: system prompt + user message
@@ -316,6 +406,33 @@ sequenceDiagram
     ADK->>G: tool result injected into context
     G-->>ADK: "42 x 17 = 714"
     ADK-->>U: final reply
+        </div>
+      </div>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+flowchart LR
+    subgraph Client["Client Interface"]
+        U["User Input\n'What is 42 x 17?'"]
+    end
+
+    subgraph Core["hello_world Agent"]
+        ADK["ADK Runner Core"]
+        LLM["FallbackLlm Router\nPrimary: Gemini 2.5 Flash\nFailover: Ollama Qwen 2.5"]
+    end
+
+    subgraph Tools["tools/calculator.py"]
+        T1["add(a, b)"]
+        T2["subtract(a, b)"]
+        T3["multiply(a, b)"]
+    end
+
+    U --> ADK
+    ADK --> LLM
+    LLM -->|"tool_call: multiply(42, 17)"| T3
+    T3 -->|"return: {'result': 714}"| ADK
+    ADK --> LLM
+    LLM -->|"Synthesized Response"| U
         </div>
       </div>
 
@@ -428,7 +545,7 @@ root_agent = <span class="cl">Agent</span>(
 sequenceDiagram
     participant U as User
     participant ADK as ADK Runner
-    participant G as "Gemini 2.0 Flash"
+    participant G as "Gemini 2.5 Flash"
     participant C as get_coordinates
     participant W as get_weather
     U->>ADK: "Weather in Mumbai?"
@@ -443,6 +560,42 @@ sequenceDiagram
     ADK->>G: tool result injected
     G-->>ADK: "Mumbai is 29 C, partly cloudy..."
     ADK-->>U: final reply
+        </div>
+      </div>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+flowchart TD
+    subgraph Input["User Request"]
+        Q["'Weather in Mumbai?'"]
+    end
+
+    subgraph Core["weather_agent Runtime"]
+        ADK["ADK Runner Engine"]
+        G["Gemini 2.5 Flash\n(Instruction: Sequential Chaining)"]
+    end
+
+    subgraph Step1["Step 1: Geocoding Lookup"]
+        C["get_coordinates('Mumbai')"]
+        API1["Open-Meteo Geocoding API\n(geocoding-api.open-meteo.com)"]
+        CoordRes["Result: lat=19.07, lon=72.87"]
+    end
+
+    subgraph Step2["Step 2: Meteorological Forecast"]
+        W["get_weather(19.07, 72.87)"]
+        API2["Open-Meteo Forecast API\n(api.open-meteo.com)"]
+        WeatherRes["Result: temp=29°C, Partly cloudy"]
+    end
+
+    Input --> ADK
+    ADK --> G
+    G -->|"Step 1 Tool Call"| C
+    C --> API1 --> CoordRes --> ADK
+    ADK --> G
+    G -->|"Step 2 Tool Call (lat, lon)"| W
+    W --> API2 --> WeatherRes --> ADK
+    ADK --> G
+    G -->|"Final Formatted Forecast"| Input
         </div>
       </div>
 
@@ -621,6 +774,37 @@ sequenceDiagram
         </div>
       </div>
 
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+flowchart LR
+    subgraph Client["User / Client"]
+        U["'List open issues on google-adk'"]
+    end
+
+    subgraph ADKLayer["ADK Host Process"]
+        Agent["github_agent\n(Gemini 2.5 Flash)"]
+        Filter["tool_filter Whitelist\n(Restricts to 6 of 25+ tools)"]
+        Mcp["McpToolset Client\n(Stdio Protocol)"]
+    end
+
+    subgraph Sandboxed["External Subprocess (Stdio)"]
+        Server["github-mcp-server binary\n(Isolated Process)"]
+    end
+
+    subgraph CloudAPI["GitHub Platform"]
+        GH["GitHub REST / GraphQL API\n(api.github.com)"]
+    end
+
+    U --> Agent
+    Agent --> Filter
+    Filter --> Mcp
+    Mcp <-->|"JSON-RPC 2.0 via Stdio\n(stdin / stdout)"| Server
+    Server <-->|"HTTPS with GITHUB_TOKEN"| GH
+    Mcp --> Agent
+    Agent -->|"Synthesized Markdown Response"| U
+        </div>
+      </div>
+
       <h3>The key insight: MCP vs hand-written tools</h3>
       <p>Instead of writing <code>def search_repos(...)</code>, <code>def list_issues(...)</code> etc., one <code>McpToolset</code> connects to the GitHub MCP server binary and imports <em>all its tools automatically</em>. One line of code gives you an entire platform&apos;s APIs.</p>
 
@@ -761,14 +945,32 @@ sequenceDiagram
         </div>
       </div>
 
-      <h3 style="margin-top:1rem">Architecture</h3>
-
       <div class="diagram-wrapper" style="margin:1rem 0">
         <div class="mermaid">
-graph LR
-    A["ADK Agent"] --> B["LiteLlm\nadapter"]
-    B --> C["Ollama\nlocalhost:11434"]
-    C --> D["qwen2.5:7b\non-device"]
+flowchart LR
+    subgraph Client["Local Host Environment"]
+        U["User Query\n'What is 15 + 27?'"]
+    end
+
+    subgraph Host["ADK Execution Host"]
+        Agent["ollama_agent"]
+        LiteLLM["LiteLlm Adapter\n(Translates to OpenAI Chat API)"]
+        Tools["tools/calculator.py\n(Local Arithmetic)"]
+    end
+
+    subgraph Daemon["Ollama Daemon (localhost:11434)"]
+        OllamaServer["Ollama HTTP Server"]
+        Weights["qwen2.5:7b / gemma\n(Apple Silicon GPU / CUDA)"]
+    end
+
+    U --> Agent
+    Agent --> LiteLLM
+    LiteLLM <-->|"POST /api/chat"| OllamaServer
+    OllamaServer <--> Weights
+    LiteLLM -->|"tool_call: add(15, 27)"| Tools
+    Tools -->|"return: {'result': 42}"| LiteLLM
+    LiteLLM --> Agent
+    Agent -->|"100% On-Device Reply"| U
         </div>
       </div>
 
@@ -855,6 +1057,39 @@ sequenceDiagram
     G-->>ADK: 12-section pre-match analysis
     ADK-->>U: Strategy, Laning, Skill Build, Items, Timings...
     Note over G,OL: If rate-limited, FallbackLlm retries via Ollama silently
+        </div>
+      </div>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+flowchart TD
+    subgraph Input["Matchup Draft Context"]
+        Match["Hero Selection Input\n(e.g., 'Playing Axe. Axe, CM, DP vs PA, Tide, Puck')"]
+    end
+
+    subgraph Core["dota_draft_analyzer Engine"]
+        Agent["dota_draft_analyzer (Zero Tools)"]
+        Router["FallbackLlm Router"]
+        Prompt["INSTRUCTIONS Prompt Contract\n- 1 bullet per section\n- Guardian-tier exploit mentality\n- Deterministic markdown structure"]
+    end
+
+    subgraph LLMLayer["Reasoning Engine"]
+        Gemini["Primary: Gemini 2.5 Flash"]
+        Ollama["Local Failover: Qwen 2.5:7b"]
+    end
+
+    subgraph Output["12-Section Tactical Blueprint"]
+        Sections["1. Strategy\n2. Laning Behavior\n3. Skill Build Priority\n4. Core Items & Counters\n5. Power Spikes & Timings\n6. Teamfight Positioning\n... 12. Win Conditions"]
+    end
+
+    Input --> Agent
+    Agent --> Router
+    Router --> Prompt
+    Prompt --> Gemini
+    Gemini -.->|"HTTP 429 Failover"| Ollama
+    Gemini --> Sections
+    Ollama --> Sections
+    Sections --> Input
         </div>
       </div>
 
@@ -992,6 +1227,45 @@ sequenceDiagram
     ADK->>G: tool result injected
     G-->>ADK: "You have 1 note: 'ideas' - ADK patterns"
     ADK-->>U: note list
+        </div>
+      </div>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+flowchart LR
+    subgraph Client["Conversation Multi-Turn Lifecycle"]
+        Turn1["Turn 1: 'Save note ideas'"]
+        Turn2["Turn 2: 'List my notes'"]
+        Turn3["Turn 3: 'Delete note ideas'"]
+    end
+
+    subgraph Host["ADK Runner Core"]
+        Agent["note_taking_agent\n(Gemini 2.5 Flash)"]
+        Injector["Dependency Injector\n(Identifies tool_context parameter)"]
+    end
+
+    subgraph ToolSuite["Stateful Tool Suite (tools/notes.py)"]
+        T_Add["add_note(title, content)"]
+        T_Get["get_note(title)"]
+        T_List["list_notes()"]
+        T_Del["delete_note(title)"]
+        T_Clear["clear_all_notes()"]
+    end
+
+    subgraph Storage["Persistent Session State"]
+        State["tool_context.state['notes']\n(dict: title -> content)"]
+    end
+
+    Client --> Agent
+    Agent --> Injector
+    Injector -->|"Injects ToolContext"| ToolSuite
+    T_Add <-->|"Defensive Copy & Reassign"| State
+    T_Get <-->|"Lookup Query"| State
+    T_List <-->|"Enumerate Previews"| State
+    T_Del <-->|"Delete Key"| State
+    T_Clear <-->|"Clear Dict"| State
+    ToolSuite --> Agent
+    Agent --> Client
         </div>
       </div>
 
@@ -1163,7 +1437,372 @@ root_agent = <span class="cl">Agent</span>(
 
     <hr />
 
-    <!-- AGENT 6 — A2A System -->
+    <!-- AGENT 7 — quiz_agent -->
+    <section id="quiz">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--amber-dim)">&#x1F393;</div>
+        <div class="agent-section-meta">
+          <h2>quiz_agent</h2>
+          <p>Interactive trivia and technical quiz master. Implements multi-turn state accumulation &mdash; tracking questions answered, real-time score, streaks, and answer histories within <code>session.state</code> via <code>ToolContext</code>.</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">agents/quiz_agent/agent.py</span>
+            <span class="meta-tag">session.state</span>
+            <span class="meta-tag">ToolContext</span>
+            <span class="meta-tag">start_quiz &middot; submit_answer &middot; get_hint &middot; get_quiz_status &middot; reset_quiz</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Execution workflow</h3>
+      <p>The <code>quiz_agent</code> turns conversational turns into a game loop. When a quiz begins, <code>start_quiz()</code> stages questions in <code>tool_context.state["quiz"]</code>. Each subsequent turn evaluates the user's answer via <code>submit_answer()</code>, updates live scores and streaks, records an audit trail in history, and serves the next question until the final summary.</p>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant ADK as ADK Runner
+    participant G as "Gemini 2.5 Flash (FallbackLlm)"
+    participant Q as Quiz Tools
+    participant S as session.state["quiz"]
+    U->>ADK: "Let's start an AI quiz"
+    ADK->>G: user prompt + system instruction
+    G->>ADK: tool_call: start_quiz(topic="ai_agents", num_questions=5)
+    ADK->>Q: start_quiz(topic, num_questions, tool_context=injected)
+    Q->>S: initialize quiz state dict (score=0, streak=0, index=0)
+    S-->>Q: state committed
+    Q-->>ADK: {"status": "in_progress", "question": "...", "options": [...]}
+    ADK->>G: inject tool result
+    G-->>ADK: Present Question 1 + options to user
+    ADK-->>U: "Question 1 of 5: ... A) ... B) ... C) ... D) ..."
+    U->>ADK: "A"
+    ADK->>G: user answer
+    G->>ADK: tool_call: submit_answer(answer="A")
+    ADK->>Q: submit_answer("A", tool_context=injected)
+    Q->>S: read state copy, evaluate, increment score/streak, advance index
+    S-->>Q: state updated
+    Q-->>ADK: {"is_correct": true, "score": "1/1", "streak": 1, "next_question": "..."}
+    ADK->>G: inject tool result
+    G-->>ADK: "Correct! Explanation... Score: 1/1, Streak: 1. Question 2 of 5: ..."
+    ADK-->>U: Feedback + Next Question
+        </div>
+      </div>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+flowchart TD
+    subgraph Client["Interactive User Turns"]
+        TurnStart["'Start an AI agents quiz'"]
+        TurnAns["'Option A' (or answer text)"]
+        TurnHint["'Give me a hint'"]
+    end
+
+    subgraph Agent["quiz_agent (Professor Turing)"]
+        Router["FallbackLlm Router"]
+        Tools["tools/quiz.py Dispatcher"]
+    end
+
+    subgraph Bank["Curated Question Bank"]
+        QBank["Question Matrix: ai_agents, python\n(Pre-compiled options & explanations)"]
+    end
+
+    subgraph StateStore["tool_context.state['quiz']"]
+        StateFields["- topic\n- total_questions\n- current_index\n- score counter\n- streak & max_streak 🔥\n- audit history list\n- status: in_progress / completed"]
+    end
+
+    subgraph Outcomes["Turn Deliverables"]
+        NextQ["Next Question + Options"]
+        HintOut["Pedagogical Clue (Zero Leaks)"]
+        Summary["Final Celebration Summary 🏆\nScore, Percentage, Peak Streak"]
+    end
+
+    Client --> Router --> Tools
+    Tools <-->|"Stage Questions"| QBank
+    Tools <-->|"Read / Mutate / Reassign"| StateStore
+    Tools -->|"Index < Total"| NextQ --> Client
+    Tools -->|"Hint Requested"| HintOut --> Client
+    Tools -->|"Index == Total"| Summary --> Client
+        </div>
+      </div>
+
+      <h3 style="margin-top:1rem">State Accumulation Pattern</h3>
+      <p>Unlike stateless tools, <code>submit_answer()</code> performs multi-step in-place state transformation. It reads the current quiz state, evaluates the submitted token, computes win streaks, appends answer metadata to an audit trail, advances the question pointer, and triggers a terminal score report when the question threshold is reached.</p>
+
+      <div class="callout tip">
+        <span class="callout-icon">&#x1F4A1;</span>
+        <p><strong>Defensive Copying &amp; Reassignment:</strong> Always create a shallow copy via <code>quiz = dict(tool_context.state.get("quiz", {}))</code> before mutation. In ADK, session state handles can be read-only proxy views. Modifying and explicitly reassigning (<code>tool_context.state["quiz"] = quiz</code>) guarantees reliable serialization across turns.</p>
+      </div>
+
+      <h3 style="margin-top:1rem">Code walkthrough</h3>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--amber-dim);color:var(--amber)">Step 1</span>
+          <span class="snippet-title">Agent definition &mdash; FallbackLlm + Quiz Master persona</span>
+          <span class="snippet-file">agents/quiz_agent/agent.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">from</span> google.adk.agents <span class="kw">import</span> <span class="cl">Agent</span>
+<span class="kw">from</span> shared.utils.fallback_model <span class="kw">import</span> <span class="cl">FallbackLlm</span>
+<span class="kw">from</span> .tools.quiz <span class="kw">import</span> (
+    start_quiz, submit_answer,
+    get_hint, get_quiz_status, reset_quiz
+)
+
+root_agent = <span class="cl">Agent</span>(
+    name=<span class="st">"quiz_agent"</span>,
+    model=<span class="cl">FallbackLlm</span>(
+        primary=<span class="st">"gemini-2.5-flash"</span>,
+        fallback=<span class="st">"ollama_chat/qwen2.5:7b"</span>,
+    ),
+    description=<span class="st">"An interactive quiz master..."</span>,
+    instruction=<span class="st">"""
+    You are an engaging Quiz Master named Professor Turing.
+    Map user intent to tools:
+    - Start / test me   -&gt; start_quiz(topic, num_questions)
+    - User answers      -&gt; submit_answer(answer)
+    - Hint requested    -&gt; get_hint()
+    - Status / Score    -&gt; get_quiz_status()
+    - Stop / restart    -&gt; reset_quiz()
+    """</span>,
+    tools=[start_quiz, submit_answer,
+           get_hint, get_quiz_status, reset_quiz],
+)</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--amber)"></span><span class="explain-text"><strong>Strict intent mapping</strong> &mdash; Ensures natural conversational inputs like &ldquo;I pick B&rdquo; or &ldquo;DAG runtime&rdquo; seamlessly map to <code>submit_answer</code> with the user&apos;s answer string.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--amber)"></span><span class="explain-text"><strong>FallbackLlm integration</strong> &mdash; Guarantees high-availability multi-turn gaming sessions: if cloud quotas throttle during turn 3, Ollama seamlessly assumes turn 4 without losing the user&apos;s active score or streak.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--amber)"></span><span class="explain-text"><strong>Separation of state and reasoning</strong> &mdash; The LLM handles conversational flair and presentation, while deterministic evaluation and scoring are delegated to Python tools.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--amber-dim);color:var(--amber)">Step 2</span>
+          <span class="snippet-title">submit_answer &mdash; Multi-turn state mutation &amp; scoring</span>
+          <span class="snippet-file">agents/quiz_agent/tools/quiz.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">from</span> google.adk.tools <span class="kw">import</span> <span class="cl">ToolContext</span>
+
+<span class="kw">def</span> <span class="fn">submit_answer</span>(answer: <span class="cl">str</span>, tool_context: <span class="cl">ToolContext</span>) -&gt; <span class="cl">dict</span>:
+    <span class="cm"># Defensive copy from session state</span>
+    quiz: <span class="cl">dict</span> = <span class="cl">dict</span>(tool_context.state.<span class="fn">get</span>(<span class="st">"quiz"</span>, {}))
+    <span class="kw">if</span> <span class="kw">not</span> quiz <span class="kw">or</span> quiz.<span class="fn">get</span>(<span class="st">"status"</span>) != <span class="st">"in_progress"</span>:
+        <span class="kw">return</span> {<span class="st">"error"</span>: <span class="st">"No active quiz in progress."</span>}
+
+    questions = quiz[<span class="st">"questions"</span>]
+    idx = quiz[<span class="st">"current_index"</span>]
+    current_q = questions[idx]
+
+    is_correct = check_answer(answer, current_q)
+    <span class="kw">if</span> is_correct:
+        quiz[<span class="st">"score"</span>] += <span class="nb">1</span>
+        quiz[<span class="st">"streak"</span>] += <span class="nb">1</span>
+        quiz[<span class="st">"max_streak"</span>] = <span class="nb">max</span>(quiz[<span class="st">"max_streak"</span>], quiz[<span class="st">"streak"</span>])
+    <span class="kw">else</span>:
+        quiz[<span class="st">"streak"</span>] = <span class="nb">0</span>
+
+    quiz[<span class="st">"current_index"</span>] = idx + <span class="nb">1</span>
+    <span class="cm"># Write back to session state</span>
+    tool_context.state[<span class="st">"quiz"</span>] = quiz
+    ...
+    <span class="kw">return</span> result</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--amber)"></span><span class="explain-text"><strong>ToolContext injection</strong> &mdash; The runtime injects the active conversation state. Neither the prompt nor the user explicitly handles state tokens.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--amber)"></span><span class="explain-text"><strong>Streak tracking</strong> &mdash; Maintains consecutive correct answers in state, providing instant gamification and motivational feedback across turns.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--amber)"></span><span class="explain-text"><strong>Terminal condition</strong> &mdash; When <code>current_index == total_questions</code>, status transitions to <code>"completed"</code> and returns cumulative accuracy analytics.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <span class="callout-icon">&#x1F4CC;</span>
+        <p><strong>Week 4 project (Sessions and State).</strong> Satisfies Project 3.2 by tracking dynamic game state, scores, and answer history entirely within <code>session.state</code>.</p>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- AGENT 8 — persistent_agent (DatabaseSessionService) -->
+    <section id="persistent">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--teal-dim)">&#x1F4BE;</div>
+        <div class="agent-section-meta">
+          <h2>persistent_agent &amp; DatabaseSessionService</h2>
+          <p>Relational SQLite persistence engine and state scoping runtime using Google ADK's <code>DatabaseSessionService</code>. Demonstrates process-restart recovery, cross-session user profile persistence (<code>user:</code> scope), app-wide metrics (<code>app:</code> scope), and ephemeral turn state (<code>temp:</code> scope).</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">agents/persistent_agent/agent.py</span>
+            <span class="meta-tag">runners/sqlite_session_runner.py</span>
+            <span class="meta-tag">DatabaseSessionService</span>
+            <span class="meta-tag">sqlite+aiosqlite</span>
+            <span class="meta-tag">session &middot; user: &middot; app: &middot; temp:</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Persistence Architecture &amp; Database Schema</h3>
+      <p>While <code>InMemorySessionService</code> loses all conversation history and scratchpad data upon process termination, <code>DatabaseSessionService</code> couples ADK to a relational database (SQLite via <code>aiosqlite</code> or PostgreSQL via <code>asyncpg</code>). Every turn, tool invocation, and state mutation is committed into a 5-table relational schema.</p>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+sequenceDiagram
+    participant U as User / Client
+    participant R as ADK Runner
+    participant A as persistent_agent
+    participant DB as DatabaseSessionService
+    participant SQL as SQLite (sessions.db)
+
+    Note over U,SQL: Phase 1: Session 1 Initialization
+    U->>R: "Remember my theme is Nord and add task: 'Ship ADK Week 4'"
+    R->>A: invoke LLM + tools
+    A->>R: state_delta = { "tasks": {...}, "user:preferences": {"theme": "Nord"}, "app:stats": {...} }
+    R->>DB: append_event(session, event)
+    DB->>SQL: INSERT INTO events (event_data)
+    DB->>SQL: UPDATE sessions SET state = state || delta
+    DB->>SQL: UPDATE user_states SET state = state || user_delta
+    DB->>SQL: UPDATE app_states SET state = state || app_delta
+    R-->>U: "Saved preference (user scope) and recorded task (session scope)."
+
+    Note over R,SQL: Process Disposed &amp; Engine Closed (Restart Simulation)
+
+    Note over U,SQL: Phase 2: Resume Session 1 after Restart
+    U->>DB: get_session(app_name, user_id, session_1_id)
+    DB->>SQL: SELECT * FROM sessions JOIN user_states JOIN app_states
+    SQL-->>DB: Merged state: tasks + user:preferences + app:stats
+    DB-->>R: Session restored with full event history
+    U->>R: "What tasks and preferences do I have?"
+    R-->>U: "You have 1 pending task ('Ship ADK Week 4') and theme is 'Nord'."
+
+    Note over U,SQL: Phase 3: Brand New Session for Same User
+    U->>DB: create_session(app_name, user_id="ishan", session_2_id)
+    DB->>SQL: Load user_states for "ishan"
+    SQL-->>DB: user:preferences restored; tasks empty
+    DB-->>R: Session 2 initialized
+    U->>R: "Do you remember my preferences?"
+    R-->>U: "Yes! Your theme is 'Nord'. No tasks created in this new session."
+        </div>
+      </div>
+
+      <h3>ADK Relational Database Schema</h3>
+      <p><code>DatabaseSessionService.prepare_tables()</code> establishes the following relational structure in SQLite:</p>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr><th>Table Name</th><th>Key Columns</th><th>Stored Data &amp; Purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="mono">sessions</td><td><code>app_name, user_id, id, state, create_time, update_time</code></td><td>Session-scoped scratchpad (no prefix) + metadata. Each session thread has an independent row.</td></tr>
+            <tr><td class="mono">user_states</td><td><code>app_name, user_id, state, update_time</code></td><td>User-scoped state (<code>user:</code> prefix). Persists across all sessions created for this user ID.</td></tr>
+            <tr><td class="mono">app_states</td><td><code>app_name, state, update_time</code></td><td>App-scoped state (<code>app:</code> prefix). Shared globally across every user and every session.</td></tr>
+            <tr><td class="mono">events</td><td><code>id, app_name, user_id, session_id, invocation_id, timestamp, event_data</code></td><td>Complete append-only log of every user message, model thought, tool call, and tool response in JSON.</td></tr>
+            <tr><td class="mono">adk_internal_metadata</td><td><code>key, value</code></td><td>Internal schema versioning and migration tracking for ADK runtime.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="margin-top:2rem">State Prefix Scoping Rules</h3>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr><th>Prefix</th><th>Scope Lifecycle</th><th>Persistence Location</th><th>Typical Use Cases</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="mono"><em>(no prefix)</em></td><td>Active conversation session</td><td><code>sessions.state</code> JSON</td><td>Shopping carts, quiz score, active multi-turn forms, session tasks.</td></tr>
+            <tr><td class="mono">user:</td><td>All sessions of a specific user</td><td><code>user_states.state</code> JSON</td><td>User preferences, tone, editor style, profile information, nickname.</td></tr>
+            <tr><td class="mono">app:</td><td>Entire application (all users)</td><td><code>app_states.state</code> JSON</td><td>Global metrics, system announcements, feature flags, aggregated counts.</td></tr>
+            <tr><td class="mono">temp:</td><td>Single agent turn / invocation</td><td>Memory only (discarded before DB save)</td><td>Intermediate scratch math, raw payloads, ephemeral tokens.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="snippet-block" style="margin-top:1.75rem">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--teal-dim);color:var(--teal)">Tools</span>
+          <span class="snippet-title">persistent_tools.py &mdash; Reading and writing across state scopes</span>
+          <span class="snippet-file">agents/persistent_agent/tools/persistent_tools.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">def</span> <span class="fn">add_task</span>(task: <span class="cl">str</span>, priority: <span class="cl">str</span> = <span class="st">"medium"</span>, tool_context: <span class="cl">ToolContext</span> = <span class="nb">None</span>) -&gt; <span class="cl">dict</span>:
+    <span class="cm"># 1. Session-scoped state (no prefix) — isolated to this session</span>
+    tasks = <span class="cl">dict</span>(tool_context.state.<span class="fn">get</span>(<span class="st">"tasks"</span>, {}))
+    task_id = <span class="st">f"task_{len(tasks)+1}"</span>
+    tasks[task_id] = {<span class="st">"id"</span>: task_id, <span class="st">"desc"</span>: task, <span class="st">"priority"</span>: priority}
+    tool_context.state[<span class="st">"tasks"</span>] = tasks
+
+    <span class="cm"># 2. App-scoped state ('app:' prefix) — global across all users</span>
+    stats = <span class="cl">dict</span>(tool_context.state.<span class="fn">get</span>(<span class="st">"app:stats"</span>, {}))
+    stats[<span class="st">"total_tasks"</span>] = stats.<span class="fn">get</span>(<span class="st">"total_tasks"</span>, <span class="nb">0</span>) + <span class="nb">1</span>
+    tool_context.state[<span class="st">"app:stats"</span>] = stats
+    <span class="kw">return</span> {<span class="st">"status"</span>: <span class="st">"success"</span>, <span class="st">"task_id"</span>: task_id}
+
+<span class="kw">def</span> <span class="fn">set_user_preference</span>(key: <span class="cl">str</span>, value: <span class="cl">str</span>, tool_context: <span class="cl">ToolContext</span> = <span class="nb">None</span>) -&gt; <span class="cl">dict</span>:
+    <span class="cm"># 3. User-scoped state ('user:' prefix) — persists across all sessions</span>
+    prefs = <span class="cl">dict</span>(tool_context.state.<span class="fn">get</span>(<span class="st">"user:preferences"</span>, {}))
+    prefs[key] = value
+    tool_context.state[<span class="st">"user:preferences"</span>] = prefs
+    <span class="kw">return</span> {<span class="st">"status"</span>: <span class="st">"success"</span>, <span class="st">"scope"</span>: <span class="st">"user"</span>, <span class="st">"prefs"</span>: prefs}</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>Automatic Delta Extraction</strong> &mdash; When <code>tool_context.state</code> is updated, ADK inspects key prefixes and automatically extracts <code>user:</code> and <code>app:</code> deltas to route them to the correct database tables.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>Safe Defensive Copying</strong> &mdash; In SQLite-backed sessions, values can be proxy mappings. Calling <code>dict(...)</code> before mutating prevents shallow reference bugs.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>Cross-Session Continuity</strong> &mdash; When a new session is launched for the same user, ADK automatically hydrates <code>tool_context.state</code> with that user's <code>user_states</code> record!</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="snippet-block" style="margin-top:1.5rem">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--teal-dim);color:var(--teal)">Runner</span>
+          <span class="snippet-title">sqlite_session_runner.py &mdash; Connecting DatabaseSessionService to Runner</span>
+          <span class="snippet-file">runners/sqlite_session_runner.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">from</span> google.adk.runners <span class="kw">import</span> <span class="cl">Runner</span>
+<span class="kw">from</span> google.adk.sessions <span class="kw">import</span> <span class="cl">DatabaseSessionService</span>
+<span class="kw">from</span> agents.persistent_agent.agent <span class="kw">import</span> root_agent
+
+<span class="cm"># 1. Initialize SQLite session service</span>
+db_url = <span class="st">"sqlite+aiosqlite:///data/sessions.db"</span>
+service = <span class="cl">DatabaseSessionService</span>(db_url=db_url)
+<span class="kw">await</span> service.<span class="fn">prepare_tables</span>()
+
+<span class="cm"># 2. Attach service to ADK Runner</span>
+runner = <span class="cl">Runner</span>(
+    agent=root_agent,
+    session_service=service,
+    app_name=<span class="st">"persistent_agent_app"</span>,
+)
+
+<span class="cm"># 3. Create or resume session</span>
+session = <span class="kw">await</span> service.<span class="fn">get_session</span>(
+    app_name=<span class="st">"persistent_agent_app"</span>,
+    user_id=<span class="st">"ishan"</span>,
+    session_id=existing_id,
+)
+
+<span class="cm"># 4. Stream response and persist events</span>
+<span class="kw">async for</span> event <span class="kw">in</span> runner.<span class="fn">run_async</span>(
+    user_id=<span class="st">"ishan"</span>,
+    session_id=session.id,
+    new_message=user_msg,
+):
+    <span class="fn">print</span>(event.content)</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>Relational Dialect</strong> &mdash; Accepts any SQLAlchemy connection string (e.g. <code>sqlite+aiosqlite:///...</code>, <code>postgresql+asyncpg://...</code>).</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>Session Resumption</strong> &mdash; Calling <code>get_session</code> by ID reconstructs the exact state and event sequence from SQLite, allowing agents to pause and resume indefinitely.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>CLI Native Compatibility</strong> &mdash; Also works natively in the ADK CLI via <code>--session_service_uri sqlite:///sessions.db</code>.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <span class="callout-icon">&#x1F4CC;</span>
+        <p><strong>Week 4 project (Sessions and State).</strong> Satisfies Project 3.3 by implementing durable, multi-scope relational persistence using <code>DatabaseSessionService</code>, complete with automated verification and direct SQLite inspection.</p>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- AGENT 9 — A2A System -->
     <section id="a2a">
       <div class="agent-section-header">
         <div class="agent-section-icon" style="background:var(--blue-dim)">&#x1F577;&#xFE0F;</div>
@@ -1193,6 +1832,38 @@ sequenceDiagram
     W-->>ADK: Streamed response (SSE)
     ADK->>ADK: Integrates worker result
     ADK-->>U: Final response
+        </div>
+      </div>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+flowchart LR
+    subgraph Client["User / Client App"]
+        U["Task Request\n(e.g., 'Execute distributed compute')"]
+    end
+
+    subgraph Node1["Coordinator Node (:8000)"]
+        Coord["coordinator agent\n(agents/coordinator/agent.py)"]
+        Proxy["RemoteA2aAgent Sub-Agent"]
+    end
+
+    subgraph Discovery["Standardized Contract"]
+        Card["Worker Agent Card\n(agents/worker/agent.json)\n- rpc_url: http://localhost:8001\n- capabilities & skills"]
+    end
+
+    subgraph Node2["Worker Microservice (:8001)"]
+        WorkerService["ADK API Server (:8001)"]
+        WorkerAgent["worker agent\n(agents/worker/agent.py)"]
+        WorkerCompute["Autonomous Background Tasks"]
+    end
+
+    U --> Coord
+    Coord --> Proxy
+    Proxy -.->|"Parses Metadata & RPC Endpoint"| Card
+    Proxy <-->|"JSON-RPC 1.0 Task Dispatch (POST)\n+ Server-Sent Events (SSE Streaming)"| WorkerService
+    WorkerService <--> WorkerAgent
+    WorkerAgent <--> WorkerCompute
+    Coord -->|"Unified Response Synthesis"| U
         </div>
       </div>
 
@@ -1402,11 +2073,12 @@ graph TD
           <tr><td class="mono">LiteLlm</td><td>Adapter for non-Google models (Ollama, OpenAI...)</td><td>ollama_agent, FallbackLlm</td></tr>
           <tr><td class="mono">McpToolset</td><td>Connects to MCP server, auto-imports its tools</td><td>github_agent</td></tr>
           <tr><td class="mono">BaseLlm</td><td>Base class for custom model wrappers</td><td>FallbackLlm extends it</td></tr>
-          <tr><td class="mono">ToolContext</td><td>Injected by ADK into stateful tools; exposes session.state</td><td>note_taking_agent tools</td></tr>
-          <tr><td class="mono">session.state</td><td>Per-conversation key-value store; persists across turns</td><td>note_taking_agent</td></tr>
+          <tr><td class="mono">DatabaseSessionService</td><td>Relational persistence engine for sessions, state deltas, and events in SQLite/PostgreSQL</td><td>persistent_agent, runners/sqlite_session_runner</td></tr>
+          <tr><td class="mono">ToolContext</td><td>Injected by ADK into stateful tools; exposes session.state and state.to_dict()</td><td>note_taking_agent, quiz_agent, persistent_agent</td></tr>
+          <tr><td class="mono">session.state</td><td>Per-conversation and scoped key-value store; persists across turns and database sessions</td><td>note_taking_agent, quiz_agent, persistent_agent</td></tr>
           <tr><td class="mono">root_agent</td><td>Module-level var; ADK&apos;s CLI entry-point convention</td><td>All agents</td></tr>
           <tr><td class="mono">tool_filter</td><td>Whitelist of MCP tools to expose to the agent</td><td>github_agent</td></tr>
-          <tr><td class="mono">FallbackLlm</td><td>Custom BaseLlm: primary Gemini + Ollama fallback on 429</td><td>hello_world, dota, notes</td></tr>
+          <tr><td class="mono">FallbackLlm</td><td>Custom BaseLlm: primary Gemini + Ollama fallback on 429</td><td>hello_world, dota, notes, quiz, persistent, coordinator</td></tr>
         </tbody>
       </table>
 
@@ -1419,12 +2091,18 @@ adk run agents/github_agent
 adk run agents/ollama_agent
 adk run agents/dota_draft_analyzer
 adk run agents/note_taking_agent
+adk run agents/quiz_agent
+adk run agents/persistent_agent --session_service_uri sqlite:///data/sessions.db
+
+<span class="cm"># Run SQLite DatabaseSessionService automated demo or interactive runner</span>
+python runners/sqlite_session_runner.py --demo
+python runners/sqlite_session_runner.py --interactive
 
 <span class="cm"># Launch the web UI at localhost:8000</span>
 adk web
 
 <span class="cm"># Run a specific agent in the web UI</span>
-adk web agents/note_taking_agent
+adk web agents/quiz_agent
 
 <span class="cm"># Scaffold a new agent folder</span>
 adk create agents/my_new_agent</pre>
@@ -1432,19 +2110,26 @@ adk create agents/my_new_agent</pre>
 
       <h3 style="margin-top:1.5rem">State scope cheat sheet</h3>
       <div class="code-plain">
-        <pre><span class="cm"># Session-scoped (resets each new conversation)</span>
-tool_context.state["notes"]         <span class="cm"># no prefix</span>
+        <pre><span class="cm"># Session-scoped (persists across turns &amp; restarts for this session_id)</span>
+tool_context.state["notes"]              <span class="cm"># note_taking_agent</span>
+tool_context.state["quiz"]               <span class="cm"># quiz_agent</span>
+tool_context.state["tasks"]              <span class="cm"># persistent_agent</span>
 
-<span class="cm"># User-scoped (survives across sessions, tied to user)</span>
-tool_context.state["user:notes"]    <span class="cm"># user: prefix</span>
+<span class="cm"># User-scoped (persists across ALL sessions belonging to this user_id in user_states table)</span>
+tool_context.state["user:preferences"]   <span class="cm"># persistent_agent</span>
+tool_context.state["user:profile"]       <span class="cm"># user: prefix</span>
 
-<span class="cm"># App-scoped (global, shared across all users)</span>
-tool_context.state["app:config"]    <span class="cm"># app: prefix</span></pre>
+<span class="cm"># App-scoped (persists globally across ALL users and sessions in app_states table)</span>
+tool_context.state["app:stats"]          <span class="cm"># persistent_agent</span>
+tool_context.state["app:config"]         <span class="cm"># app: prefix</span>
+
+<span class="cm"># Ephemeral / Transient (discarded before DB save, lives only within single turn)</span>
+tool_context.state["temp:scratchpad"]    <span class="cm"># temp: prefix</span></pre>
       </div>
     </section>
 
     <div class="footer">
-      Google ADK 2.5.0 &middot; Gemini 2.5 Flash &middot; Phase 1, 2 &amp; 3 complete &middot; 6 agents &middot; Aug 2026
+      Google ADK 2.5.0 &middot; Gemini 2.5 Flash &middot; Phase 1 &amp; Phase 2 Complete &middot; 8 agents &middot; Sep 2026
     </div>
 
   </main>

@@ -9,15 +9,15 @@
 |---|---|
 | **Started** | July 19, 2026 |
 | **Current Phase** | Phase 2 — Core Capabilities |
-| **Current Week** | Week 4 — Sessions and State 🔄 In Progress |
-| **Weeks Completed** | 3 / 12 |
-| **Projects Completed** | 9 / 23 |
-| **Last Active** | August 19, 2026 |
-| **Streak** | 2 days 🔥 |
+| **Current Week** | Week 4 — Sessions and State ✅ Complete (Moving to Week 5) |
+| **Weeks Completed** | 4 / 12 |
+| **Projects Completed** | 11 / 23 |
+| **Last Active** | September 13, 2026 |
+| **Streak** | 4 days 🔥 |
 
 ---
 
-## Phase 1 — Foundations `0 / 2 weeks`
+## Phase 1 — Foundations `2 / 2 weeks`
 
 ### Week 1 — What is an Agent?
 - **Status:** ✅ Complete
@@ -47,7 +47,7 @@
 
 ---
 
-## Phase 2 — Core Capabilities `0 / 3 weeks`
+## Phase 2 — Core Capabilities `2 / 3 weeks`
 
 ### Week 3 — Tools Deep Dive
 - **Status:** ✅ Complete
@@ -63,15 +63,15 @@
 ---
 
 ### Week 4 — Sessions and State
-- **Status:** 🔄 In Progress
-- **Completed on:** —
-- **Time taken:** —
-- **Notes:** Project 3.1 done. Key insight: ToolContext is injected by ADK when the tool function declares a `tool_context` parameter — agent code never passes it explicitly. `tool_context.state` is a mutable dict that persists across all turns in a session.
+- **Status:** ✅ Complete
+- **Completed on:** September 13, 2026
+- **Time taken:** 2 days
+- **Notes:** Projects 3.1, 3.2, and 3.3 complete. Mastered state management across short-term memory (in-memory `session.state`), dynamic multi-turn game loops (`quiz_agent`), and relational persistence (`DatabaseSessionService` backed by SQLite `data/sessions.db`). Discovered key ADK mechanics: `tool_context.state.to_dict()`, prefix scoping (`user:`, `app:`, `temp:`), and multi-turn session resumption across process restarts.
 
 #### Projects
 - [x] Project 3.1 — `note_taking_agent` with session state (add/get/list/delete/clear notes)
-- [ ] Project 3.2 — `quiz_agent` tracking score across turns
-- [ ] Project 3.3 — SQLite-backed sessions with `DatabaseSessionService`
+- [x] Project 3.2 — `quiz_agent` tracking score across turns
+- [x] Project 3.3 — SQLite-backed sessions with `DatabaseSessionService`
 
 ---
 
@@ -188,6 +188,8 @@
 | August 19, 2026 | HTML docs written for all 5 agents (docs/agents_documentation.html). |
 | August 19, 2026 | Discovered gemini-2.0-flash is deprecated — migrated all agents to gemini-2.5-flash. |
 | August 19, 2026 | Project 3.1 done — note_taking_agent with 5 CRUD tools using session.state via ToolContext injection. |
+| September 12, 2026 | Project 3.2 done — quiz_agent built with ToolContext state persistence, streak tracking, question evaluation, and HTML documentation in docs/agents_documentation.html. |
+| September 13, 2026 | Project 3.3 done — SQLite-backed sessions with DatabaseSessionService. Built persistent_agent, runners/sqlite_session_runner.py, automated verification test suite, fixed State.to_dict() and FallbackLlm model_copy routing, and updated comprehensive docs. Week 4 complete! |
 
 ---
 
@@ -203,6 +205,11 @@
 - **August 19** — `ToolContext` is injected by ADK automatically when a tool function declares `tool_context: ToolContext` as a parameter. The agent never passes it manually.
 - **August 19** — `tool_context.state` is a delta-aware mutable dict. `tool_context.state['key'] = value` persists the change to the session for the duration of the conversation.
 - **August 19** — Always `dict(tool_context.state.get('key', {}))` before mutating — state values can be read-only proxy objects. Copy first, mutate copy, write back.
+- **September 12** — Multi-turn game loops and cumulative metrics (score, streak, audit logs) can be implemented deterministically using ADK's `ToolContext.state`, leaving the LLM free to handle dialogue, tone, and presentation while tools handle logic and state integrity.
+- **September 13** — `DatabaseSessionService` maps session state into 5 relational tables: `sessions`, `user_states`, `app_states`, `events`, and `adk_internal_metadata`. It accepts standard SQLAlchemy connection strings (`sqlite+aiosqlite:///...`, `postgresql+asyncpg://...`).
+- **September 13** — State prefix scopes are automatically parsed and segregated: `(no prefix)` goes to `sessions.state`, `user:` prefix goes to `user_states.state` and survives across distinct sessions for the same user, `app:` prefix goes to `app_states.state` and is shared globally across all users, and `temp:` is discarded before persistence.
+- **September 13** — ADK's `State` class does not implement `.items()`; use `tool_context.state.to_dict().items()` to iterate over keys and values safely.
+- **September 13** — When wrapping LLMs with custom fallbacks (`BaseLlm`), `llm_request.model` must be updated using `llm_request.model_copy(update={"model": self.fallback_model_name})` before invoking the secondary model so backend adapters (like LiteLLM) do not route to the primary model's provider.
 
 ---
 

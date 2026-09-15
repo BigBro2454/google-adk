@@ -134,7 +134,8 @@ class FallbackLlm(BaseLlm):
                     self.fallback_model_name,
                 )
                 fallback = self._get_fallback()
-                async for response in fallback.generate_content_async(llm_request, stream=stream):
+                fallback_request = llm_request.model_copy(update={"model": self.fallback_model_name})
+                async for response in fallback.generate_content_async(fallback_request, stream=stream):
                     yield response
             else:
                 # Not a rate limit error — re-raise so the user sees it
