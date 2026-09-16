@@ -8,12 +8,12 @@
 | | |
 |---|---|
 | **Started** | July 19, 2026 |
-| **Current Phase** | Phase 2 — Core Capabilities |
-| **Current Week** | Week 4 — Sessions and State ✅ Complete (Moving to Week 5) |
-| **Weeks Completed** | 4 / 12 |
-| **Projects Completed** | 11 / 23 |
-| **Last Active** | September 13, 2026 |
-| **Streak** | 4 days 🔥 |
+| **Current Phase** | Phase 3 — Multi-Agent Systems |
+| **Current Week** | Week 6 — Agent-as-a-Tool and Sub-Agents 🔄 In Progress |
+| **Weeks Completed** | 5 / 12 |
+| **Projects Completed** | 14 / 23 |
+| **Last Active** | September 14, 2026 |
+| **Streak** | 5 days 🔥 |
 
 ---
 
@@ -47,7 +47,7 @@
 
 ---
 
-## Phase 2 — Core Capabilities `2 / 3 weeks`
+## Phase 2 — Core Capabilities `3 / 3 weeks`
 
 ### Week 3 — Tools Deep Dive
 - **Status:** ✅ Complete
@@ -76,15 +76,15 @@
 ---
 
 ### Week 5 — Memory and Callbacks
-- **Status:** ⬜ Not started
-- **Completed on:** —
-- **Time taken:** —
-- **Notes:** —
+- **Status:** ✅ Complete
+- **Completed on:** September 14, 2026
+- **Time taken:** 1 day
+- **Notes:** Projects 4.1, 4.2, and 4.3 complete. Phase 2 (Core Capabilities) fully finished! Implemented PersistentMemoryService with direct memory indexing and relevance search for personal_assistant. Built UniversalLoggingPlugin with timing and telemetry metrics. Built GuardrailsPlugin providing input PII redaction (email, phone, SSN, card) and prompt injection blocking.
 
 #### Projects
-- [ ] Project 4.1 — `personal_assistant` with long-term memory
-- [ ] Project 4.2 — Universal logging callback across all agents
-- [ ] Project 4.3 — Content moderation guardrail callback
+- [x] Project 4.1 — `personal_assistant` with long-term memory
+- [x] Project 4.2 — Universal logging callback across all agents
+- [x] Project 4.3 — Content moderation guardrail callback
 
 ---
 
@@ -190,6 +190,7 @@
 | August 19, 2026 | Project 3.1 done — note_taking_agent with 5 CRUD tools using session.state via ToolContext injection. |
 | September 12, 2026 | Project 3.2 done — quiz_agent built with ToolContext state persistence, streak tracking, question evaluation, and HTML documentation in docs/agents_documentation.html. |
 | September 13, 2026 | Project 3.3 done — SQLite-backed sessions with DatabaseSessionService. Built persistent_agent, runners/sqlite_session_runner.py, automated verification test suite, fixed State.to_dict() and FallbackLlm model_copy routing, and updated comprehensive docs. Week 4 complete! |
+| September 14, 2026 | Week 5 complete — Memory & Callbacks (Projects 4.1, 4.2, 4.3). Built personal_assistant with PersistentMemoryService (direct writes and relevance search), UniversalLoggingPlugin for lifecycle observability, and GuardrailsPlugin for bidirectional PII redaction and prompt injection defense. Phase 2 100% complete! |
 
 ---
 
@@ -210,6 +211,8 @@
 - **September 13** — State prefix scopes are automatically parsed and segregated: `(no prefix)` goes to `sessions.state`, `user:` prefix goes to `user_states.state` and survives across distinct sessions for the same user, `app:` prefix goes to `app_states.state` and is shared globally across all users, and `temp:` is discarded before persistence.
 - **September 13** — ADK's `State` class does not implement `.items()`; use `tool_context.state.to_dict().items()` to iterate over keys and values safely.
 - **September 13** — When wrapping LLMs with custom fallbacks (`BaseLlm`), `llm_request.model` must be updated using `llm_request.model_copy(update={"model": self.fallback_model_name})` before invoking the secondary model so backend adapters (like LiteLLM) do not route to the primary model's provider.
+- **September 14** — `BaseMemoryService` provides long-term recall (`search_memory`), decoupling durable facts from per-session event lifecycles to solve the Goldfish Problem across conversations.
+- **September 14** — `BasePlugin` hooks (`before_run`, `after_run`, `before_tool`, `after_tool`, `before_model`, `after_model`) enable clean non-intrusive telemetry, automated PII sanitization, and prompt injection defense before token dispatch.
 
 ---
 

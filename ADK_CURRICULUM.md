@@ -271,18 +271,18 @@ after_agent_runs   log responses, audit outputs
 
 #### Topics to Study
 
-- [ ] InMemoryMemoryService for local development
-- [ ] VertexAiMemoryBankService for cloud-backed persistent memory
-- [ ] Semantic search over stored memories
-- [ ] Writing before_agent and after_agent callbacks
-- [ ] Building input/output guardrails using callbacks
-- [ ] Response caching to reduce API costs
+- [x] InMemoryMemoryService for local development
+- [x] VertexAiMemoryBankService for cloud-backed persistent memory
+- [x] Semantic search over stored memories
+- [x] Writing before_agent and after_agent callbacks
+- [x] Building input/output guardrails using callbacks
+- [x] Response caching to reduce API costs
 
 #### Hands-On Projects
 
-- [ ] Project 4.1 — Build a personal_assistant that remembers your preferences
-- [ ] Project 4.2 — Add a universal logging callback to all agents
-- [ ] Project 4.3 — Build a content moderation guardrail using callbacks
+- [x] Project 4.1 — Build a personal_assistant that remembers your preferences
+- [x] Project 4.2 — Add a universal logging callback to all agents
+- [x] Project 4.3 — Build a content moderation guardrail using callbacks
 
 #### Resources
 
@@ -612,7 +612,7 @@ adk deploy cloud_run          # Deploy to Google Cloud Run
 ### Phase 2 — Core Capabilities (Weeks 3-5)
 - [x] Week 3: Tools and MCP integration
 - [x] Week 4: Sessions and State management
-- [ ] Week 5: Memory and Callbacks with guardrails
+- [x] Week 5: Memory and Callbacks with guardrails
 
 ### Phase 3 — Multi-Agent Systems (Weeks 6-8)
 - [ ] Week 6: Agent-as-a-Tool and Sub-agents
