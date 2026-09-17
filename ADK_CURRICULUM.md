@@ -325,15 +325,15 @@ Each agent is an expert at one thing. The orchestrator is an expert at delegatin
 
 #### Topics to Study
 
-- [ ] agent_as_tool — registering an agent as a callable tool for another
-- [ ] Sub-agents (automatic delegation) vs. tool-agents (explicit calls)
-- [ ] Single Responsibility Principle applied to agents
-- [ ] ADK Skill Design Patterns in depth
+- [x] agent_as_tool — registering an agent as a callable tool for another
+- [x] Sub-agents (automatic delegation) vs. tool-agents (explicit calls)
+- [x] Single Responsibility Principle applied to agents
+- [x] ADK Skill Design Patterns in depth
 
 #### Hands-On Projects
 
-- [ ] Project 5.1 — Build a research_agent that delegates to a search_agent
-- [ ] Project 5.2 — Build a Generator + Reviewer pipeline for blog post writing
+- [x] Project 5.1 — Build a research_agent that delegates to a search_agent
+- [x] Project 5.2 — Build a Generator + Reviewer pipeline for blog post writing
 
 ---
 
@@ -615,7 +615,7 @@ adk deploy cloud_run          # Deploy to Google Cloud Run
 - [x] Week 5: Memory and Callbacks with guardrails
 
 ### Phase 3 — Multi-Agent Systems (Weeks 6-8)
-- [ ] Week 6: Agent-as-a-Tool and Sub-agents
+- [x] Week 6: Agent-as-a-Tool and Sub-agents
 - [ ] Week 7: Sequential, Parallel, and Hierarchical orchestration
 - [ ] Week 8: ADK Skills and token optimization
 

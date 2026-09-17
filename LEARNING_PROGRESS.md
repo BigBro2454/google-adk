@@ -9,9 +9,9 @@
 |---|---|
 | **Started** | July 19, 2026 |
 | **Current Phase** | Phase 3 — Multi-Agent Systems |
-| **Current Week** | Week 6 — Agent-as-a-Tool and Sub-Agents 🔄 In Progress |
-| **Weeks Completed** | 5 / 12 |
-| **Projects Completed** | 14 / 23 |
+| **Current Week** | Week 7 — Orchestration Patterns 🔄 In Progress |
+| **Weeks Completed** | 6 / 12 |
+| **Projects Completed** | 16 / 23 |
 | **Last Active** | September 14, 2026 |
 | **Streak** | 5 days 🔥 |
 
@@ -88,17 +88,17 @@
 
 ---
 
-## Phase 3 — Multi-Agent Systems `0 / 3 weeks`
+## Phase 3 — Multi-Agent Systems `1 / 3 weeks`
 
 ### Week 6 — Agent-as-a-Tool and Sub-Agents
-- **Status:** ⬜ Not started
-- **Completed on:** —
-- **Time taken:** —
-- **Notes:** —
+- **Status:** ✅ Complete
+- **Completed on:** September 14, 2026
+- **Time taken:** 1 day
+- **Notes:** Projects 5.1 and 5.2 complete. Mastered the Single Responsibility Principle for agents. Implemented AgentTool wrapping specialist agents as callable tools. Built research_agent delegating to search_specialist, and editorial_director coordinating blog_generator and blog_reviewer sub-agents in a collaborative authoring loop.
 
 #### Projects
-- [ ] Project 5.1 — `research_agent` delegating to `search_agent`
-- [ ] Project 5.2 — Generator + Reviewer pipeline for blog posts
+- [x] Project 5.1 — `research_agent` delegating to `search_agent`
+- [x] Project 5.2 — Generator + Reviewer pipeline for blog posts
 
 ---
 
@@ -191,6 +191,7 @@
 | September 12, 2026 | Project 3.2 done — quiz_agent built with ToolContext state persistence, streak tracking, question evaluation, and HTML documentation in docs/agents_documentation.html. |
 | September 13, 2026 | Project 3.3 done — SQLite-backed sessions with DatabaseSessionService. Built persistent_agent, runners/sqlite_session_runner.py, automated verification test suite, fixed State.to_dict() and FallbackLlm model_copy routing, and updated comprehensive docs. Week 4 complete! |
 | September 14, 2026 | Week 5 complete — Memory & Callbacks (Projects 4.1, 4.2, 4.3). Built personal_assistant with PersistentMemoryService (direct writes and relevance search), UniversalLoggingPlugin for lifecycle observability, and GuardrailsPlugin for bidirectional PII redaction and prompt injection defense. Phase 2 100% complete! |
+| September 14, 2026 | Week 6 complete — Agent-as-a-Tool and Sub-Agents (Projects 5.1 & 5.2). Built research_agent delegating to search_specialist via AgentTool, and editorial_director coordinating blog_generator and blog_reviewer sub-agents. |
 
 ---
 
@@ -213,6 +214,8 @@
 - **September 13** — When wrapping LLMs with custom fallbacks (`BaseLlm`), `llm_request.model` must be updated using `llm_request.model_copy(update={"model": self.fallback_model_name})` before invoking the secondary model so backend adapters (like LiteLLM) do not route to the primary model's provider.
 - **September 14** — `BaseMemoryService` provides long-term recall (`search_memory`), decoupling durable facts from per-session event lifecycles to solve the Goldfish Problem across conversations.
 - **September 14** — `BasePlugin` hooks (`before_run`, `after_run`, `before_tool`, `after_tool`, `before_model`, `after_model`) enable clean non-intrusive telemetry, automated PII sanitization, and prompt injection defense before token dispatch.
+- **September 14** — `AgentTool(agent)` allows any ADK agent to be exposed as a callable tool for another agent. Sub-agents (`sub_agents=[...]`) enforce the Single Responsibility Principle, allowing orchestrators to coordinate specialized pipelines.
+- **September 14** — The Generator + Reviewer design pattern decouples drafting from quality auditing, preventing self-confirmation bias and dramatically improving technical article rigor.
 
 ---
 
