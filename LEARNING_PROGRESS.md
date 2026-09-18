@@ -9,9 +9,9 @@
 |---|---|
 | **Started** | July 19, 2026 |
 | **Current Phase** | Phase 3 — Multi-Agent Systems |
-| **Current Week** | Week 7 — Orchestration Patterns 🔄 In Progress |
-| **Weeks Completed** | 6 / 12 |
-| **Projects Completed** | 16 / 23 |
+| **Current Week** | Week 8 — ADK Skills and Token Optimization 🔄 In Progress |
+| **Weeks Completed** | 7 / 12 |
+| **Projects Completed** | 19 / 23 |
 | **Last Active** | September 14, 2026 |
 | **Streak** | 5 days 🔥 |
 
@@ -88,7 +88,7 @@
 
 ---
 
-## Phase 3 — Multi-Agent Systems `1 / 3 weeks`
+## Phase 3 — Multi-Agent Systems `2 / 3 weeks`
 
 ### Week 6 — Agent-as-a-Tool and Sub-Agents
 - **Status:** ✅ Complete
@@ -103,15 +103,15 @@
 ---
 
 ### Week 7 — Orchestration Patterns
-- **Status:** ⬜ Not started
-- **Completed on:** —
-- **Time taken:** —
-- **Notes:** —
+- **Status:** ✅ Complete
+- **Completed on:** September 14, 2026
+- **Time taken:** 1 day
+- **Notes:** Projects 6.1, 6.2, and 6.3 complete. Mastered all three primary ADK multi-agent topologies: 1) SequentialAgent ordered pipeline (news_pipeline: fetch -> summarize -> format); 2) ParallelAgent concurrent fanout (parallel_researcher querying GitHub, ArXiv, and Industry blogs simultaneously); and 3) dynamic Coordinator / Dispatcher intent routing (smart_dispatcher routing across code, research, and math specialists).
 
 #### Projects
-- [ ] Project 6.1 — Sequential news summarizer (Fetch → Summarize → Format)
-- [ ] Project 6.2 — Parallel researcher querying 3 sources at once
-- [ ] Project 6.3 — Coordinator routing to 3 specialist agents
+- [x] Project 6.1 — Sequential news summarizer (Fetch → Summarize → Format)
+- [x] Project 6.2 — Parallel researcher querying 3 sources at once
+- [x] Project 6.3 — Coordinator routing to 3 specialist agents
 
 ---
 
@@ -192,6 +192,7 @@
 | September 13, 2026 | Project 3.3 done — SQLite-backed sessions with DatabaseSessionService. Built persistent_agent, runners/sqlite_session_runner.py, automated verification test suite, fixed State.to_dict() and FallbackLlm model_copy routing, and updated comprehensive docs. Week 4 complete! |
 | September 14, 2026 | Week 5 complete — Memory & Callbacks (Projects 4.1, 4.2, 4.3). Built personal_assistant with PersistentMemoryService (direct writes and relevance search), UniversalLoggingPlugin for lifecycle observability, and GuardrailsPlugin for bidirectional PII redaction and prompt injection defense. Phase 2 100% complete! |
 | September 14, 2026 | Week 6 complete — Agent-as-a-Tool and Sub-Agents (Projects 5.1 & 5.2). Built research_agent delegating to search_specialist via AgentTool, and editorial_director coordinating blog_generator and blog_reviewer sub-agents. |
+| September 14, 2026 | Week 7 complete — Orchestration Patterns (Projects 6.1, 6.2, 6.3). Built news_pipeline (SequentialAgent 3-stage pipeline), parallel_researcher (ParallelAgent concurrent fanout to GitHub, ArXiv, and Blogs), and smart_dispatcher (Coordinator routing across code, research, and math specialists). |
 
 ---
 
@@ -216,6 +217,9 @@
 - **September 14** — `BasePlugin` hooks (`before_run`, `after_run`, `before_tool`, `after_tool`, `before_model`, `after_model`) enable clean non-intrusive telemetry, automated PII sanitization, and prompt injection defense before token dispatch.
 - **September 14** — `AgentTool(agent)` allows any ADK agent to be exposed as a callable tool for another agent. Sub-agents (`sub_agents=[...]`) enforce the Single Responsibility Principle, allowing orchestrators to coordinate specialized pipelines.
 - **September 14** — The Generator + Reviewer design pattern decouples drafting from quality auditing, preventing self-confirmation bias and dramatically improving technical article rigor.
+- **September 14** — `SequentialAgent` enforces deterministic assembly-line pipelines (A -> B -> C) where each sub-agent consumes and transforms the collective conversation history.
+- **September 14** — `ParallelAgent` executes sub-agents concurrently, dramatically reducing total latency for independent batch or multi-source queries, followed by a synthesizing orchestrator.
+- **September 14** — The Coordinator/Dispatcher pattern dynamically inspects user intent to route queries to domain-specific specialists without manual prompt switching.
 
 ---
 

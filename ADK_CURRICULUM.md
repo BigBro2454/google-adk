@@ -374,17 +374,17 @@ DAG-based    Nodes + edges as a graph      ADK 2.0 — deterministic branching
 
 #### Topics to Study
 
-- [ ] SequentialAgent — building ordered agent pipelines
-- [ ] ParallelAgent — concurrent agent task execution
-- [ ] Coordinator and Dispatcher routing pattern
-- [ ] State interpolation — merging results from parallel branches
-- [ ] A2A (Agent-to-Agent) Protocol for cross-framework communication
+- [x] SequentialAgent — building ordered agent pipelines
+- [x] ParallelAgent — concurrent agent task execution
+- [x] Coordinator and Dispatcher routing pattern
+- [x] State interpolation — merging results from parallel branches
+- [x] A2A (Agent-to-Agent) Protocol for cross-framework communication
 
 #### Hands-On Projects
 
-- [ ] Project 6.1 — Sequential news summarizer: Fetch then Summarize then Format
-- [ ] Project 6.2 — Parallel researcher: query 3 sources at once, merge results
-- [ ] Project 6.3 — Coordinator that routes to 3 specialist agents based on intent
+- [x] Project 6.1 — Sequential news summarizer: Fetch then Summarize then Format
+- [x] Project 6.2 — Parallel researcher: query 3 sources at once, merge results
+- [x] Project 6.3 — Coordinator that routes to 3 specialist agents based on intent
 
 #### Resources
 
@@ -616,7 +616,7 @@ adk deploy cloud_run          # Deploy to Google Cloud Run
 
 ### Phase 3 — Multi-Agent Systems (Weeks 6-8)
 - [x] Week 6: Agent-as-a-Tool and Sub-agents
-- [ ] Week 7: Sequential, Parallel, and Hierarchical orchestration
+- [x] Week 7: Sequential, Parallel, and Hierarchical orchestration
 - [ ] Week 8: ADK Skills and token optimization
 
 ### Phase 4 — Production (Weeks 9-12)
