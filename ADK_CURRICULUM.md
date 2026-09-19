@@ -411,16 +411,16 @@ With Skills:
 
 #### Topics to Study
 
-- [ ] What ADK Skills are and why they matter at scale
-- [ ] Progressive disclosure — only load instructions when needed
-- [ ] Dynamic instruction injection at runtime based on user context
-- [ ] Organizing reusable skills in the shared/ folder
-- [ ] Versioning and testing skills independently
+- [x] What ADK Skills are and why they matter at scale
+- [x] Progressive disclosure — only load instructions when needed
+- [x] Dynamic instruction injection at runtime based on user context
+- [x] Organizing reusable skills in the shared/ folder
+- [x] Versioning and testing skills independently
 
 #### Hands-On Projects
 
-- [ ] Project 7.1 — Extract a reusable search_skill into shared/tools/
-- [ ] Project 7.2 — Build a dynamic instruction loader based on user role
+- [x] Project 7.1 — Extract a reusable search_skill into shared/tools/
+- [x] Project 7.2 — Build a dynamic instruction loader based on user role
 
 #### Resources
 
@@ -617,7 +617,7 @@ adk deploy cloud_run          # Deploy to Google Cloud Run
 ### Phase 3 — Multi-Agent Systems (Weeks 6-8)
 - [x] Week 6: Agent-as-a-Tool and Sub-agents
 - [x] Week 7: Sequential, Parallel, and Hierarchical orchestration
-- [ ] Week 8: ADK Skills and token optimization
+- [x] Week 8: ADK Skills and token optimization
 
 ### Phase 4 — Production (Weeks 9-12)
 - [ ] Week 9: Evaluation and Testing

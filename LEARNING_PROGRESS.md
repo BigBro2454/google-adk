@@ -8,10 +8,10 @@
 | | |
 |---|---|
 | **Started** | July 19, 2026 |
-| **Current Phase** | Phase 3 — Multi-Agent Systems |
-| **Current Week** | Week 8 — ADK Skills and Token Optimization 🔄 In Progress |
-| **Weeks Completed** | 7 / 12 |
-| **Projects Completed** | 19 / 23 |
+| **Current Phase** | Phase 4 — Production |
+| **Current Week** | Week 9 — Evaluation and Testing 🔄 In Progress |
+| **Weeks Completed** | 8 / 12 |
+| **Projects Completed** | 21 / 23 |
 | **Last Active** | September 14, 2026 |
 | **Streak** | 5 days 🔥 |
 
@@ -88,7 +88,7 @@
 
 ---
 
-## Phase 3 — Multi-Agent Systems `2 / 3 weeks`
+## Phase 3 — Multi-Agent Systems `3 / 3 weeks`
 
 ### Week 6 — Agent-as-a-Tool and Sub-Agents
 - **Status:** ✅ Complete
@@ -116,14 +116,14 @@
 ---
 
 ### Week 8 — ADK Skills and Token Optimization
-- **Status:** ⬜ Not started
-- **Completed on:** —
-- **Time taken:** —
-- **Notes:** —
+- **Status:** ✅ Complete
+- **Completed on:** September 14, 2026
+- **Time taken:** 1 day
+- **Notes:** Projects 7.1 and 7.2 complete. Phase 3 (Multi-Agent Systems) fully finished! Implemented Progressive Disclosure architecture: modular skills in shared/skills/ (developer_search_skill) that load on-demand, reducing base system prompt overhead from thousands of tokens down to ~150 tokens. Built dynamic_agent with callable dynamic instruction builder that injects persona guidelines (developer, product manager, executive, QA) and skill instructions at runtime.
 
 #### Projects
-- [ ] Project 7.1 — Reusable `search_skill` in `shared/tools/`
-- [ ] Project 7.2 — Dynamic instruction loader based on user role
+- [x] Project 7.1 — Reusable `search_skill` in `shared/tools/`
+- [x] Project 7.2 — Dynamic instruction loader based on user role
 
 ---
 
@@ -193,6 +193,7 @@
 | September 14, 2026 | Week 5 complete — Memory & Callbacks (Projects 4.1, 4.2, 4.3). Built personal_assistant with PersistentMemoryService (direct writes and relevance search), UniversalLoggingPlugin for lifecycle observability, and GuardrailsPlugin for bidirectional PII redaction and prompt injection defense. Phase 2 100% complete! |
 | September 14, 2026 | Week 6 complete — Agent-as-a-Tool and Sub-Agents (Projects 5.1 & 5.2). Built research_agent delegating to search_specialist via AgentTool, and editorial_director coordinating blog_generator and blog_reviewer sub-agents. |
 | September 14, 2026 | Week 7 complete — Orchestration Patterns (Projects 6.1, 6.2, 6.3). Built news_pipeline (SequentialAgent 3-stage pipeline), parallel_researcher (ParallelAgent concurrent fanout to GitHub, ArXiv, and Blogs), and smart_dispatcher (Coordinator routing across code, research, and math specialists). |
+| September 14, 2026 | Week 8 complete — ADK Skills and Token Optimization (Projects 7.1 & 7.2). Implemented BaseSkill and developer_search_skill in shared/skills/, built dynamic_agent with callable dynamic instruction builder and persona management tools. Phase 3 100% complete! |
 
 ---
 
@@ -220,6 +221,8 @@
 - **September 14** — `SequentialAgent` enforces deterministic assembly-line pipelines (A -> B -> C) where each sub-agent consumes and transforms the collective conversation history.
 - **September 14** — `ParallelAgent` executes sub-agents concurrently, dramatically reducing total latency for independent batch or multi-source queries, followed by a synthesizing orchestrator.
 - **September 14** — The Coordinator/Dispatcher pattern dynamically inspects user intent to route queries to domain-specific specialists without manual prompt switching.
+- **September 14** — Progressive disclosure separates base lightweight agent behavior (~150 tokens) from specialized skills, injecting instructions and tools dynamically to save 70%+ of prompt tokens.
+- **September 14** — Passing a callable `instruction=dynamic_instruction_builder` to an `Agent` allows compiling instructions dynamically from `context.state` (such as `user:role` or loaded skills).
 
 ---
 
