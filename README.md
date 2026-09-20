@@ -52,13 +52,19 @@ graph TB
         A_Notes["Stateful Notes Agent<br/>(Session CRUD)"]
         A_Quiz["Interactive Quiz Agent<br/>(Multi-turn State & Streaks)"]
         A_Persist["Persistent State Agent<br/>(DatabaseSessionService)"]
+        A_Assist["Personal Assistant<br/>(PersistentMemory + Plugins)"]
+        A_Research["Research Agent<br/>(AgentTool Delegation)"]
+        A_Writer["Writer & Reviewer<br/>(Editorial Collaboration Loop)"]
+        A_Orch["Orchestration Suite<br/>(Sequential, Parallel, Dispatcher)"]
+        A_Dyn["Dynamic Agent<br/>(BaseSkill & Progressive Disclosure)"]
+        A_HITL["HITL Operations Agent<br/>(ToolConfirmation & Human Approval)"]
         A_Dota["Dota Tactical Coach<br/>(Structured Prompt Agent)"]
         A_Local["Local Ollama Agent<br/>(Offline / Private Agent)"]
     end
 
     subgraph IntelligenceLayer["Dual-Runtime Intelligence Layer"]
         FallbackEngine["FallbackLlm Wrapper<br/>(Circuit Breaker Router)"]
-        GeminiPrimary["Primary: Gemini 2.5 Flash<br/>(Google GenAI API)"]
+        GeminiPrimary["Primary: Gemini 2.5 Flash / Flash-Lite<br/>(Google GenAI API)"]
         OllamaBackup["Fallback: Qwen 2.5 / Gemma<br/>(Local Ollama via LiteLLM)"]
     end
 
@@ -68,6 +74,9 @@ graph TB
         RestTools["Open-Meteo REST API<br/>(Geocoding + Forecast)"]
         SessionTools["Session State Memory<br/>(tool_context.state dict)"]
         SQLiteStore["Relational SQLite DB<br/>(DatabaseSessionService: data/sessions.db)"]
+        MemoryStore["Persistent Memory Store<br/>(PersistentMemoryService: data/memory.json)"]
+        SkillsEngine["Dynamic Skill Registry<br/>(shared/skills/ BaseSkill)"]
+        EvalEngine["Trajectory Evaluator<br/>(evals/evaluator.py)"]
     end
 
     %% Wiring
@@ -221,20 +230,22 @@ A core responsibility of a Google Technical Product Manager is navigating multi-
 
 ## 7. Observability, Telemetry & Evaluation
 
-The repository implements a structured evaluation framework for multi-agent workflows:
+The repository implements a comprehensive production evaluation and testing framework:
 
 ```mermaid
 graph LR
-    Input["Test Evaluation Suite"] --> AgentRunner["Agent Execution"]
-    AgentRunner --> Tracing["Telemetry & Trace Logging"]
-    Tracing --> Eval1["Tool Call Accuracy: Target >95%"]
-    Tracing --> Eval2["Turn Latency p95: Target <1.5s"]
-    Tracing --> Eval3["Fallback Activation Rate: Target <1%"]
+    Input["10-Case EvalSet<br/>(hello_world.test.json)"] --> Runner["AgentTrajectoryEvaluator<br/>(InMemoryRunner / Live Agent)"]
+    Runner --> Trajectory["Trajectory Sequence Match<br/>(Tool selection & order)"]
+    Runner --> Args["Argument Accuracy<br/>(Exact parameter matching)"]
+    Runner --> Bench["Model Benchmark Comparator<br/>(Flash vs. Lite vs. Ollama)"]
+    Trajectory --> Summary["Structured Markdown Reports<br/>(Pass rate, latency, step counts)"]
+    Args --> Summary
 ```
 
-- **Tool Call Precision:** Evaluated against deterministic mathematical queries (`hello_world`) and dual-step geocoding lookups (`weather_agent`). Target: **>95% correct parameter extraction**.
-- **State Integrity:** Monitored across 10+ consecutive turn sessions in `note_taking_agent`. Zero state leakage or cross-session collision.
-- **Circuit Breaker Health:** Telemetry logs fallback switches to `stderr` with model metadata for Cloud Monitoring / OpenTelemetry ingestion.
+- **Deterministic Trajectory Evaluation:** Evaluated against ground-truth trajectories in `evals/hello_world.test.json` covering arithmetic tools (`add`, `subtract`, `multiply`), parameter boundaries, and conversational no-tool queries.
+- **Model Benchmarking:** Multi-model comparative suite in `evals/model_benchmark.py` measuring latency, tool selection precision, and throughput across Gemini 2.5 Flash, Gemini 2.5 Flash-Lite, and local Ollama (`qwen2.5:7b`).
+- **Human-in-the-Loop (HITL) Governance:** High-impact tools (`transfer_funds`, `delete_account_records`) enforce explicit human approval using ADK 2.0 `ToolConfirmation`, preventing unauthorized execution while keeping read-only queries fast and frictionless.
+- **Non-Intrusive Telemetry & Guardrails:** `UniversalLoggingPlugin` captures turn execution latencies and tool usage without modifying business logic; `GuardrailsPlugin` applies bidirectional PII sanitization and blocks prompt injections before model dispatch.
 
 ---
 
@@ -271,50 +282,49 @@ cp .env.example .env
 
 #### Option A: Terminal Interactive Chat
 ```bash
-# Test the basic hello_world agent
+# Phase 1 & 2 Agents
 adk run agents/hello_world
-
-# Test real-time weather tool chaining
 adk run agents/weather_agent
-
-# Test multi-turn session state notes agent
 adk run agents/note_taking_agent
-
-# Test multi-turn interactive quiz agent
 adk run agents/quiz_agent
-
-# Test SQLite persistent session agent via ADK CLI
 adk run agents/persistent_agent --session_service_uri sqlite:///data/sessions.db
+adk run agents/personal_assistant
 
-# Run automated multi-session restart & scoping verification demo
-python runners/sqlite_session_runner.py --demo
-
-# Test Dota 2 tactical analysis
-adk run agents/dota_draft_analyzer
+# Phase 3 & 4 Agents
+adk run agents/research_agent
+adk run agents/writer_reviewer
+adk run agents/news_pipeline
+adk run agents/parallel_researcher
+adk run agents/smart_dispatcher
+adk run agents/dynamic_agent
+adk run agents/hitl_agent
 ```
 
-#### Option B: Launch Full ADK Web Workspace
+#### Option B: Dedicated Verification Runners
+```bash
+# Run SQLite DatabaseSessionService multi-user scoping & recovery demo
+python runners/sqlite_session_runner.py --demo
+
+# Run Human-in-the-Loop (HITL) pause, approval, and rejection workflow demo
+python runners/hitl_runner.py
+
+# Run ADK 10-case deterministic trajectory evaluation suite
+python evals/evaluator.py --eval-set evals/hello_world.test.json
+
+# Run Model Benchmark comparison (Gemini 2.5 Flash vs. Flash-Lite vs. Ollama)
+python evals/model_benchmark.py
+```
+
+#### Option C: Run Full Automated Test Suite
+```bash
+# Runs all 23 unit tests across Weeks 4-9
+python -m unittest discover tests
+```
+
+#### Option D: Launch Full ADK Web Workspace
 ```bash
 # Launches interactive UI for all discovered agents at http://localhost:8000
 adk web
-```
-
-#### Option C: Run Local Agent via Ollama
-```bash
-# Ensure Ollama daemon is active
-ollama serve
-
-# Run the 100% local agent
-adk run agents/ollama_agent
-```
-
-#### Option D: Run Distributed A2A Coordinator & Worker
-```bash
-# Terminal 1: Launch worker service
-adk api_server agents/worker --port 8001
-
-# Terminal 2: Run coordinator agent
-adk run agents/coordinator
 ```
 
 ---
@@ -324,45 +334,52 @@ adk run agents/coordinator
 ```
 google-adk/
 ├── agents/
-│   ├── coordinator/               # Root Coordinator for A2A delegation
-│   │   ├── agent.py               # Implements RemoteA2aAgent binding
-│   │   └── tools/calculator.py
-│   ├── worker/                    # Distributed Worker microservice
-│   │   ├── agent.py
-│   │   └── agent.json             # Standardized A2A capability manifest
-│   ├── github_agent/              # Model Context Protocol (MCP) implementation
-│   │   └── agent.py               # McpToolset connecting to github-mcp-server
+│   ├── hello_world/               # Starter agent with arithmetic tools
 │   ├── weather_agent/             # Production REST API tool chaining
-│   │   ├── agent.py
-│   │   └── tools/weather.py       # get_coordinates & get_weather (Open-Meteo)
-│   ├── persistent_agent/          # SQLite-backed relational persistence agent
-│   │   ├── agent.py               # Implements session, user, and app scoping
-│   │   └── tools/persistent_tools.py # CRUD and prefix-scoped state tools
-│   ├── note_taking_agent/         # Stateful session memory agent
-│   │   ├── agent.py
-│   │   └── tools/notes.py         # CRUD tools using ToolContext injection
-│   ├── quiz_agent/                # Multi-turn interactive trivia & quiz agent
-│   │   ├── agent.py
-│   │   └── tools/quiz.py          # Gamified tools with score & streak state
-│   ├── dota_draft_analyzer/       # Structured tactical reasoning engine
-│   │   └── agent.py
-│   ├── ollama_agent/              # Fully offline private agent
-│   │   └── agent.py               # LiteLlm bridge to local Ollama daemon
-│   └── hello_world/               # Foundational agent & arithmetic tools
-│       ├── agent.py
-│       └── tools/calculator.py
-├── runners/
-│   ├── __init__.py
-│   └── sqlite_session_runner.py   # DatabaseSessionService runner & demo suite
-├── tests/
-│   └── test_sqlite_sessions.py    # Unit tests for SQLite schema & state scopes
+│   ├── github_agent/              # Model Context Protocol (MCP) implementation
+│   ├── ollama_agent/              # Fully offline private agent via LiteLLM
+│   ├── dota_draft_analyzer/       # Structured tactical prompt reasoning engine
+│   ├── note_taking_agent/         # Stateful session memory agent via ToolContext
+│   ├── quiz_agent/                # Multi-turn gamified trivia agent with streaks
+│   ├── persistent_agent/          # SQLite relational persistence (DatabaseSessionService)
+│   ├── personal_assistant/        # Long-term memory & recall across sessions
+│   ├── research_agent/            # Agent-as-a-Tool pattern (search sub-agent)
+│   ├── writer_reviewer/           # Generator + Reviewer editorial collaboration
+│   ├── news_pipeline/             # SequentialAgent 3-stage linear pipeline
+│   ├── parallel_researcher/       # ParallelAgent multi-source concurrent fanout
+│   ├── smart_dispatcher/          # Dynamic intent routing coordinator
+│   ├── dynamic_agent/             # ADK Skills progressive disclosure & dynamic prompts
+│   ├── hitl_agent/                # Human-in-the-Loop approval governed operations
+│   ├── coordinator/               # Root Coordinator for A2A delegation
+│   └── worker/                    # Distributed Worker microservice (agent.json)
+├── evals/
+│   ├── hello_world.test.json      # 10 deterministic trajectory evaluation cases
+│   ├── evaluator.py               # AgentTrajectoryEvaluator engine & CLI
+│   ├── model_benchmark.py         # Model comparison runner across Flash & Ollama
+│   └── generate_eval_set.py       # Script to generate standard ADK test sets
 ├── shared/
+│   ├── skills/                    # Reusable BaseSkill definitions (search_skill.py)
 │   └── utils/
-│       └── fallback_model.py      # Resilient FallbackLlm circuit-breaker class
+│       ├── fallback_model.py      # Resilient FallbackLlm circuit-breaker class
+│       └── persistent_memory.py   # PersistentMemoryService disk-backed memory
+├── plugins/
+│   ├── logging_plugin.py          # UniversalLoggingPlugin lifecycle telemetry
+│   └── guardrails_plugin.py       # GuardrailsPlugin PII redaction & injection defense
+├── runners/
+│   ├── sqlite_session_runner.py   # DatabaseSessionService runner & demo suite
+│   └── hitl_runner.py             # Human-in-the-Loop workflow runner
+├── tests/
+│   ├── test_sqlite_sessions.py    # Week 4 session persistence tests
+│   ├── test_week5_memory_callbacks.py # Week 5 memory & plugin guardrail tests
+│   ├── test_week6_agent_as_tool.py    # Week 6 AgentTool & writer/reviewer tests
+│   ├── test_week7_orchestration.py    # Week 7 Sequential, Parallel, Dispatcher tests
+│   ├── test_week8_skills.py           # Week 8 Skills & dynamic instruction tests
+│   └── test_week9_eval_hitl.py        # Week 9 Evaluation & HITL confirmation tests
 ├── docs/
 │   └── agents_documentation.html  # Interactive visual documentation suite
 ├── data/
-│   └── sessions.db                # SQLite database (sessions, events, states)
+│   ├── sessions.db                # SQLite database (sessions, events, states)
+│   └── memory.json                # Disk-backed persistent memory store
 ├── .env.example                   # Sanitized environment variable template
 ├── .gitignore                     # Zero-leak pattern definitions
 ├── ADK_CURRICULUM.md              # 12-Week Zero-to-Production Learning Path
@@ -377,9 +394,9 @@ google-adk/
 This project is part of a 12-week comprehensive mastery of **Google Cloud AI & Vertex AI Agent Development**:
 
 - **Phase 1: Foundations (Weeks 1–2):** Agent loop primitives, tool calling, CLI/Web UI workflows. *(Completed ✅)*
-- **Phase 2: Core Capabilities (Weeks 3–5):** REST API tool chaining, MCP integrations, stateful sessions, SQLite relational persistence (`DatabaseSessionService`), and `FallbackLlm` architecture. *(Weeks 3 & 4 Complete ✅; Week 5 Next Up)*
-- **Phase 3: Multi-Agent Systems (Weeks 6–8):** Agent-to-Agent (A2A) protocol, Agent-as-a-Tool, and graph orchestration.
-- **Phase 4: Production & Scale (Weeks 9–12):** Evals, Cloud Run deployment, OpenTelemetry tracing, and guardrails.
+- **Phase 2: Core Capabilities (Weeks 3–5):** REST API tool chaining, MCP integrations, stateful sessions, SQLite relational persistence (`DatabaseSessionService`), long-term memory (`PersistentMemoryService`), and plugins (`UniversalLoggingPlugin`, `GuardrailsPlugin`). *(Completed ✅)*
+- **Phase 3: Multi-Agent Systems (Weeks 6–8):** Agent-to-Agent (A2A) protocol, Agent-as-a-Tool, collaborative Generator + Reviewer editorial systems, `SequentialAgent` pipelines, `ParallelAgent` concurrent fanouts, dynamic intent dispatchers, and token-optimized progressive disclosure skills. *(Completed ✅)*
+- **Phase 4: Production & Scale (Weeks 9–12):** Evals (`evals/evaluator.py`, 10-case trajectory evaluation), model benchmarking, and Human-in-the-Loop (`ToolConfirmation`) approval governance. *(Week 9 Completed ✅; Weeks 10–12 Next Up)*
 
 For the exhaustive curriculum and weekly progress logs, see [`ADK_CURRICULUM.md`](./ADK_CURRICULUM.md) and [`LEARNING_PROGRESS.md`](./LEARNING_PROGRESS.md).
 

@@ -180,7 +180,7 @@
     <a class="nav-link" href="#overview"><span class="dot" style="background:var(--blue)"></span>Introduction</a>
     <a class="nav-link" href="#architecture"><span class="dot" style="background:var(--purple)"></span>Architecture</a>
     <a class="nav-link" href="#shared"><span class="dot" style="background:var(--teal)"></span>Shared Utilities</a>
-    <span class="nav-section-label">Agents</span>
+    <span class="nav-section-label">Phase 1 &amp; 2 Agents</span>
     <a class="nav-link" href="#hello-world"><span class="dot" style="background:var(--purple)"></span>hello_world</a>
     <a class="nav-link" href="#weather"><span class="dot" style="background:var(--blue)"></span>weather_agent</a>
     <a class="nav-link" href="#github"><span class="dot" style="background:var(--teal)"></span>github_agent</a>
@@ -189,9 +189,16 @@
     <a class="nav-link" href="#notes"><span class="dot" style="background:var(--green)"></span>note_taking_agent</a>
     <a class="nav-link" href="#quiz"><span class="dot" style="background:var(--amber)"></span>quiz_agent</a>
     <a class="nav-link" href="#persistent"><span class="dot" style="background:var(--teal)"></span>persistent_agent</a>
-    <span class="nav-section-label">Multi-Agent</span>
+    <a class="nav-link" href="#personal-assistant"><span class="dot" style="background:var(--purple)"></span>personal_assistant &amp; plugins</a>
+    <span class="nav-section-label">Phase 3 &amp; 4 Agents</span>
+    <a class="nav-link" href="#research-agent"><span class="dot" style="background:var(--blue)"></span>research_agent (AgentTool)</a>
+    <a class="nav-link" href="#writer-reviewer"><span class="dot" style="background:var(--rose)"></span>writer_reviewer (Editorial)</a>
+    <a class="nav-link" href="#orchestration"><span class="dot" style="background:var(--orange)"></span>orchestration (Seq/Par/Disp)</a>
+    <a class="nav-link" href="#skills-section"><span class="dot" style="background:var(--green)"></span>dynamic_agent &amp; skills</a>
+    <a class="nav-link" href="#hitl-section"><span class="dot" style="background:var(--amber)"></span>hitl_agent (Approval HITL)</a>
+    <a class="nav-link" href="#eval-section"><span class="dot" style="background:var(--teal)"></span>evaluation &amp; benchmarking</a>
+    <span class="nav-section-label">Multi-Agent &amp; Internals</span>
     <a class="nav-link" href="#a2a"><span class="dot" style="background:var(--blue)"></span>A2A System</a>
-    <span class="nav-section-label">Internals</span>
     <a class="nav-link" href="#fallback"><span class="dot" style="background:var(--orange)"></span>FallbackLlm</a>
     <a class="nav-link" href="#primitives"><span class="dot" style="background:var(--text-dim)"></span>ADK Primitives</a>
   </aside>
@@ -199,8 +206,8 @@
   <main class="main">
     <nav class="mobile-nav">
       <a href="#overview">Overview</a>
-      <a href="#architecture">Architecture</a>
-      <a href="#hello-world">hello_world</a>
+      <a href="#architecture">Arch</a>
+      <a href="#hello-world">hello</a>
       <a href="#weather">weather</a>
       <a href="#github">github</a>
       <a href="#ollama">ollama</a>
@@ -208,6 +215,13 @@
       <a href="#notes">notes</a>
       <a href="#quiz">quiz</a>
       <a href="#persistent">persistent</a>
+      <a href="#personal-assistant">assistant</a>
+      <a href="#research-agent">research</a>
+      <a href="#writer-reviewer">editorial</a>
+      <a href="#orchestration">orchestration</a>
+      <a href="#skills-section">skills</a>
+      <a href="#hitl-section">hitl</a>
+      <a href="#eval-section">eval</a>
       <a href="#a2a">a2a</a>
       <a href="#fallback">fallback</a>
       <a href="#primitives">primitives</a>
@@ -215,21 +229,25 @@
 
     <!-- Hero -->
     <div class="hero" id="overview">
-      <div class="hero-badge">&#x1F916; Google ADK &middot; Phase 1, 2 &amp; 3 Agents</div>
+      <div class="hero-badge">&#x1F916; Google ADK &middot; Phase 1, 2, 3 &amp; 4 Agents (Weeks 1&ndash;9 Complete)</div>
       <h1>ADK Agent<br>Documentation</h1>
-      <p>Code walkthroughs for the autonomous and multi-agent systems built during the Google ADK curriculum (Phases 1&ndash;3). Each section covers agent capabilities, topology, execution workflows, and key ADK patterns.</p>
+      <p>Comprehensive code walkthroughs and architectural specifications for the autonomous agents, multi-agent pipelines, memory layers, guardrails, skills, evaluation frameworks, and Human-in-the-Loop workflows built during the Google ADK curriculum (Weeks 1&ndash;9).</p>
       <div class="tech-stack">
         <span class="tech-pill">google-adk 2.5.0</span>
         <span class="tech-pill">gemini-2.5-flash</span>
-        <span class="tech-pill">gemini-2.0-flash</span>
+        <span class="tech-pill">gemini-2.5-flash-lite</span>
         <span class="tech-pill">litellm</span>
-        <span class="tech-pill">ollama</span>
+        <span class="tech-pill">ollama (qwen2.5:7b)</span>
         <span class="tech-pill">DatabaseSessionService</span>
+        <span class="tech-pill">PersistentMemoryService</span>
+        <span class="tech-pill">BasePlugin &amp; Guardrails</span>
+        <span class="tech-pill">AgentTool &amp; Sub-Agents</span>
+        <span class="tech-pill">SequentialAgent</span>
+        <span class="tech-pill">ParallelAgent</span>
+        <span class="tech-pill">BaseSkill</span>
+        <span class="tech-pill">ToolConfirmation (HITL)</span>
+        <span class="tech-pill">AgentTrajectoryEvaluator</span>
         <span class="tech-pill">SQLite (aiosqlite)</span>
-        <span class="tech-pill">open-meteo</span>
-        <span class="tech-pill">github-mcp-server</span>
-        <span class="tech-pill">A2A Protocol</span>
-        <span class="tech-pill">session.state</span>
         <span class="tech-pill">python 3.12</span>
       </div>
     </div>
@@ -352,6 +370,62 @@ graph TD
           </div>
           <p>Multi-agent system communicating over the Agent-to-Agent (A2A) protocol via RemoteA2aAgent.</p>
           <div class="agent-meta"><span class="meta-tag">A2A</span><span class="meta-tag">RemoteA2aAgent</span><span class="meta-tag">AgentCard</span></div>
+        </div>
+        <div class="agent-card purple">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--purple-dim)">&#x1F9E0;</div>
+            <h3>personal_assistant &amp; Plugins</h3>
+          </div>
+          <p>Long-term recall solving Goldfish Problem with PersistentMemoryService + Logging &amp; Guardrails plugins.</p>
+          <div class="agent-meta"><span class="meta-tag">PersistentMemory</span><span class="meta-tag">UniversalLogging</span><span class="meta-tag">Guardrails</span></div>
+        </div>
+        <div class="agent-card blue">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--blue-dim)">&#x1F50D;</div>
+            <h3>research_agent (AgentTool)</h3>
+          </div>
+          <p>Delegates web discovery to search_specialist wrapped as a callable AgentTool. Enforces Single Responsibility.</p>
+          <div class="agent-meta"><span class="meta-tag">AgentTool</span><span class="meta-tag">sub-agent</span><span class="meta-tag">context isolation</span></div>
+        </div>
+        <div class="agent-card rose">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--rose-dim)">&#x270D;&#xFE0F;</div>
+            <h3>writer_reviewer (Editorial)</h3>
+          </div>
+          <p>Generator + Reviewer collaborative authoring. Editorial director orchestrates drafting and quality audits.</p>
+          <div class="agent-meta"><span class="meta-tag">Generator+Reviewer</span><span class="meta-tag">multi-agent</span><span class="meta-tag">editorial loop</span></div>
+        </div>
+        <div class="agent-card orange">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--orange-dim)">&#x1F500;</div>
+            <h3>orchestration (Seq/Par/Disp)</h3>
+          </div>
+          <p>Sequential pipelines, parallel multi-source synthesis, and dynamic intent dispatcher routing.</p>
+          <div class="agent-meta"><span class="meta-tag">SequentialAgent</span><span class="meta-tag">ParallelAgent</span><span class="meta-tag">Dispatcher</span></div>
+        </div>
+        <div class="agent-card green">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--green-dim)">&#x26A1;</div>
+            <h3>dynamic_agent &amp; Skills</h3>
+          </div>
+          <p>Token optimization through progressive disclosure: BaseSkill, developer_search_skill, and dynamic prompt compiler.</p>
+          <div class="agent-meta"><span class="meta-tag">BaseSkill</span><span class="meta-tag">Progressive Disclosure</span><span class="meta-tag">Dynamic Instructions</span></div>
+        </div>
+        <div class="agent-card amber">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--amber-dim)">&#x1F6E1;&#xFE0F;</div>
+            <h3>hitl_agent (Approval HITL)</h3>
+          </div>
+          <p>ADK 2.0 Human-in-the-Loop governance. Halts critical operations and awaits human confirmation.</p>
+          <div class="agent-meta"><span class="meta-tag">ToolConfirmation</span><span class="meta-tag">HITL</span><span class="meta-tag">Audit Trail</span></div>
+        </div>
+        <div class="agent-card teal">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--teal-dim)">&#x1F4CA;</div>
+            <h3>evals &amp; benchmark</h3>
+          </div>
+          <p>10-case deterministic trajectory evaluation, parameter matching, and Flash vs. Lite vs. Ollama benchmark.</p>
+          <div class="agent-meta"><span class="meta-tag">AgentTrajectoryEvaluator</span><span class="meta-tag">EvalSet</span><span class="meta-tag">Benchmark</span></div>
         </div>
       </div>
     </section>
@@ -2056,6 +2130,387 @@ graph TD
 
     <hr />
 
+
+    <!-- Week 5: personal_assistant & Plugins -->
+    <section id="personal-assistant">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--purple-dim)">&#x1F9E0;</div>
+        <div class="agent-section-meta">
+          <h2>personal_assistant &amp; Observability Plugins</h2>
+          <p>Long-term episodic recall with <code>PersistentMemoryService</code>, plus non-intrusive lifecycle telemetry and bidirectional safety guardrails.</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">PersistentMemoryService</span>
+            <span class="meta-tag">UniversalLoggingPlugin</span>
+            <span class="meta-tag">GuardrailsPlugin</span>
+            <span class="meta-tag">PII Redaction</span>
+            <span class="meta-tag">Prompt Injection Defense</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="diagram-wrapper">
+        <div class="mermaid">
+graph LR
+    User([User Prompt]) --> G_In[Guardrails: Input Redaction &amp; Injection Check]
+    G_In --> Log_Pre[LoggingPlugin: before_run]
+    Log_Pre --> Agent[personal_assistant / Gemini 2.5 Flash]
+    Agent <--> Mem[(PersistentMemoryService
+data/memory.json)]
+    Agent --> Log_Post[LoggingPlugin: after_run Latency &amp; Token Audit]
+    Log_Post --> G_Out[Guardrails: Output PII Sanitization]
+    G_Out --> Resp([Sanitized Response])
+        </div>
+      </div>
+
+      <div class="snippet-block" style="margin-top:1.5rem">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--purple-dim);color:var(--purple)">Pattern</span>
+          <span class="snippet-title">Persistent Memory &amp; Lifecycle Plugins</span>
+          <span class="snippet-file">agents/personal_assistant/agent.py &middot; plugins/</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="cm"># Memory tools allow long-term fact storage across sessions</span>
+<span class="fn">@tool</span>
+<span class="kw">async def</span> <span class="fn">remember_fact</span>(fact: <span class="cl">str</span>, tool_context: <span class="cl">ToolContext</span>):
+    <span class="st">"""Save a permanent user preference or fact."""</span>
+    <span class="kw">await</span> tool_context.<span class="fn">add_memory</span>(fact)
+    <span class="kw">return</span> {<span class="st">"status"</span>: <span class="st">"remembered"</span>, <span class="st">"fact"</span>: fact}
+
+<span class="cm"># Runner configured with memory service and guardrails</span>
+runner = <span class="cl">Runner</span>(
+    agent=root_agent,
+    memory_service=<span class="cl">PersistentMemoryService</span>(<span class="st">"data/memory.json"</span>),
+    plugins=[
+        <span class="cl">UniversalLoggingPlugin</span>(),
+        <span class="cl">GuardrailsPlugin</span>(redact_pii=<span class="kw">True</span>, block_injections=<span class="kw">True</span>),
+    ]
+)</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--purple)"></span><span class="explain-text"><strong>Solving the Goldfish Problem:</strong> Ordinary session state vanishes when a conversation terminates. <code>PersistentMemoryService</code> persists durable knowledge across any number of separate user sessions.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--purple)"></span><span class="explain-text"><strong>Bidirectional PII Guardrail:</strong> Redacts emails, phone numbers, and SSNs from incoming prompts before the LLM sees them, and verifies generated outputs before reaching the client.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--purple)"></span><span class="explain-text"><strong>Zero Overhead Logging:</strong> <code>UniversalLoggingPlugin</code> automatically records start times, tool execution counts, model invocations, and total wall-clock duration.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- Week 6: research_agent & writer_reviewer -->
+    <section id="research-agent">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--blue-dim)">&#x1F50D;</div>
+        <div class="agent-section-meta">
+          <h2>research_agent (Agent-as-a-Tool Pattern)</h2>
+          <p>Enforcing the Single Responsibility Principle by encapsulating search intelligence into a sub-agent exposed as a callable tool.</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">AgentTool</span>
+            <span class="meta-tag">sub_agents</span>
+            <span class="meta-tag">Single Responsibility</span>
+            <span class="meta-tag">Context Isolation</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="diagram-wrapper">
+        <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor User
+    participant Orch as research_orchestrator
+    participant Tool as AgentTool(search_specialist)
+    participant Sub as search_specialist
+    participant Web as Web / Knowledge Tools
+
+    User->>Orch: "Research latest Quantum Computing breakthroughs"
+    Note over Orch: Decides search is required
+    Orch->>Tool: execute(query="Quantum Computing 2026")
+    Tool->>Sub: Run sub-agent in isolated context
+    Sub->>Web: Query specialized indices
+    Web-->>Sub: Raw discovery results
+    Sub-->>Tool: Synthesized executive findings
+    Tool-->>Orch: Clean tool result string
+    Orch-->>User: Comprehensive, well-structured research briefing
+        </div>
+      </div>
+
+      <div class="snippet-block" style="margin-top:1.5rem">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--blue-dim);color:var(--blue)">ADK 2.5</span>
+          <span class="snippet-title">Wrapping an Agent as a Tool</span>
+          <span class="snippet-file">agents/research_agent/agent.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">from</span> google.adk.agents <span class="kw">import</span> <span class="cl">Agent</span>
+<span class="kw">from</span> google.adk.tools <span class="kw">import</span> <span class="cl">AgentTool</span>
+
+<span class="cm"># 1. Specialized child agent</span>
+search_specialist = <span class="cl">Agent</span>(
+    name=<span class="st">"search_specialist"</span>,
+    instruction=<span class="st">"Deep search specialist. Fetch and filter authoritative sources."</span>,
+    tools=[duckduckgo_search, fetch_webpage],
+)
+
+<span class="cm"># 2. Parent orchestrator embeds child via AgentTool</span>
+root_agent = <span class="cl">Agent</span>(
+    name=<span class="st">"research_orchestrator"</span>,
+    instruction=<span class="st">"Synthesize high-level research briefings using your search tool."</span>,
+    tools=[<span class="cl">AgentTool</span>(search_specialist)],
+    sub_agents=[search_specialist],
+)</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>Context Hygiene:</strong> The orchestrator doesn't have its context window polluted by raw HTML, pagination tokens, or noisy intermediary scrapers.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>Modular Testing:</strong> The <code>search_specialist</code> can be independently tested, benchmarked, and improved without touching orchestrator logic.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <section id="writer-reviewer">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--rose-dim)">&#x270D;&#xFE0F;</div>
+        <div class="agent-section-meta">
+          <h2>writer_reviewer (Editorial Director Pattern)</h2>
+          <p>Collaborative multi-agent system pairing a creative generator with a rigorous critical auditor to eliminate hallucination and shallow drafting.</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">Generator + Reviewer</span>
+            <span class="meta-tag">Editorial Director</span>
+            <span class="meta-tag">Self-Correction</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="diagram-wrapper">
+        <div class="mermaid">
+flowchart TD
+    Prompt([Article Topic]) --> Director[editorial_director Orchestrator]
+    Director --> Draft[blog_generator: Produces Initial Draft]
+    Draft --> Audit[blog_reviewer: Audits Tone, Technical Accuracy, &amp; Structure]
+    Audit --> Check{Passed Editorial Standards?}
+    Check -- "Needs Polish (Score &lt; 8/10)" --> Refine[blog_generator: Re-drafts with Feedback]
+    Refine --> Audit
+    Check -- "Approved" --> Final[Final Published Technical Article]
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- Week 7: Orchestration Patterns -->
+    <section id="orchestration">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--orange-dim)">&#x1F500;</div>
+        <div class="agent-section-meta">
+          <h2>Multi-Agent Orchestration Patterns</h2>
+          <p>Architectural blueprints for structuring complex agent topologies: Assembly-line pipelines, concurrent multi-source fanouts, and dynamic intent routing.</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">SequentialAgent</span>
+            <span class="meta-tag">ParallelAgent</span>
+            <span class="meta-tag">Coordinator / Dispatcher</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="agent-grid">
+        <div class="agent-card orange">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--orange-dim)">&#x25B6;&#xFE0F;</div>
+            <h3>news_pipeline</h3>
+          </div>
+          <p><strong>Sequential Pipeline:</strong> Executes sub-agents in deterministic linear order (Fetcher &rarr; Summarizer &rarr; Markdown Formatter).</p>
+          <div class="agent-meta"><span class="meta-tag">SequentialAgent</span><span class="meta-tag">Pipeline</span></div>
+        </div>
+        <div class="agent-card blue">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--blue-dim)">&#x26A1;</div>
+            <h3>parallel_researcher</h3>
+          </div>
+          <p><strong>Parallel Fanout:</strong> Queries GitHub, ArXiv, and Engineering Blogs concurrently, cutting wall-clock research time by 60%+.</p>
+          <div class="agent-meta"><span class="meta-tag">ParallelAgent</span><span class="meta-tag">Concurrent Fanout</span></div>
+        </div>
+        <div class="agent-card green">
+          <div class="agent-card-header">
+            <div class="agent-card-icon" style="background:var(--green-dim)">&#x1F3AF;</div>
+            <h3>smart_dispatcher</h3>
+          </div>
+          <p><strong>Dynamic Dispatcher:</strong> Evaluates incoming query intent and routes to specialized Coding, Research, or Math agents.</p>
+          <div class="agent-meta"><span class="meta-tag">Coordinator</span><span class="meta-tag">Intent Router</span></div>
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- Week 8: Skills & Dynamic Instructions -->
+    <section id="skills-section">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--green-dim)">&#x26A1;</div>
+        <div class="agent-section-meta">
+          <h2>dynamic_agent &amp; ADK Skills Pattern</h2>
+          <p>Token optimization through progressive disclosure: Loading specialized toolsets and prompt personas only when dynamically triggered.</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">BaseSkill</span>
+            <span class="meta-tag">Progressive Disclosure</span>
+            <span class="meta-tag">Callable Instructions</span>
+            <span class="meta-tag">Token Optimization</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--green-dim);color:var(--green)">Skill Pattern</span>
+          <span class="snippet-title">Dynamic Instructions &amp; Skill Injection</span>
+          <span class="snippet-file">shared/skills/search_skill.py &middot; agents/dynamic_agent/</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">class</span> <span class="cl">DeveloperSearchSkill</span>(<span class="cl">BaseSkill</span>):
+    <span class="st">"""Self-contained bundle of tools and instructions."""</span>
+    name = <span class="st">"developer_search"</span>
+    instruction_fragment = <span class="st">"You have access to GitHub, StackOverflow, and PyPI tools."</span>
+    tools = [search_github_repos, search_pypi_packages]
+
+<span class="kw">def</span> <span class="fn">dynamic_instruction_builder</span>(context: <span class="cl">ReadonlyContext</span>) -&gt; <span class="cl">str</span>:
+    <span class="st">"""Compiles prompt dynamically from user role and active skills."""</span>
+    role = context.state.<span class="fn">get</span>(<span class="st">"user:role"</span>, <span class="st">"general"</span>)
+    skills = context.state.<span class="fn">get</span>(<span class="st">"active_skills"</span>, [])
+    prompt = <span class="st">f"You are a helpful assistant tailored for a {role}."</span>
+    <span class="kw">for</span> skill_name <span class="kw">in</span> skills:
+        prompt += <span class="st">f"\nSkill [{skill_name}]: {SKILL_REGISTRY[skill_name].instruction_fragment}"</span>
+    <span class="kw">return</span> prompt</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--green)"></span><span class="explain-text"><strong>70% Token Savings:</strong> Monolithic prompts loading dozens of dormant tools exhaust context windows. Progressive disclosure loads skills on demand.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--green)"></span><span class="explain-text"><strong>State-Aware Persona:</strong> Updating <code>tool_context.state['user:role'] = 'security_auditor'</code> immediately shifts agent persona on the next invocation.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- Week 9: HITL & Approval Governance -->
+    <section id="hitl-section">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--amber-dim)">&#x1F6E1;&#xFE0F;</div>
+        <div class="agent-section-meta">
+          <h2>hitl_agent (Human-in-the-Loop Governance)</h2>
+          <p>ADK 2.0 native tool confirmation. Sensitive financial transactions and data deletions pause automatically and await explicit human approval.</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">ToolConfirmation</span>
+            <span class="meta-tag">require_confirmation=True</span>
+            <span class="meta-tag">State Audit Trail</span>
+            <span class="meta-tag">Enterprise Compliance</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="diagram-wrapper">
+        <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor User as Client / User
+    participant Agent as hitl_operations_agent
+    participant Tool as FunctionTool(transfer_funds)
+    actor Supervisor as Human Supervisor
+
+    User->>Agent: "Transfer $3,000 from ACC-001 to ACC-002"
+    Agent->>Tool: transfer_funds(from="ACC-001", to="ACC-002", amount=3000)
+    Note over Tool: require_confirmation=True &amp; unconfirmed
+    Tool-->>Agent: request_confirmation(hint="Approval needed for $3,000 transfer")
+    Agent-->>User: "Transaction paused. Pending supervisor confirmation."
+    
+    rect rgb(30, 45, 60)
+    Supervisor->>Agent: ToolConfirmation(confirmed=True)
+    end
+
+    Agent->>Tool: Resume transfer with confirmed=True
+    Tool->>Tool: Execute transfer, deduct balance, log audit
+    Tool-->>Agent: {"status": "TRANSFERRED", "new_balance": 12000.0}
+    Agent-->>User: "Transfer complete! New balance is $12,000.00"
+        </div>
+      </div>
+
+      <div class="snippet-block" style="margin-top:1.5rem">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--amber-dim);color:var(--amber)">ADK 2.0 Feature</span>
+          <span class="snippet-title">Native Tool Confirmation Setup</span>
+          <span class="snippet-file">agents/hitl_agent/tools/approval_tools.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre><span class="kw">from</span> google.adk.tools <span class="kw">import</span> <span class="cl">FunctionTool</span>
+<span class="kw">from</span> google.adk.tools.tool_confirmation <span class="kw">import</span> <span class="cl">ToolConfirmation</span>
+
+<span class="cm"># Safe tools execute automatically</span>
+view_account_tool = <span class="cl">FunctionTool</span>(view_account_details, require_confirmation=<span class="kw">False</span>)
+
+<span class="cm"># High-impact operations halt execution and require confirmation</span>
+transfer_funds_tool = <span class="cl">FunctionTool</span>(transfer_funds, require_confirmation=<span class="kw">True</span>)
+delete_account_tool = <span class="cl">FunctionTool</span>(delete_account_records, require_confirmation=<span class="kw">True</span>)
+
+<span class="cm"># Tool function logic checks confirmation status:</span>
+<span class="kw">def</span> <span class="fn">transfer_funds</span>(from_account, to_account, amount, tool_context: <span class="cl">ToolContext</span>):
+    <span class="cm"># If approved, mutate balances and write to audit trail</span>
+    tool_context.state[<span class="st">"audit_trail"</span>].<span class="fn">append</span>({
+        <span class="st">"action"</span>: <span class="st">"TRANSFER_FUNDS"</span>,
+        <span class="st">"amount"</span>: amount,
+        <span class="st">"approved_by_human"</span>: <span class="kw">True</span>
+    })
+    <span class="kw">return</span> {<span class="st">"status"</span>: <span class="st">"TRANSFERRED"</span>, <span class="st">"amount"</span>: amount}</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--amber)"></span><span class="explain-text"><strong>Zero Data Mutation on Pause:</strong> The tool function is not even invoked if confirmation is missing; ADK intercepts the invocation and yields a confirmation request event.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--amber)"></span><span class="explain-text"><strong>Deterministic Rejection:</strong> If a human rejects the operation (<code>confirmed=False</code>), the runner yields an explicit rejection notice and session data remains pristine.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--amber)"></span><span class="explain-text"><strong>Audit Logging:</strong> All approved transactions log immutable compliance metadata into <code>session.state['audit_trail']</code>.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- Week 9: Evaluation & Benchmarking -->
+    <section id="eval-section">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--teal-dim)">&#x1F4CA;</div>
+        <div class="agent-section-meta">
+          <h2>Agent Evaluation Suite &amp; Model Benchmark</h2>
+          <p>Deterministic trajectory evaluation, argument verification, and side-by-side model benchmarking across Gemini 2.5 Flash, Gemini 2.5 Flash-Lite, and local Ollama.</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">AgentTrajectoryEvaluator</span>
+            <span class="meta-tag">EvalSet / EvalCase</span>
+            <span class="meta-tag">Trajectory Accuracy</span>
+            <span class="meta-tag">Model Benchmarking</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <span class="callout-icon">&#x1F9EE;</span>
+        <p>Traditional unit tests assert inputs to outputs. Because LLM output phrasing fluctuates, <strong>Trajectory Evaluation</strong> checks whether the agent chose the exact sequence of tools and parameter values expected for the goal.</p>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Evaluation Case ID</th><th>Prompt</th><th>Expected Trajectory</th><th>Verification Type</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="mono">case_01_add_basic</td><td>What is 15 + 27?</td><td>add(a=15, b=27)</td><td>Tool &amp; Parameter Match</td></tr>
+          <tr><td class="mono">case_02_subtract_basic</td><td>Calculate 100 - 45</td><td>subtract(a=100, b=45)</td><td>Tool &amp; Parameter Match</td></tr>
+          <tr><td class="mono">case_03_multiply_basic</td><td>What is 8 times 9?</td><td>multiply(a=8, b=9)</td><td>Tool &amp; Parameter Match</td></tr>
+          <tr><td class="mono">case_04_add_negative</td><td>What is -12 plus 30?</td><td>add(a=-12, b=30)</td><td>Negative Number Handling</td></tr>
+          <tr><td class="mono">case_05_subtract_negative</td><td>What is 50 minus -25?</td><td>subtract(a=50, b=-25)</td><td>Arithmetic Boundary</td></tr>
+          <tr><td class="mono">case_06_multiply_zero</td><td>Compute 42 multiplied by 0</td><td>multiply(a=42, b=0)</td><td>Zero Identity Handling</td></tr>
+          <tr><td class="mono">case_07_add_zero_identity</td><td>Add 0 and 73</td><td>add(a=0, b=73)</td><td>Zero Identity Handling</td></tr>
+          <tr><td class="mono">case_08_plain_greeting</td><td>Hello there! How are you today?</td><td>(none)</td><td>No-Tool Conversational Pass</td></tr>
+          <tr><td class="mono">case_09_concept_explanation</td><td>What is a prime number?</td><td>(none)</td><td>Concept Inquiry Pass</td></tr>
+          <tr><td class="mono">case_10_multiply_large</td><td>Can you multiply 125 by 4?</td><td>multiply(a=125, b=4)</td><td>Large Integer Arithmetic</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <hr />
+
     <!-- ADK Primitives -->
     <section id="primitives">
       <div class="section-header">
@@ -2074,11 +2529,19 @@ graph TD
           <tr><td class="mono">McpToolset</td><td>Connects to MCP server, auto-imports its tools</td><td>github_agent</td></tr>
           <tr><td class="mono">BaseLlm</td><td>Base class for custom model wrappers</td><td>FallbackLlm extends it</td></tr>
           <tr><td class="mono">DatabaseSessionService</td><td>Relational persistence engine for sessions, state deltas, and events in SQLite/PostgreSQL</td><td>persistent_agent, runners/sqlite_session_runner</td></tr>
-          <tr><td class="mono">ToolContext</td><td>Injected by ADK into stateful tools; exposes session.state and state.to_dict()</td><td>note_taking_agent, quiz_agent, persistent_agent</td></tr>
-          <tr><td class="mono">session.state</td><td>Per-conversation and scoped key-value store; persists across turns and database sessions</td><td>note_taking_agent, quiz_agent, persistent_agent</td></tr>
+          <tr><td class="mono">PersistentMemoryService</td><td>Long-term durable recall across sessions (BaseMemoryService implementation)</td><td>personal_assistant</td></tr>
+          <tr><td class="mono">BasePlugin</td><td>Lifecycle hooks (before/after run, tool, model) for non-intrusive telemetry &amp; security</td><td>UniversalLoggingPlugin, GuardrailsPlugin</td></tr>
+          <tr><td class="mono">AgentTool</td><td>Wraps an Agent as a callable tool for another Agent</td><td>research_agent</td></tr>
+          <tr><td class="mono">SequentialAgent</td><td>Linear pipeline chaining sub-agents deterministically (A &rarr; B &rarr; C)</td><td>news_pipeline</td></tr>
+          <tr><td class="mono">ParallelAgent</td><td>Executes sub-agents concurrently, followed by a synthesizing coordinator</td><td>parallel_researcher</td></tr>
+          <tr><td class="mono">BaseSkill</td><td>Self-contained bundle of tools and prompt fragments loaded on demand</td><td>developer_search_skill</td></tr>
+          <tr><td class="mono">ToolConfirmation</td><td>ADK 2.0 Human-in-the-Loop pause and approval protocol</td><td>hitl_agent, runners/hitl_runner</td></tr>
+          <tr><td class="mono">AgentTrajectoryEvaluator</td><td>Ground-truth trajectory verification, argument accuracy, and step counting</td><td>evals/evaluator.py, hello_world.test.json</td></tr>
+          <tr><td class="mono">ToolContext</td><td>Injected by ADK into stateful tools; exposes session.state and state.to_dict()</td><td>note_taking_agent, quiz_agent, persistent_agent, hitl_agent</td></tr>
+          <tr><td class="mono">session.state</td><td>Per-conversation and scoped key-value store; persists across turns and database sessions</td><td>note_taking_agent, quiz_agent, persistent_agent, hitl_agent</td></tr>
           <tr><td class="mono">root_agent</td><td>Module-level var; ADK&apos;s CLI entry-point convention</td><td>All agents</td></tr>
           <tr><td class="mono">tool_filter</td><td>Whitelist of MCP tools to expose to the agent</td><td>github_agent</td></tr>
-          <tr><td class="mono">FallbackLlm</td><td>Custom BaseLlm: primary Gemini + Ollama fallback on 429</td><td>hello_world, dota, notes, quiz, persistent, coordinator</td></tr>
+          <tr><td class="mono">FallbackLlm</td><td>Custom BaseLlm: primary Gemini + Ollama fallback on 429</td><td>All agents across repo</td></tr>
         </tbody>
       </table>
 
@@ -2093,16 +2556,25 @@ adk run agents/dota_draft_analyzer
 adk run agents/note_taking_agent
 adk run agents/quiz_agent
 adk run agents/persistent_agent --session_service_uri sqlite:///data/sessions.db
+adk run agents/personal_assistant
+adk run agents/research_agent
+adk run agents/writer_reviewer
+adk run agents/news_pipeline
+adk run agents/parallel_researcher
+adk run agents/smart_dispatcher
+adk run agents/dynamic_agent
+adk run agents/hitl_agent
 
-<span class="cm"># Run SQLite DatabaseSessionService automated demo or interactive runner</span>
+<span class="cm"># Run specialized runners</span>
 python runners/sqlite_session_runner.py --demo
-python runners/sqlite_session_runner.py --interactive
+python runners/hitl_runner.py
+
+<span class="cm"># Run ADK Agent Evaluation Suite &amp; Model Benchmark</span>
+python evals/evaluator.py --eval-set evals/hello_world.test.json
+python evals/model_benchmark.py
 
 <span class="cm"># Launch the web UI at localhost:8000</span>
 adk web
-
-<span class="cm"># Run a specific agent in the web UI</span>
-adk web agents/quiz_agent
 
 <span class="cm"># Scaffold a new agent folder</span>
 adk create agents/my_new_agent</pre>
@@ -2114,10 +2586,13 @@ adk create agents/my_new_agent</pre>
 tool_context.state["notes"]              <span class="cm"># note_taking_agent</span>
 tool_context.state["quiz"]               <span class="cm"># quiz_agent</span>
 tool_context.state["tasks"]              <span class="cm"># persistent_agent</span>
+tool_context.state["accounts"]           <span class="cm"># hitl_agent</span>
+tool_context.state["audit_trail"]        <span class="cm"># hitl_agent</span>
 
 <span class="cm"># User-scoped (persists across ALL sessions belonging to this user_id in user_states table)</span>
 tool_context.state["user:preferences"]   <span class="cm"># persistent_agent</span>
 tool_context.state["user:profile"]       <span class="cm"># user: prefix</span>
+tool_context.state["user:role"]          <span class="cm"># dynamic_agent (persona switching)</span>
 
 <span class="cm"># App-scoped (persists globally across ALL users and sessions in app_states table)</span>
 tool_context.state["app:stats"]          <span class="cm"># persistent_agent</span>
@@ -2129,7 +2604,7 @@ tool_context.state["temp:scratchpad"]    <span class="cm"># temp: prefix</span><
     </section>
 
     <div class="footer">
-      Google ADK 2.5.0 &middot; Gemini 2.5 Flash &middot; Phase 1 &amp; Phase 2 Complete &middot; 8 agents &middot; Sep 2026
+      Google ADK 2.5.0 &middot; Gemini 2.5 Flash &middot; Phase 1, 2, 3 &amp; 4 Complete (Weeks 1&ndash;9) &middot; 16 agents &middot; Sep 2026
     </div>
 
   </main>

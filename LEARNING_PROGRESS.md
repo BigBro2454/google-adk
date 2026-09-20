@@ -9,9 +9,9 @@
 |---|---|
 | **Started** | July 19, 2026 |
 | **Current Phase** | Phase 4 — Production |
-| **Current Week** | Week 9 — Evaluation and Testing 🔄 In Progress |
-| **Weeks Completed** | 8 / 12 |
-| **Projects Completed** | 21 / 23 |
+| **Current Week** | Week 10 — Observability and Guardrails 🔄 Up Next |
+| **Weeks Completed** | 9 / 12 |
+| **Projects Completed** | 23 / 23 |
 | **Last Active** | September 14, 2026 |
 | **Streak** | 5 days 🔥 |
 
@@ -127,17 +127,17 @@
 
 ---
 
-## Phase 4 — Production `0 / 4 weeks`
+## Phase 4 — Production `1 / 4 weeks`
 
 ### Week 9 — Evaluation and Testing
-- **Status:** ⬜ Not started
-- **Completed on:** —
-- **Time taken:** —
-- **Notes:** —
+- **Status:** ✅ Complete
+- **Completed on:** September 14, 2026
+- **Time taken:** 1 day
+- **Notes:** Built comprehensive ADK trajectory evaluation suite (10 test cases in `evals/hello_world.test.json`, `AgentTrajectoryEvaluator` engine), multi-model benchmarking comparing Gemini 2.5 Flash vs. Flash-Lite vs. local Ollama (`evals/model_benchmark.py`), and ADK 2.0 Human-in-the-Loop approval workflows with `ToolConfirmation` (`agents/hitl_agent/` and `runners/hitl_runner.py`).
 
 #### Projects
-- [ ] Project 8.1 — 10 evaluation test cases for `hello_world`
-- [ ] Project 8.2 — Flash vs. Flash-Lite performance comparison
+- [x] Project 8.1 — 10 evaluation test cases for `hello_world` & trajectory verifier
+- [x] Project 8.2 — Flash vs. Flash-Lite performance comparison & Human-in-the-Loop approval workflows
 
 ---
 
@@ -194,6 +194,7 @@
 | September 14, 2026 | Week 6 complete — Agent-as-a-Tool and Sub-Agents (Projects 5.1 & 5.2). Built research_agent delegating to search_specialist via AgentTool, and editorial_director coordinating blog_generator and blog_reviewer sub-agents. |
 | September 14, 2026 | Week 7 complete — Orchestration Patterns (Projects 6.1, 6.2, 6.3). Built news_pipeline (SequentialAgent 3-stage pipeline), parallel_researcher (ParallelAgent concurrent fanout to GitHub, ArXiv, and Blogs), and smart_dispatcher (Coordinator routing across code, research, and math specialists). |
 | September 14, 2026 | Week 8 complete — ADK Skills and Token Optimization (Projects 7.1 & 7.2). Implemented BaseSkill and developer_search_skill in shared/skills/, built dynamic_agent with callable dynamic instruction builder and persona management tools. Phase 3 100% complete! |
+| September 14, 2026 | Week 9 complete — Evaluation, Testing & HITL (Projects 8.1 & 8.2). Built 10-case deterministic trajectory evaluation suite (evals/hello_world.test.json, evals/evaluator.py), model benchmark comparator (evals/model_benchmark.py), and ADK 2.0 native Human-in-the-Loop approval workflows (agents/hitl_agent/, runners/hitl_runner.py). Phase 4 underway! |
 
 ---
 
@@ -223,6 +224,8 @@
 - **September 14** — The Coordinator/Dispatcher pattern dynamically inspects user intent to route queries to domain-specific specialists without manual prompt switching.
 - **September 14** — Progressive disclosure separates base lightweight agent behavior (~150 tokens) from specialized skills, injecting instructions and tools dynamically to save 70%+ of prompt tokens.
 - **September 14** — Passing a callable `instruction=dynamic_instruction_builder` to an `Agent` allows compiling instructions dynamically from `context.state` (such as `user:role` or loaded skills).
+- **September 14** — Traditional input/output unit assertions fail on agents due to natural language variability; Trajectory Evaluation tests the exact sequence and parameter schemas of tool calls against ground truth.
+- **September 14** — ADK 2.0 `ToolConfirmation` enables enterprise Human-in-the-Loop (HITL) workflows: setting `FunctionTool(func, require_confirmation=True)` pauses execution before tool invocation until an explicit `ToolConfirmation(confirmed=True)` is submitted, protecting critical transactions and maintaining an audit trail.
 
 ---
 

@@ -1,0 +1,358 @@
+{
+  "eval_set_id": "hello_world_eval_set",
+  "name": "Hello World Agent Evaluation Suite",
+  "description": "10 deterministic trajectory evaluation cases testing arithmetic tools and non-tool queries.",
+  "eval_cases": [
+    {
+      "evalId": "case_01_add_basic",
+      "conversation": [
+        {
+          "invocationId": "inv_case_01_add_basic",
+          "userContent": {
+            "parts": [
+              {
+                "text": "What is 15 + 27?"
+              }
+            ]
+          },
+          "intermediateData": {
+            "toolUses": [
+              {
+                "args": {
+                  "a": 15,
+                  "b": 27
+                },
+                "name": "add"
+              }
+            ],
+            "toolResponses": [
+              {
+                "name": "add",
+                "response": {
+                  "result": 42
+                }
+              }
+            ],
+            "intermediateResponses": []
+          },
+          "creationTimestamp": 0.0
+        }
+      ],
+      "creationTimestamp": 0.0,
+      "finalSessionState": {}
+    },
+    {
+      "evalId": "case_02_subtract_basic",
+      "conversation": [
+        {
+          "invocationId": "inv_case_02_subtract_basic",
+          "userContent": {
+            "parts": [
+              {
+                "text": "Calculate 100 - 45"
+              }
+            ]
+          },
+          "intermediateData": {
+            "toolUses": [
+              {
+                "args": {
+                  "a": 100,
+                  "b": 45
+                },
+                "name": "subtract"
+              }
+            ],
+            "toolResponses": [
+              {
+                "name": "subtract",
+                "response": {
+                  "result": 55
+                }
+              }
+            ],
+            "intermediateResponses": []
+          },
+          "creationTimestamp": 0.0
+        }
+      ],
+      "creationTimestamp": 0.0,
+      "finalSessionState": {}
+    },
+    {
+      "evalId": "case_03_multiply_basic",
+      "conversation": [
+        {
+          "invocationId": "inv_case_03_multiply_basic",
+          "userContent": {
+            "parts": [
+              {
+                "text": "What is 8 times 9?"
+              }
+            ]
+          },
+          "intermediateData": {
+            "toolUses": [
+              {
+                "args": {
+                  "a": 8,
+                  "b": 9
+                },
+                "name": "multiply"
+              }
+            ],
+            "toolResponses": [
+              {
+                "name": "multiply",
+                "response": {
+                  "result": 72
+                }
+              }
+            ],
+            "intermediateResponses": []
+          },
+          "creationTimestamp": 0.0
+        }
+      ],
+      "creationTimestamp": 0.0,
+      "finalSessionState": {}
+    },
+    {
+      "evalId": "case_04_add_negative",
+      "conversation": [
+        {
+          "invocationId": "inv_case_04_add_negative",
+          "userContent": {
+            "parts": [
+              {
+                "text": "What is -12 plus 30?"
+              }
+            ]
+          },
+          "intermediateData": {
+            "toolUses": [
+              {
+                "args": {
+                  "a": -12,
+                  "b": 30
+                },
+                "name": "add"
+              }
+            ],
+            "toolResponses": [
+              {
+                "name": "add",
+                "response": {
+                  "result": 18
+                }
+              }
+            ],
+            "intermediateResponses": []
+          },
+          "creationTimestamp": 0.0
+        }
+      ],
+      "creationTimestamp": 0.0,
+      "finalSessionState": {}
+    },
+    {
+      "evalId": "case_05_subtract_negative",
+      "conversation": [
+        {
+          "invocationId": "inv_case_05_subtract_negative",
+          "userContent": {
+            "parts": [
+              {
+                "text": "What is 50 minus -25?"
+              }
+            ]
+          },
+          "intermediateData": {
+            "toolUses": [
+              {
+                "args": {
+                  "a": 50,
+                  "b": -25
+                },
+                "name": "subtract"
+              }
+            ],
+            "toolResponses": [
+              {
+                "name": "subtract",
+                "response": {
+                  "result": 75
+                }
+              }
+            ],
+            "intermediateResponses": []
+          },
+          "creationTimestamp": 0.0
+        }
+      ],
+      "creationTimestamp": 0.0,
+      "finalSessionState": {}
+    },
+    {
+      "evalId": "case_06_multiply_zero",
+      "conversation": [
+        {
+          "invocationId": "inv_case_06_multiply_zero",
+          "userContent": {
+            "parts": [
+              {
+                "text": "Compute 42 multiplied by 0"
+              }
+            ]
+          },
+          "intermediateData": {
+            "toolUses": [
+              {
+                "args": {
+                  "a": 42,
+                  "b": 0
+                },
+                "name": "multiply"
+              }
+            ],
+            "toolResponses": [
+              {
+                "name": "multiply",
+                "response": {
+                  "result": 0
+                }
+              }
+            ],
+            "intermediateResponses": []
+          },
+          "creationTimestamp": 0.0
+        }
+      ],
+      "creationTimestamp": 0.0,
+      "finalSessionState": {}
+    },
+    {
+      "evalId": "case_07_add_zero_identity",
+      "conversation": [
+        {
+          "invocationId": "inv_case_07_add_zero_identity",
+          "userContent": {
+            "parts": [
+              {
+                "text": "Add 0 and 73"
+              }
+            ]
+          },
+          "intermediateData": {
+            "toolUses": [
+              {
+                "args": {
+                  "a": 0,
+                  "b": 73
+                },
+                "name": "add"
+              }
+            ],
+            "toolResponses": [
+              {
+                "name": "add",
+                "response": {
+                  "result": 73
+                }
+              }
+            ],
+            "intermediateResponses": []
+          },
+          "creationTimestamp": 0.0
+        }
+      ],
+      "creationTimestamp": 0.0,
+      "finalSessionState": {}
+    },
+    {
+      "evalId": "case_08_plain_greeting",
+      "conversation": [
+        {
+          "invocationId": "inv_case_08_plain_greeting",
+          "userContent": {
+            "parts": [
+              {
+                "text": "Hello there! How are you today?"
+              }
+            ]
+          },
+          "intermediateData": {
+            "toolUses": [],
+            "toolResponses": [],
+            "intermediateResponses": []
+          },
+          "creationTimestamp": 0.0
+        }
+      ],
+      "creationTimestamp": 0.0,
+      "finalSessionState": {}
+    },
+    {
+      "evalId": "case_09_concept_explanation",
+      "conversation": [
+        {
+          "invocationId": "inv_case_09_concept_explanation",
+          "userContent": {
+            "parts": [
+              {
+                "text": "What is a prime number in mathematics?"
+              }
+            ]
+          },
+          "intermediateData": {
+            "toolUses": [],
+            "toolResponses": [],
+            "intermediateResponses": []
+          },
+          "creationTimestamp": 0.0
+        }
+      ],
+      "creationTimestamp": 0.0,
+      "finalSessionState": {}
+    },
+    {
+      "evalId": "case_10_multiply_large",
+      "conversation": [
+        {
+          "invocationId": "inv_case_10_multiply_large",
+          "userContent": {
+            "parts": [
+              {
+                "text": "Can you multiply 125 by 4?"
+              }
+            ]
+          },
+          "intermediateData": {
+            "toolUses": [
+              {
+                "args": {
+                  "a": 125,
+                  "b": 4
+                },
+                "name": "multiply"
+              }
+            ],
+            "toolResponses": [
+              {
+                "name": "multiply",
+                "response": {
+                  "result": 500
+                }
+              }
+            ],
+            "intermediateResponses": []
+          },
+          "creationTimestamp": 0.0
+        }
+      ],
+      "creationTimestamp": 0.0,
+      "finalSessionState": {}
+    }
+  ],
+  "creation_timestamp": 0.0
+}

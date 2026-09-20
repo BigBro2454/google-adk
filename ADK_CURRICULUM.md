@@ -460,16 +460,16 @@ Use HITL for: financial transactions, data deletion, sending emails, API calls w
 
 #### Topics to Study
 
-- [ ] ADK's built-in evaluation framework (adk eval)
-- [ ] Writing evaluation test cases with expected trajectories
-- [ ] Evaluating tool call accuracy vs. final response quality
-- [ ] Benchmarking agent performance across code versions
-- [ ] A/B testing different instructions, models, and tool configurations
+- [x] ADK's built-in evaluation framework (adk eval)
+- [x] Writing evaluation test cases with expected trajectories
+- [x] Evaluating tool call accuracy vs. final response quality
+- [x] Benchmarking agent performance across code versions
+- [x] A/B testing different instructions, models, and tool configurations
 
 #### Hands-On Projects
 
-- [ ] Project 8.1 — Write 10 evaluation test cases for the hello_world agent
-- [ ] Project 8.2 — Compare gemini-2.0-flash vs gemini-2.0-flash-lite performance
+- [x] Project 8.1 — Write 10 evaluation test cases for the hello_world agent
+- [x] Project 8.2 — Compare gemini-2.0-flash vs gemini-2.0-flash-lite performance (and local Ollama)
 
 ---
 
@@ -620,7 +620,7 @@ adk deploy cloud_run          # Deploy to Google Cloud Run
 - [x] Week 8: ADK Skills and token optimization
 
 ### Phase 4 — Production (Weeks 9-12)
-- [ ] Week 9: Evaluation and Testing
+- [x] Week 9: Evaluation and Testing
 - [ ] Week 10: Observability and Guardrails
 - [ ] Week 11: Cloud Deployment to Cloud Run
 - [ ] Week 12: Capstone Project complete
