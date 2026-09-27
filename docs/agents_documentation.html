@@ -166,10 +166,99 @@
       .main { padding: 1.5rem 1rem; }
       .mobile-nav { margin: -1.5rem -1rem 1.5rem -1rem; }
     }
-  </style>
+  
+    /* PM Lens CSS */
+    .pm-lens { background: var(--surface-3); border-radius: var(--radius); padding: 1.5rem; margin: 2rem 0; border: 1px solid var(--border); position: relative; overflow: hidden; }
+    .pm-lens::before { content: 'PM LENS'; position: absolute; top: 0; right: 0; background: var(--blue-dim); color: var(--blue); font-size: 0.65rem; font-weight: 700; padding: 0.25rem 0.75rem; border-bottom-left-radius: var(--radius-sm); letter-spacing: 0.05em; }
+    .pm-lens h4 { margin-top: 0; font-size: 1rem; color: var(--text); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .pm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    @media (max-width: 768px) { .pm-grid { grid-template-columns: 1fr; } }
+    .pm-box { background: var(--surface); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+    .pm-box h5 { margin: 0 0 0.5rem 0; font-size: 0.85rem; color: var(--text); }
+    .pm-box p { margin: 0; font-size: 0.8rem; color: var(--text-muted); }
+    
+    /* Trace Simulator */
+    .trace-sim { background: #0d1117; border-radius: var(--radius-sm); border: 1px solid #30363d; overflow: hidden; font-family: var(--font-mono); font-size: 0.75rem; }
+    .trace-header { background: #161b22; padding: 0.5rem 1rem; border-bottom: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center; color: #8b949e; }
+    .trace-body { padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem; max-height: 250px; overflow-y: auto; }
+    .trace-msg { padding: 0.5rem 0.75rem; border-radius: 6px; max-width: 85%; }
+    .trace-user { background: #1f6feb; color: #fff; align-self: flex-end; }
+    .trace-agent { background: #21262d; color: #c9d1d9; align-self: flex-start; border: 1px solid #30363d; }
+    .trace-system { background: rgba(210, 153, 34, 0.15); color: #d29922; align-self: center; border: 1px dashed #d29922; width: 100%; box-sizing: border-box; text-align: center; }
+    .trace-toggle { cursor: pointer; color: var(--blue); font-size: 0.75rem; background: none; border: none; font-family: inherit; }
+    
+    /* Tooltips */
+    .pm-tip { text-decoration: underline; text-decoration-style: dotted; text-decoration-color: var(--blue); cursor: help; position: relative; }
+    .pm-tip:hover::after { content: attr(data-tip); position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: var(--surface-3); color: var(--text); padding: 0.5rem; border-radius: 6px; font-size: 0.75rem; white-space: normal; width: 200px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 100; text-align: left; }
+
+    
+    /* Collapsible Panes */
+    .layout { transition: grid-template-columns 0.3s ease; position: relative; }
+    .layout.left-collapsed { grid-template-columns: 0px minmax(0, 1fr); }
+    .sidebar { transition: opacity 0.2s ease, transform 0.3s ease; width: 260px; overflow: hidden; }
+    .layout.left-collapsed .sidebar { opacity: 0; pointer-events: none; }
+    
+    .layout.right-expanded .main-content { margin-right: 350px; }
+    .main-content { transition: margin-right 0.3s ease; }
+    
+    /* Toggle Buttons */
+    .pane-toggle { position: fixed; top: 1rem; z-index: 90; background: var(--surface-3); border: 1px solid var(--border); color: var(--text); padding: 0.4rem 0.6rem; border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: all 0.3s ease; }
+    .pane-toggle:hover { background: var(--surface); color: var(--blue); }
+    .toggle-left { left: 270px; }
+    .layout.left-collapsed .toggle-left { left: 1rem; }
+    .toggle-right { right: 1rem; }
+    .layout.right-expanded .toggle-right { right: 360px; }
+    
+    /* QnA Right Sidebar */
+    .qna-sidebar { position: fixed; top: 0; right: 0; width: 350px; height: 100vh; background: var(--surface); border-left: 1px solid var(--border); transform: translateX(100%); transition: transform 0.3s ease; display: flex; flex-direction: column; z-index: 100; box-shadow: -4px 0 15px rgba(0,0,0,0.2); }
+    .layout.right-expanded .qna-sidebar { transform: translateX(0); }
+    
+    .qna-header { padding: 1rem; border-bottom: 1px solid var(--border); background: var(--surface-2); display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: var(--text); }
+    .qna-config { padding: 1rem; border-bottom: 1px solid var(--border); background: var(--bg); }
+    .qna-config label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+    .qna-config input { width: 100%; padding: 0.5rem; background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: var(--radius-sm); margin-top: 0.5rem; box-sizing: border-box; font-family: monospace; font-size: 0.8rem; }
+    .qna-messages { flex-grow: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; background: var(--bg); }
+    .qna-msg { padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.85rem; line-height: 1.5; word-wrap: break-word; }
+    .qna-msg.user { background: var(--blue-dim); color: var(--blue); align-self: flex-end; max-width: 85%; border-bottom-right-radius: 2px; }
+    .qna-msg.bot { background: var(--surface-2); color: var(--text); align-self: flex-start; max-width: 90%; border: 1px solid var(--border); border-bottom-left-radius: 2px; }
+    .qna-input { padding: 1rem; border-top: 1px solid var(--border); background: var(--surface-2); display: flex; flex-direction: column; gap: 0.5rem; }
+    .qna-input textarea { width: 100%; padding: 0.75rem; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: var(--radius-sm); resize: none; font-family: inherit; box-sizing: border-box; height: 80px; }
+    .qna-input textarea:focus { outline: 1px solid var(--blue); }
+    .qna-input button { padding: 0.75rem; background: var(--blue); color: #fff; border: none; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600; transition: background 0.2s; }
+    .qna-input button:hover { background: #1a56db; }
+    .qna-input button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .typing-indicator { font-size: 0.8rem; color: var(--text-muted); font-style: italic; display: none; }
+    .qna-msg.bot pre { background: #0d1117; padding: 0.5rem; border-radius: 4px; overflow-x: auto; font-size: 0.75rem; }
+    .qna-msg.bot code { font-family: var(--font-mono); }
+
+    </style>
 </head>
 <body>
-<div class="layout">
+<div class="layout" id="main-layout">
+
+  <!-- Toggles -->
+  <button class="pane-toggle toggle-left" id="btn-toggle-left" title="Toggle Sidebar">&#x2630;</button>
+  <button class="pane-toggle toggle-right" id="btn-toggle-right" title="Ask AI">&#x2728;</button>
+
+  <!-- QnA Sidebar -->
+  <aside class="qna-sidebar">
+    <div class="qna-header">
+      <span style="font-size: 1.2rem;">&#x2728;</span> Document Q&A
+    </div>
+    <div class="qna-config">
+      <label for="qna-api-key">Gemini API Key</label>
+      <input type="password" id="qna-api-key" placeholder="AIzaSy..." />
+    </div>
+    <div class="qna-messages" id="qna-chat-box">
+      <div class="qna-msg bot">Hi! I'm an AI assistant. I've read this entire documentation. Paste your API key above and ask me anything about the agents, architectures, or ADK concepts!</div>
+    </div>
+    <div class="qna-input">
+      <div class="typing-indicator" id="qna-typing">Thinking...</div>
+      <textarea id="qna-prompt" placeholder="E.g., How does the FallbackLlm work?"></textarea>
+      <button id="qna-send">Ask Question</button>
+    </div>
+  </aside>
+
 
   <aside class="sidebar">
     <div class="sidebar-logo">
@@ -255,6 +344,49 @@
     <hr />
 
     <!-- Architecture -->
+    
+    <!-- Decision Tree -->
+    <section id="decision-tree">
+      <div class="section-header">
+        <div class="section-icon" style="background:var(--blue-dim)">&#x1F5FA;&#xFE0F;</div>
+        <h2>PM Guide: Choose Your Architecture</h2>
+      </div>
+      <p>Start with your business requirement to find the correct agent architecture.</p>
+      <div class="diagram-wrapper">
+        <div class="mermaid">
+flowchart TD
+    Start([What is your primary business goal?]) --> Single[Single Task / Lookup]
+    Start --> Multi[Multi-Step / Complex Logic]
+    Start --> Security[Data Privacy & Compliance]
+    
+    Single --> Tools{Need external data?}
+    Tools -->|No| Prompt[Zero-Tool Expert
+👉 dota_draft_analyzer]
+    Tools -->|Yes| API[API Integration
+👉 weather_agent]
+    Tools -->|GitHub| MCP[Instant SaaS Integrations
+👉 github_agent]
+    
+    Multi --> State{Need to remember things?}
+    State -->|Session Only| Sess[Memory via Session State
+👉 note_taking_agent]
+    State -->|Forever| DB[Relational DB Persistence
+👉 persistent_agent]
+    State -->|Quality Control| Edit[Self-Correcting Loop
+👉 writer_reviewer]
+    
+    Security --> Cloud{Can data leave the premise?}
+    Cloud -->|No| Local[100% Offline Local Model
+👉 ollama_agent]
+    Cloud -->|Yes, but audited| PII[PII Redaction & Guardrails
+👉 personal_assistant]
+    Cloud -->|Yes, but high stakes| HITL[Human Approval Required
+👉 hitl_agent]
+        </div>
+      </div>
+    </section>
+    <hr />
+
     <section id="architecture">
       <div class="section-header">
         <div class="section-icon" style="background:var(--purple-dim)">&#x1F3D7;&#xFE0F;</div>
@@ -304,7 +436,7 @@ graph TD
             <div class="agent-card-icon" style="background:var(--purple-dim)">&#x1F9EE;</div>
             <h3>hello_world</h3>
           </div>
-          <p>Starter calculator. Demonstrates tool-calling basics and FallbackLlm.</p>
+          <p>Starter calculator. Demonstrates <span class='pm-tip' data-tip='Giving the AI hands. Instead of just talking, it can press buttons in our actual software.'>tool-calling</span> basics and FallbackLlm.</p>
           <div class="agent-meta"><span class="meta-tag">FallbackLlm</span><span class="meta-tag">3 tools</span></div>
         </div>
         <div class="agent-card blue">
@@ -453,7 +585,7 @@ graph TD
         <div class="agent-section-icon" style="background:var(--purple-dim)">&#x1F9EE;</div>
         <div class="agent-section-meta">
           <h2>hello_world</h2>
-          <p>Your first ADK agent. A math assistant with calculator tools. Demonstrates the core tool-calling loop and FallbackLlm.</p>
+          <p>Your first ADK agent. A math assistant with calculator tools. Demonstrates the core <span class='pm-tip' data-tip='Giving the AI hands. Instead of just talking, it can press buttons in our actual software.'>tool-calling</span> loop and FallbackLlm.</p>
           <div class="agent-section-pills">
             <span class="meta-tag">agents/hello_world/agent.py</span>
             <span class="meta-tag">FallbackLlm</span>
@@ -461,6 +593,54 @@ graph TD
           </div>
         </div>
       </div>
+
+      <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--purple); border-radius: 0 var(--radius) var(--radius) 0;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
+
+        <p><strong>The Requirement:</strong> Build an AI assistant that can accurately answer math questions.</p>
+        <p><strong>Solution Design:</strong> Large Language Models are probabilistic text generators (they predict words, they don't do math), not calculators. They frequently hallucinate numbers (confidently make up wrong answers). To solve this, we don't improve the prompt; we give the LLM an external tool. By providing a calculator, the LLM offloads the deterministic computation (the exact math) to Python (the backend code).</p>
+        <p><strong>Implementation Plan:</strong></p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+          <li>Create pure Python functions (standard code blocks for <code>add</code>, <code>subtract</code>, <code>multiply</code>).</li>
+          <li>Add precise type hints and docstrings (code labels). This is critical because the ADK uses them to generate the JSON schema (the exact formatting rules) for the LLM.</li>
+          <li>Instantiate the <code>Agent</code> (turn the AI on), passing the tools array (its toolbelt) and a system instruction (its core persona) guiding its behavior.</li>
+          <li>Wrap the model in <code>FallbackLlm</code> to ensure high availability (so if the primary AI server crashes, it seamlessly switches to a backup).</li>
+        </ol>
+
+
+      </div>
+
+      <div class="pm-lens">
+        <h4><span style="font-size:1.2rem">&#x1F4BC;</span> PM Lens: Business & Risks</h4>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h5>&#x1F4B8; Business Value</h5>
+            <p>Foundation for reliable computation. Eliminates LLM math hallucinations.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
+            <p>Giving a junior intern a physical calculator instead of making them do long division in their head.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
+            <p>If the tool code crashes, the LLM will try to guess the answer anyway. (Mitigation: robust error handling in tools).</p>
+          </div>
+          <div class="pm-box trace-sim">
+            <div class="trace-header">
+              <span>Interactive Trace Simulator</span>
+              <span style="font-size:0.6rem">LIVE</span>
+            </div>
+            <div class="trace-body">
+              <div class="trace-msg trace-user">What is 42 * 7?</div>
+<div class="trace-msg trace-system">Executing tool: multiply(42, 7) -> 294</div>
+<div class="trace-msg trace-agent">42 * 7 is 294.</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
 
       <h3>Execution workflow</h3>
       <p>User sends a math question &rarr; ADK passes it to Gemini with the system instruction &rarr; Gemini decides which tool to call &rarr; ADK executes the Python function &rarr; the result is injected back into context &rarr; Gemini formats a friendly reply.</p>
@@ -581,7 +761,7 @@ root_agent = <span class="cl">Agent</span>(
     <span class="st">"""Multiplies two numbers together."""</span>
     <span class="kw">return</span> {<span class="st">"result"</span>: a * b}</pre></div>
           <div class="snippet-explain">
-            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>Type hints</strong> (<code>float</code>, <code>dict</code>) are mandatory. ADK uses them to build the JSON schema passed to the LLM &mdash; without them, tool calling breaks silently.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>Type hints</strong> (<code>float</code>, <code>dict</code>) are mandatory. ADK uses them to build the JSON schema passed to the LLM &mdash; without them, <span class='pm-tip' data-tip='Giving the AI hands. Instead of just talking, it can press buttons in our actual software.'>tool calling</span> breaks silently.</span></div>
             <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>Docstrings</strong> are the tool&apos;s contract with the LLM. Quality directly determines how reliably the LLM calls the tool and with what arguments.</span></div>
             <div class="explain-item"><span class="explain-dot" style="background:var(--teal)"></span><span class="explain-text"><strong>Return a dict</strong> &mdash; ADK serializes it to JSON and feeds it back to the LLM so Gemini can reason about the result.</span></div>
           </div>
@@ -610,6 +790,55 @@ root_agent = <span class="cl">Agent</span>(
           </div>
         </div>
       </div>
+
+      <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--blue); border-radius: 0 var(--radius) var(--radius) 0;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
+
+        <p><strong>The Requirement:</strong> An agent that can report live weather conditions for any given city.</p>
+        <p><strong>Solution Design:</strong> Weather APIs (data providers) usually require latitude and longitude, but humans ask for weather by city name. The agent needs to perform two distinct actions in sequence: geocoding (converting a city name to coordinates) and forecasting (converting coordinates to weather). Instead of hardcoding this logic in Python (writing rigid step-by-step code), we can provide both tools and rely on the LLM's reasoning to chain them together autonomously.</p>
+        <p><strong>Implementation Plan:</strong></p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+          <li>Build <code>get_coordinates(city)</code> using a free geocoding API (an external service to get map data).</li>
+          <li>Build <code>get_weather(lat, lon)</code> using the Open-Meteo forecast API (a service to get weather data).</li>
+          <li>Write a system prompt (core instruction manual) that explicitly acts as the control flow: "Step 1: Always call get_coordinates first. Step 2: Then call get_weather."</li>
+          <li>Let the LLM handle error states (like gracefully apologizing if a city is not found) organically through prompt instructions rather than writing strict error-handling code.</li>
+        </ol>
+
+
+      </div>
+
+      <div class="pm-lens">
+        <h4><span style="font-size:1.2rem">&#x1F4BC;</span> PM Lens: Business & Risks</h4>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h5>&#x1F4B8; Business Value</h5>
+            <p>Enables multi-step autonomous workflows without requiring the user to do intermediate steps.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
+            <p>A concierge looking up a city's zip code in a directory (Tool 1) before typing it into a weather terminal (Tool 2).</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
+            <p>Error cascades. If Tool 1 returns a typo, Tool 2 fails. (Mitigation: System prompts teaching the LLM to verify Step 1 first).</p>
+          </div>
+          <div class="pm-box trace-sim">
+            <div class="trace-header">
+              <span>Interactive Trace Simulator</span>
+              <span style="font-size:0.6rem">LIVE</span>
+            </div>
+            <div class="trace-body">
+              <div class="trace-msg trace-user">Weather in Paris?</div>
+<div class="trace-msg trace-system">Tool: get_coordinates('Paris') -> lat, lon</div>
+<div class="trace-msg trace-system">Tool: get_weather(lat, lon) -> 22C</div>
+<div class="trace-msg trace-agent">It's 22C in Paris.</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
 
       <h3>Execution workflow</h3>
       <p>The instruction tells Gemini to <em>always</em> call <code>get_coordinates</code> before <code>get_weather</code>. The system prompt is the control flow &mdash; no code orchestration needed.</p>
@@ -823,6 +1052,53 @@ WMO_CODES = {
         </div>
       </div>
 
+      <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--teal); border-radius: 0 var(--radius) var(--radius) 0;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
+
+        <p><strong>The Requirement:</strong> An agent capable of reading issues, reviewing pull requests, and managing a GitHub repository.</p>
+        <p><strong>Solution Design:</strong> Manually writing tool functions (custom code to click buttons) for every single GitHub API endpoint would be incredibly tedious and difficult to maintain. The Model Context Protocol (MCP - a universal remote standard) solves this. By running an existing GitHub MCP server as a subprocess (a background helper), the agent can dynamically discover and use all GitHub APIs without us writing any integration code.</p>
+        <p><strong>Implementation Plan:</strong></p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+          <li>Configure an <code>McpToolset</code> (the connector) to point to the official GitHub NPM package (the pre-built universal remote code).</li>
+          <li>Since the MCP server exposes dozens of tools, use a <code>tool_filter</code> (a permissions whitelist) to expose only the 6 relevant tools to the LLM, preventing context window bloat (overwhelming the AI's short-term memory).</li>
+          <li>Provide a system prompt (core persona) that explains the agent's role as a GitHub maintainer.</li>
+        </ol>
+
+
+      </div>
+
+      <div class="pm-lens">
+        <h4><span style="font-size:1.2rem">&#x1F4BC;</span> PM Lens: Business & Risks</h4>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h5>&#x1F4B8; Business Value</h5>
+            <p>Zero-code integrations. Connects to hundreds of enterprise tools without writing custom API wrappers.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
+            <p>Giving your AI a universal remote control that automatically knows how to operate any TV.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
+            <p>Too many tools overwhelm the AI's <span class='pm-tip' data-tip='The AI short-term memory. Too much info causes it to forget instructions.'><span class='pm-tip' data-tip='The AI's short-term memory. If you put too many instructions in, it forgets the ones at the beginning.'>Context Window</span></span>. (Mitigation: We use a Tool Filter to only show relevant buttons).</p>
+          </div>
+          <div class="pm-box trace-sim">
+            <div class="trace-header">
+              <span>Interactive Trace Simulator</span>
+              <span style="font-size:0.6rem">LIVE</span>
+            </div>
+            <div class="trace-body">
+              <div class="trace-msg trace-user">Close issue #5</div>
+<div class="trace-msg trace-system">MCP Server Tool: github_close_issue(5) -> Success</div>
+<div class="trace-msg trace-agent">I've closed issue #5.</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
       <h3>Execution workflow</h3>
       <p>ADK spawns the GitHub MCP server as a subprocess on startup, communicating over stdin/stdout. At query time, Gemini selects a GitHub tool from the filtered list, the MCP server calls the real GitHub REST API, and the result flows back through ADK into the LLM context.</p>
 
@@ -990,6 +1266,54 @@ github_toolset = <span class="cl">McpToolset</span>(
         </div>
       </div>
 
+      <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
+
+        <p><strong>The Requirement:</strong> A fully local, offline agent that doesn't send sensitive code to cloud APIs.</p>
+        <p><strong>Solution Design:</strong> Cloud LLMs offer great reasoning, but data privacy and offline capability require local inference (running the AI on your own hardware). We need a way to swap the cloud LLM for a local one without rewriting the agent's logic. By using LiteLLM as an adapter (a universal translator), ADK can speak standard formats, while LiteLLM translates the payload to the local Ollama daemon (the local AI engine).</p>
+        <p><strong>Implementation Plan:</strong></p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+          <li>Ensure Ollama (the offline AI host) is running locally with a capable model (like <code>qwen2.5:7b</code>).</li>
+          <li>Set the agent's model string to point to this local model instead of a cloud provider.</li>
+          <li>Rely on ADK's built-in LiteLLM integration (the translator layer) to automatically route the request to <code>localhost:11434</code> (your machine's internal network).</li>
+          <li>Test tool calling, as local models are historically weaker at adhering to JSON tool schemas (following exact data formatting rules) than cloud models.</li>
+        </ol>
+
+
+      </div>
+
+      <div class="pm-lens">
+        <h4><span style="font-size:1.2rem">&#x1F4BC;</span> PM Lens: Business & Risks</h4>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h5>&#x1F4B8; Business Value</h5>
+            <p>100% Data Privacy and zero recurring API costs. Runs entirely on your hardware.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
+            <p>Hiring a private consultant to work inside a Faraday cage where no data can leave.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
+            <p>Local models are smaller and less reliable at strict JSON formatting. (Mitigation: Using robust parser libraries).</p>
+          </div>
+          <div class="pm-box trace-sim">
+            <div class="trace-header">
+              <span>Interactive Trace Simulator</span>
+              <span style="font-size:0.6rem">LIVE</span>
+            </div>
+            <div class="trace-body">
+              <div class="trace-msg trace-user">Summarize this sensitive contract</div>
+<div class="trace-msg trace-system">Routing to localhost:11434 (No cloud APIs hit)</div>
+<div class="trace-msg trace-agent">Here is the summary...</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
       <h3>Execution workflow</h3>
       <p>ADK&apos;s <code>LiteLlm</code> adapter translates ADK&apos;s internal <code>LlmRequest</code> format into the OpenAI-compatible API that Ollama speaks. All inference runs on-device &mdash; no data ever leaves the machine.</p>
 
@@ -1094,7 +1418,7 @@ root_agent = <span class="cl">Agent</span>(
 
       <div class="callout tip">
         <span class="callout-icon">&#x1F4A1;</span>
-        <p><strong>Models installed on your machine:</strong> <code>qwen2.5:7b</code> (best tool-calling) &middot; <code>llama3.1:8b</code> (general) &middot; <code>qwen2.5-coder:7b</code> (coding) &middot; <code>qwen3.5:9b</code> (most capable) &middot; <code>gemma4:12b</code> (Google&apos;s own, locally)</p>
+        <p><strong>Models installed on your machine:</strong> <code>qwen2.5:7b</code> (best <span class='pm-tip' data-tip='Giving the AI hands. Instead of just talking, it can press buttons in our actual software.'>tool-calling</span>) &middot; <code>llama3.1:8b</code> (general) &middot; <code>qwen2.5-coder:7b</code> (coding) &middot; <code>qwen3.5:9b</code> (most capable) &middot; <code>gemma4:12b</code> (Google&apos;s own, locally)</p>
       </div>
     </section>
 
@@ -1114,6 +1438,54 @@ root_agent = <span class="cl">Agent</span>(
           </div>
         </div>
       </div>
+
+      <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--rose); border-radius: 0 var(--radius) var(--radius) 0;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
+
+        <p><strong>The Requirement:</strong> An expert strategic analyzer for Dota 2 drafts that provides highly structured, deterministic advice.</p>
+        <p><strong>Solution Design:</strong> Unlike the calculator or weather agent, this task doesn't need external data fetching; all the knowledge is already encoded in the LLM's weights (its pre-trained brain). The challenge is extracting that knowledge in a rigorous, useful format rather than a generic conversational reply. The solution is pure, aggressive Prompt Engineering (writing incredibly strict instructions without giving it external tools).</p>
+        <p><strong>Implementation Plan:</strong></p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+          <li>Design a heavily structured system instruction (a rigid prompt) that acts as a "contract" between the AI and the user.</li>
+          <li>Demand a specific 12-section markdown output (a standardized document format).</li>
+          <li>Define the exact tone (e.g., highly tactical and aggressive).</li>
+          <li>Use <code>FallbackLlm</code> (the backup router) to guarantee the lengthy response doesn't fail due to rate limits (API traffic jams).</li>
+        </ol>
+
+
+      </div>
+
+      <div class="pm-lens">
+        <h4><span style="font-size:1.2rem">&#x1F4BC;</span> PM Lens: Business & Risks</h4>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h5>&#x1F4B8; Business Value</h5>
+            <p>High-quality domain expertise guaranteed in a specific format via strict prompt contracts.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
+            <p>Giving an expert a very strict fill-in-the-blank template to ensure they don't ramble.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
+            <p>Lengthy outputs hit API rate limits. (Mitigation: FallbackLLM seamlessly retries or swaps models).</p>
+          </div>
+          <div class="pm-box trace-sim">
+            <div class="trace-header">
+              <span>Interactive Trace Simulator</span>
+              <span style="font-size:0.6rem">LIVE</span>
+            </div>
+            <div class="trace-body">
+              <div class="trace-msg trace-user">Analyze this draft</div>
+<div class="trace-msg trace-system">Applying 12-section formatting constraint</div>
+<div class="trace-msg trace-agent">## 1. Strategy...</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
 
       <h3>Execution workflow</h3>
       <p>No tool calls. No API calls. The entire execution is a single round-trip: user provides heroes &rarr; Gemini applies the structured INSTRUCTIONS prompt &rarr; structured 12-section analysis is returned immediately.</p>
@@ -1269,6 +1641,55 @@ Include exactly these sections:
           </div>
         </div>
       </div>
+
+      <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--green); border-radius: 0 var(--radius) var(--radius) 0;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
+
+        <p><strong>The Requirement:</strong> An agent that can take notes and remember them across multiple conversational turns.</p>
+        <p><strong>Solution Design:</strong> By default, LLM interactions are stateless (meaning they forget everything when you refresh the page). To enable memory, we need a State Store (an invisible background notepad). The tools themselves need access to this state to read and write notes, but the LLM only needs the JSON output (the final readable answer, not the messy backend data). We solve this using ToolContext injection (a technique that secretly passes the notepad to the tool), which gives the Python tool functions access to the conversational session.state (the active memory file) behind the scenes.</p>
+        <p><strong>Implementation Plan:</strong></p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+          <li>Define CRUD operations (functions to Create, Read, Update, and Delete) as Python tool functions.</li>
+          <li>Add <code>tool_context: ToolContext = injected</code> (a secret backdoor to the memory) as a parameter to the tools. The LLM won't see this parameter.</li>
+          <li>Inside the tools, read and mutate (modify) <code>tool_context.state['notes']</code> (the actual memory file).</li>
+          <li>The ADK runner (the engine powering the AI) automatically persists (saves) this state between user inputs within the same session.</li>
+        </ol>
+
+
+      </div>
+
+      <div class="pm-lens">
+        <h4><span style="font-size:1.2rem">&#x1F4BC;</span> PM Lens: Business & Risks</h4>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h5>&#x1F4B8; Business Value</h5>
+            <p>Contextual awareness. The agent remembers what was said 10 minutes ago, reducing user friction.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
+            <p>An assistant keeping a notepad on their desk during a phone call.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
+            <p>State Bloat. Storing too much data in the session makes the prompt too large. (Mitigation: Store summaries, not raw data).</p>
+          </div>
+          <div class="pm-box trace-sim">
+            <div class="trace-header">
+              <span>Interactive Trace Simulator</span>
+              <span style="font-size:0.6rem">LIVE</span>
+            </div>
+            <div class="trace-body">
+              <div class="trace-msg trace-user">Save note: Buy milk</div>
+<div class="trace-msg trace-system">State Updated: notes=['Buy milk']</div>
+<div class="trace-msg trace-user">What did I need to buy?</div>
+<div class="trace-msg trace-agent">You need to buy milk.</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
 
       <h3>Execution workflow</h3>
       <p>Every tool function receives a <code>ToolContext</code> object injected by ADK. Tools read and write to <code>tool_context.state["notes"]</code> &mdash; a dict that survives for the entire conversation. No database, no files &mdash; just an in-memory session dict wired through ADK&apos;s state machinery.</p>
@@ -1486,7 +1907,7 @@ root_agent = <span class="cl">Agent</span>(
     <span class="kw">return</span> {<span class="st">"message"</span>: <span class="st">f"Cleared all {count} note(s)."</span>}</pre></div>
           <div class="snippet-explain">
             <div class="explain-item"><span class="explain-dot" style="background:var(--green)"></span><span class="explain-text"><strong>available_notes in error</strong> &mdash; when a title is not found, returning all known titles gives the LLM the information to ask &ldquo;did you mean X?&rdquo; instead of a dead-end error.</span></div>
-            <div class="explain-item"><span class="explain-dot" style="background:var(--green)"></span><span class="explain-text"><strong>80-char preview</strong> &mdash; <code>list_notes</code> returns truncated previews, not full content. Keeps tool responses small so they do not overflow the context window in long sessions.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--green)"></span><span class="explain-text"><strong>80-char preview</strong> &mdash; <code>list_notes</code> returns truncated previews, not full content. Keeps tool responses small so they do not overflow the <span class='pm-tip' data-tip='The AI's short-term memory. If you put too many instructions in, it forgets the ones at the beginning.'>context window</span> in long sessions.</span></div>
             <div class="explain-item"><span class="explain-dot" style="background:var(--green)"></span><span class="explain-text"><strong>Docstring guard on clear_all</strong> &mdash; &ldquo;Only call if user explicitly asks&rdquo; in the docstring prevents the LLM from nuking all notes on vague requests like &ldquo;clean up&rdquo;.</span></div>
           </div>
         </div>
@@ -1526,6 +1947,56 @@ root_agent = <span class="cl">Agent</span>(
           </div>
         </div>
       </div>
+
+      <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
+
+        <p><strong>The Requirement:</strong> An interactive quiz master that guides a user through multiple questions, keeping track of scores and streaks.</p>
+        <p><strong>Solution Design:</strong> A quiz requires a strict state machine (a rigid system tracking the current question number, score, and if the quiz is over). The LLM is the "frontend" (the host presenting questions), while the tools act as the "backend" state manager (the referee keeping score). By separating concerns (keeping the rules away from the creative AI), we prevent the LLM from hallucinating the score (inventing fake points) or skipping questions.</p>
+        <p><strong>Implementation Plan:</strong></p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+          <li>Create a curated question bank dictionary (a pre-written list of questions and answers).</li>
+          <li>Build a <code>start_quiz</code> tool that initializes the state (resets the score and question number to zero).</li>
+          <li>Build a <code>submit_answer</code> tool that evaluates correctness, increments the score in <code>session.state</code> (the active memory), and advances the index (moves to the next question).</li>
+          <li>Instruct the agent to use these tools sequentially (one after another) to drive the user through the quiz loop.</li>
+        </ol>
+
+
+      </div>
+
+      <div class="pm-lens">
+        <h4><span style="font-size:1.2rem">&#x1F4BC;</span> PM Lens: Business & Risks</h4>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h5>&#x1F4B8; Business Value</h5>
+            <p>Structured User Journeys. Forces the LLM to act as a strict state machine rather than a free-form chatbot.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
+            <p>A game show host who must read from the teleprompter and can't skip questions.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
+            <p>The LLM invents a fake score or skips a question. (Mitigation: Python backend manages the score, the LLM just reads it).</p>
+          </div>
+          <div class="pm-box trace-sim">
+            <div class="trace-header">
+              <span>Interactive Trace Simulator</span>
+              <span style="font-size:0.6rem">LIVE</span>
+            </div>
+            <div class="trace-body">
+              <div class="trace-msg trace-system">State: index=0, score=0</div>
+<div class="trace-msg trace-agent">Q1: What is Python?</div>
+<div class="trace-msg trace-user">A programming language</div>
+<div class="trace-msg trace-system">Tool: evaluate() -> Correct. State: score=1</div>
+<div class="trace-msg trace-agent">Correct!</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
 
       <h3>Execution workflow</h3>
       <p>The <code>quiz_agent</code> turns conversational turns into a game loop. When a quiz begins, <code>start_quiz()</code> stages questions in <code>tool_context.state["quiz"]</code>. Each subsequent turn evaluates the user's answer via <code>submit_answer()</code>, updates live scores and streaks, records an audit trail in history, and serves the next question until the final summary.</p>
@@ -1714,6 +2185,54 @@ root_agent = <span class="cl">Agent</span>(
         </div>
       </div>
 
+      <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--teal); border-radius: 0 var(--radius) var(--radius) 0;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
+
+        <p><strong>The Requirement:</strong> State that survives server restarts and can be scoped globally (app level), per-user, or per-session.</p>
+        <p><strong>Solution Design:</strong> In-memory state is volatile (it vanishes if the server restarts). For production, we need a durable persistence layer (a permanent filing cabinet). Using a relational database (SQLite) allows us to store the event trajectory (the chat history) and state snapshots. We can introduce scoping (permissions) so that the agent remembers a user's theme preference globally across all chats, but isolates their current task list to the active session (just the current chat window).</p>
+        <p><strong>Implementation Plan:</strong></p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+          <li>Swap the default temporary memory for <code>DatabaseSessionService</code> using <code>aiosqlite</code> (a lightweight, permanent SQL database).</li>
+          <li>Build tools that utilize <code>tool_context.state</code> (memory just for this chat), <code>tool_context.user_state</code> (memory for this specific user forever), and <code>tool_context.app_state</code> (memory for everyone using the app).</li>
+          <li>Test by restarting the application (simulating a crash) and verifying that the agent can seamlessly resume previous conversations and recall user preferences.</li>
+        </ol>
+
+
+      </div>
+
+      <div class="pm-lens">
+        <h4><span style="font-size:1.2rem">&#x1F4BC;</span> PM Lens: Business & Risks</h4>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h5>&#x1F4B8; Business Value</h5>
+            <p>Cross-session retention and personalized UX. Users don't have to repeat their preferences.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
+            <p>A filing cabinet that survives power outages and is strictly organized by User ID.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
+            <p>Data leaks between users. (Mitigation: Strict database scoping by user_id and session_id).</p>
+          </div>
+          <div class="pm-box trace-sim">
+            <div class="trace-header">
+              <span>Interactive Trace Simulator</span>
+              <span style="font-size:0.6rem">LIVE</span>
+            </div>
+            <div class="trace-body">
+              <div class="trace-msg trace-user">My theme is dark mode</div>
+<div class="trace-msg trace-system">DB Insert: user_id=123, theme=dark</div>
+<div class="trace-msg trace-system">*App Restarts*</div>
+<div class="trace-msg trace-agent">Welcome back! Loading dark mode.</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
       <h3>Persistence Architecture &amp; Database Schema</h3>
       <p>While <code>InMemorySessionService</code> loses all conversation history and scratchpad data upon process termination, <code>DatabaseSessionService</code> couples ADK to a relational database (SQLite via <code>aiosqlite</code> or PostgreSQL via <code>asyncpg</code>). Every turn, tool invocation, and state mutation is committed into a 5-table relational schema.</p>
 
@@ -1750,7 +2269,7 @@ sequenceDiagram
     Note over U,SQL: Phase 3: Brand New Session for Same User
     U->>DB: create_session(app_name, user_id="ishan", session_2_id)
     DB->>SQL: Load user_states for "ishan"
-    SQL-->>DB: user:preferences restored; tasks empty
+    SQL-->>DB: user:preferences restored, tasks empty
     DB-->>R: Session 2 initialized
     U->>R: "Do you remember my preferences?"
     R-->>U: "Yes! Your theme is 'Nord'. No tasks created in this new session."
@@ -2143,10 +2662,58 @@ graph TD
             <span class="meta-tag">UniversalLoggingPlugin</span>
             <span class="meta-tag">GuardrailsPlugin</span>
             <span class="meta-tag">PII Redaction</span>
-            <span class="meta-tag">Prompt Injection Defense</span>
+            <span class="meta-tag"><span class='pm-tip' data-tip='When a malicious user tricks the AI into ignoring its rules by sneaking hidden commands into the input.'>Prompt Injection</span> Defense</span>
           </div>
         </div>
       </div>
+
+      <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--purple); border-radius: 0 var(--radius) var(--radius) 0;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
+
+        <p><strong>The Requirement:</strong> A safe, long-term personal assistant that remembers facts forever while enforcing strict guardrails on input and output.</p>
+        <p><strong>Solution Design:</strong> Standard session state eventually fills up the context window (the AI's short-term memory limit). We need a Vector/JSON memory layer (a searchable long-term database) that the agent can actively query and update. Furthermore, since this agent handles personal data, we must inject middleware (Plugins—security checkpoints) to intercept and sanitize inputs/outputs (like redacting SSNs) before they ever hit the LLM.</p>
+        <p><strong>Implementation Plan:</strong></p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+          <li>Implement <code>PersistentMemoryService</code> tools allowing the agent to save and search semantic memories (searching by meaning, not just exact keywords).</li>
+          <li>Write a <code>BasePlugin</code> for Logging (a background tracker) to audit latency (speed) and token usage (cost).</li>
+          <li>Write a <code>Guardrails</code> plugin that hooks into <code>before_run</code> (intercepting the message before the AI sees it) to redact PII (censor personal info) and <code>after_run</code> (intercepting the AI's reply) to sanitize outputs.</li>
+          <li>Register these plugins (security checkpoints) in the main Agent definition.</li>
+        </ol>
+
+
+      </div>
+
+      <div class="pm-lens">
+        <h4><span style="font-size:1.2rem">&#x1F4BC;</span> PM Lens: Business & Risks</h4>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h5>&#x1F4B8; Business Value</h5>
+            <p>Enterprise compliance and privacy. Guarantees sensitive data is scrubbed before hitting cloud APIs.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
+            <p>A corporate assistant whose emails are strictly audited and redacted by Legal before sending.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
+            <p><span class='pm-tip' data-tip='When a user tricks the AI into ignoring its rules.'><span class='pm-tip' data-tip='When a malicious user tricks the AI into ignoring its rules by sneaking hidden commands into the input.'>Prompt Injection</span></span> or PII leaks. (Mitigation: Guardrails middleware intercepts all traffic).</p>
+          </div>
+          <div class="pm-box trace-sim">
+            <div class="trace-header">
+              <span>Interactive Trace Simulator</span>
+              <span style="font-size:0.6rem">LIVE</span>
+            </div>
+            <div class="trace-body">
+              <div class="trace-msg trace-user">My SSN is 123-45</div>
+<div class="trace-msg trace-system">Guardrails: Redacting PII -> 'My SSN is [REDACTED]'</div>
+<div class="trace-msg trace-agent">I've noted that safely.</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
 
       <div class="diagram-wrapper">
         <div class="mermaid">
@@ -2154,8 +2721,7 @@ graph LR
     User([User Prompt]) --> G_In[Guardrails: Input Redaction &amp; Injection Check]
     G_In --> Log_Pre[LoggingPlugin: before_run]
     Log_Pre --> Agent[personal_assistant / Gemini 2.5 Flash]
-    Agent <--> Mem[(PersistentMemoryService
-data/memory.json)]
+    Agent <--> Mem[("PersistentMemoryService\ndata/memory.json")]
     Agent --> Log_Post[LoggingPlugin: after_run Latency &amp; Token Audit]
     Log_Post --> G_Out[Guardrails: Output PII Sanitization]
     G_Out --> Resp([Sanitized Response])
@@ -2212,6 +2778,55 @@ runner = <span class="cl">Runner</span>(
         </div>
       </div>
 
+      <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--blue); border-radius: 0 var(--radius) var(--radius) 0;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
+
+        <p><strong>The Requirement:</strong> A research orchestrator that can delegate complex deep-dives to a specialized sub-agent without cluttering its own context.</p>
+        <p><strong>Solution Design:</strong> Giving a single agent 20 different tools leads to "tool confusion" and context exhaustion (running out of memory space). The Single Responsibility Principle (do one thing well) applies to agents too. We should wrap a specialized <code>search_specialist</code> agent (an "Intern") inside an <code>AgentTool</code>. The orchestrator (the "Manager") calls the sub-agent like a normal function, waits for the synthesized report, and stays focused on the high-level goal.</p>
+        <p><strong>Implementation Plan:</strong></p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+          <li>Create a standalone <code>search_specialist</code> agent (the "Intern") equipped with web scraping and search tools.</li>
+          <li>Create the <code>research_orchestrator</code> agent (the "Manager").</li>
+          <li>Pass <code>AgentTool(search_specialist)</code> (giving the Manager a direct hotline to the Intern) into the orchestrator's tool list.</li>
+          <li>The orchestrator simply invokes the tool, spinning up an isolated sub-session (a quiet room) for the specialist to work in without distracting the Manager.</li>
+        </ol>
+
+
+      </div>
+
+      <div class="pm-lens">
+        <h4><span style="font-size:1.2rem">&#x1F4BC;</span> PM Lens: Business & Risks</h4>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h5>&#x1F4B8; Business Value</h5>
+            <p>Scalability and Delegation. Keeps the main orchestrator focused by offloading complex tasks to specialists.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
+            <p>A Manager delegating a deep-dive market report to a dedicated Analyst intern.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
+            <p>Sub-agent gets stuck in an infinite research loop. (Mitigation: Hard timeout limits on sub-agents).</p>
+          </div>
+          <div class="pm-box trace-sim">
+            <div class="trace-header">
+              <span>Interactive Trace Simulator</span>
+              <span style="font-size:0.6rem">LIVE</span>
+            </div>
+            <div class="trace-body">
+              <div class="trace-msg trace-user">Research quantum computing</div>
+<div class="trace-msg trace-system">Delegating to search_specialist...</div>
+<div class="trace-msg trace-system">Sub-agent executing 5 searches...</div>
+<div class="trace-msg trace-agent">Here is the final report.</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
       <div class="diagram-wrapper">
         <div class="mermaid">
 sequenceDiagram
@@ -2259,7 +2874,7 @@ root_agent = <span class="cl">Agent</span>(
     sub_agents=[search_specialist],
 )</pre></div>
           <div class="snippet-explain">
-            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>Context Hygiene:</strong> The orchestrator doesn't have its context window polluted by raw HTML, pagination tokens, or noisy intermediary scrapers.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>Context Hygiene:</strong> The orchestrator doesn't have its <span class='pm-tip' data-tip='The AI's short-term memory. If you put too many instructions in, it forgets the ones at the beginning.'>context window</span> polluted by raw HTML, pagination tokens, or noisy intermediary scrapers.</span></div>
             <div class="explain-item"><span class="explain-dot" style="background:var(--blue)"></span><span class="explain-text"><strong>Modular Testing:</strong> The <code>search_specialist</code> can be independently tested, benchmarked, and improved without touching orchestrator logic.</span></div>
           </div>
         </div>
@@ -2281,6 +2896,54 @@ root_agent = <span class="cl">Agent</span>(
           </div>
         </div>
       </div>
+
+      <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--rose); border-radius: 0 var(--radius) var(--radius) 0;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
+
+        <p><strong>The Requirement:</strong> A high-quality content generation pipeline that automatically audits and refines its own drafts.</p>
+        <p><strong>Solution Design:</strong> A single prompt rarely produces perfect content. We need an "Editorial Loop". An Orchestrator (Manager) manages the workflow: it asks a Generator agent to write a draft, then sends that draft to a Reviewer agent. If the Reviewer scores it poorly, the Orchestrator feeds the critique back to the Generator for a rewrite, creating an autonomous quality-control cycle (an automatic self-correction loop).</p>
+        <p><strong>Implementation Plan:</strong></p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+          <li>Define <code>blog_generator</code> (the Writer AI) optimized for creative writing.</li>
+          <li>Define <code>blog_reviewer</code> (the Editor AI) optimized for critical analysis and scoring.</li>
+          <li>Build an Orchestrator agent (the Publisher) that orchestrates a <code>while score < 8</code> loop in Python (a strict rule to keep trying until the grade is an 8 or higher), passing the artifacts (drafts) between the two sub-agents.</li>
+        </ol>
+
+
+      </div>
+
+      <div class="pm-lens">
+        <h4><span style="font-size:1.2rem">&#x1F4BC;</span> PM Lens: Business & Risks</h4>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h5>&#x1F4B8; Business Value</h5>
+            <p>Autonomous Quality Control. Generates production-ready artifacts without human hand-holding.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
+            <p>A Junior Writer and a Senior Editor locked in a room until the draft is perfect.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
+            <p>Infinite loops if the Reviewer is too strict. (Mitigation: Max iterations cap e.g., max_loops=3).</p>
+          </div>
+          <div class="pm-box trace-sim">
+            <div class="trace-header">
+              <span>Interactive Trace Simulator</span>
+              <span style="font-size:0.6rem">LIVE</span>
+            </div>
+            <div class="trace-body">
+              <div class="trace-msg trace-system">Generator writes Draft V1</div>
+<div class="trace-msg trace-system">Reviewer scores 5/10. Feedback: 'Too informal'</div>
+<div class="trace-msg trace-system">Generator writes Draft V2</div>
+<div class="trace-msg trace-agent">Final Approved Draft.</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
 
       <div class="diagram-wrapper">
         <div class="mermaid">
@@ -2312,6 +2975,53 @@ flowchart TD
           </div>
         </div>
       </div>
+
+      <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--orange); border-radius: 0 var(--radius) var(--radius) 0;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
+
+        <p><strong>The Requirement:</strong> Deterministic routing and parallel execution of multi-agent workflows.</p>
+        <p><strong>Solution Design:</strong> While LLMs are great at reasoning, sometimes we want rigid, code-driven orchestration (strict rules instead of AI guessing). Instead of relying on an LLM to decide who to call, we can use structural primitives (building blocks): <code>SequentialAgent</code> (Agent A passes work directly to B), <code>ParallelAgent</code> (Agents A and B work at the same time to save time), and a Dispatcher that routes messages based on exact keyword matches.</p>
+        <p><strong>Implementation Plan:</strong></p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+          <li>Use a <code>SequentialAgent</code> (an assembly line) to pipe raw research data directly into a summarizer.</li>
+          <li>Use a <code>ParallelAgent</code> (a multi-tasker) to fetch data from 3 different sources concurrently (all at the exact same time) to save time, then synthesize the arrays (merge the results).</li>
+          <li>Build a semantic Intent Dispatcher (a smart router) that routes user messages to the correct sub-agent without needing a heavy LLM orchestrator (avoiding the cost of a full AI just to make a routing decision).</li>
+        </ol>
+
+
+      </div>
+
+      <div class="pm-lens">
+        <h4><span style="font-size:1.2rem">&#x1F4BC;</span> PM Lens: Business & Risks</h4>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h5>&#x1F4B8; Business Value</h5>
+            <p>Deterministic business logic. Uses LLMs only where needed, relying on fast code for routing.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
+            <p>A factory assembly line where each station performs exactly one predictable task.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
+            <p>Over-engineering. Using an LLM where a simple IF statement would be faster and cheaper.</p>
+          </div>
+          <div class="pm-box trace-sim">
+            <div class="trace-header">
+              <span>Interactive Trace Simulator</span>
+              <span style="font-size:0.6rem">LIVE</span>
+            </div>
+            <div class="trace-body">
+              <div class="trace-msg trace-user">Summarize this</div>
+<div class="trace-msg trace-system">Dispatcher routes to Summarizer Node</div>
+<div class="trace-msg trace-system">Sequential Pipe: Fetch -> Summarize -> Translate</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
 
       <div class="agent-grid">
         <div class="agent-card orange">
@@ -2359,6 +3069,53 @@ flowchart TD
         </div>
       </div>
 
+      <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--green); border-radius: 0 var(--radius) var(--radius) 0;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
+
+        <p><strong>The Requirement:</strong> An agent that can handle dozens of complex domains without blowing up its system prompt token count.</p>
+        <p><strong>Solution Design:</strong> "Mega-prompts" (giving the AI a massive 100-page rulebook upfront) are expensive, slow, and confuse the LLM. We need Progressive Disclosure (showing information only when needed). The agent starts with a tiny prompt and a tool to "load skills". When a user asks about a specific topic, the agent dynamically fetches the instructions and tools for that domain (a specific Skill module) and recompiles its own context (updates its short-term memory) on the fly.</p>
+        <p><strong>Implementation Plan:</strong></p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+          <li>Create a <code>BaseSkill</code> interface (a standard blueprint) combining instructions, tools, and trigger conditions (the rules for when to load it).</li>
+          <li>Build specific skills (e.g., a <code>developer_search_skill</code> module).</li>
+          <li>Implement a Dynamic Prompt Compiler (a system that rewrites the AI's instructions on the fly) that injects the loaded skill's markdown and toolset into the agent's active memory.</li>
+        </ol>
+
+
+      </div>
+
+      <div class="pm-lens">
+        <h4><span style="font-size:1.2rem">&#x1F4BC;</span> PM Lens: Business & Risks</h4>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h5>&#x1F4B8; Business Value</h5>
+            <p>Infinite knowledge scalability without token costs. The agent only loads the manual it needs right now.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
+            <p>An employee checking out a specific instruction manual from the library only when asked to perform that specific job.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
+            <p>The agent misclassifies the user's intent and loads the wrong skill. (Mitigation: Clear trigger descriptions).</p>
+          </div>
+          <div class="pm-box trace-sim">
+            <div class="trace-header">
+              <span>Interactive Trace Simulator</span>
+              <span style="font-size:0.6rem">LIVE</span>
+            </div>
+            <div class="trace-body">
+              <div class="trace-msg trace-user">Help me with AWS</div>
+<div class="trace-msg trace-system">Skill matched: Injecting AWS docs into memory</div>
+<div class="trace-msg trace-agent">I have loaded the AWS skill. How can I help?</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
       <div class="snippet-block">
         <div class="snippet-header">
           <span class="snippet-badge" style="background:var(--green-dim);color:var(--green)">Skill Pattern</span>
@@ -2405,6 +3162,55 @@ flowchart TD
           </div>
         </div>
       </div>
+
+      <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--amber); border-radius: 0 var(--radius) var(--radius) 0;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
+
+        <p><strong>The Requirement:</strong> Ensure destructive or high-stakes actions (like transferring money or deploying code) cannot be executed autonomously without human approval.</p>
+        <p><strong>Solution Design:</strong> We need a suspension mechanism (a pause button). When the LLM decides to call a high-risk tool, the system must pause execution, serialize the context (save the exact state to a file), and alert a human. Once the human reviews and provides a <code>ToolConfirmation</code> object (an explicit "Approve" signal), the engine injects it back and resumes the trajectory exactly where it left off.</p>
+        <p><strong>Implementation Plan:</strong></p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+          <li>Tag specific tools (like deleting data) with <code>require_confirmation=True</code>.</li>
+          <li>Modify the ADK runner (the core engine) to yield a <code>ConfirmationRequest</code> event (hit the pause button) instead of executing the tool.</li>
+          <li>Build a UI/CLI listener (a popup window) that waits for human input (Approve/Reject).</li>
+          <li>Inject the human's decision back into the tool context (unpause the AI and let it proceed).</li>
+        </ol>
+
+
+      </div>
+
+      <div class="pm-lens">
+        <h4><span style="font-size:1.2rem">&#x1F4BC;</span> PM Lens: Business & Risks</h4>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h5>&#x1F4B8; Business Value</h5>
+            <p>Risk Mitigation. Prevents the AI from taking destructive or financially sensitive actions autonomously.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
+            <p>Dual-key authorization for a bank vault. The AI prepares everything, but a human turns the final key.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
+            <p>The AI gets confused when execution is paused. (Mitigation: Serializing state and yielding execution completely).</p>
+          </div>
+          <div class="pm-box trace-sim">
+            <div class="trace-header">
+              <span>Interactive Trace Simulator</span>
+              <span style="font-size:0.6rem">LIVE</span>
+            </div>
+            <div class="trace-body">
+              <div class="trace-msg trace-user">Transfer $500</div>
+<div class="trace-msg trace-system">Action Paused. Awaiting Human Approval...</div>
+<div class="trace-msg trace-system">Human clicks APPROVE</div>
+<div class="trace-msg trace-agent">Transfer completed.</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
 
       <div class="diagram-wrapper">
         <div class="mermaid">
@@ -2484,6 +3290,53 @@ delete_account_tool = <span class="cl">FunctionTool</span>(delete_account_record
           </div>
         </div>
       </div>
+
+      <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--teal); border-radius: 0 var(--radius) var(--radius) 0;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
+
+        <p><strong>The Requirement:</strong> A way to objectively prove that an agent works, and to benchmark different models (Flash vs. Qwen) against each other without manual testing.</p>
+        <p><strong>Solution Design:</strong> "Vibes" (guessing if it feels right) aren't a testing strategy. We need deterministic evaluation (math-based proof). Instead of just checking the final text response, we must evaluate the Trajectory (the exact sequence of steps the AI took): Did it call the right tools? In the right sequence? With the correct JSON arguments (the exact data format)? We build an Eval framework to assert (automatically verify) these exact behaviors.</p>
+        <p><strong>Implementation Plan:</strong></p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+          <li>Define an <code>EvalSet</code> (a standardized exam) with 10 complex edge cases.</li>
+          <li>Build an <code>AgentTrajectoryEvaluator</code> (an automated grader) that intercepts tool calls and validates them against expected schemas (checks if the exact right buttons were pressed).</li>
+          <li>Run the suite against Gemini Flash, Flash-Lite, and Ollama to generate a comparative accuracy benchmark (a side-by-side leaderboard of which AI is smartest).</li>
+        </ol>
+
+
+      </div>
+
+      <div class="pm-lens">
+        <h4><span style="font-size:1.2rem">&#x1F4BC;</span> PM Lens: Business & Risks</h4>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h5>&#x1F4B8; Business Value</h5>
+            <p>Objective ROI tracking and regression testing. Proves the AI works reliably before deploying to production.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
+            <p>A QA department running automated test scripts instead of just 'vibes-based' manual testing.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
+            <p>Tests are too brittle and fail if the LLM changes a single word. (Mitigation: Evaluating the *Trajectory* (tool calls), not the text output).</p>
+          </div>
+          <div class="pm-box trace-sim">
+            <div class="trace-header">
+              <span>Interactive Trace Simulator</span>
+              <span style="font-size:0.6rem">LIVE</span>
+            </div>
+            <div class="trace-body">
+              <div class="trace-msg trace-system">Running Test Suite...</div>
+<div class="trace-msg trace-system">Expected: get_weather('London') | Actual: get_weather('London') -> PASS</div>
+<div class="trace-msg trace-system">Score: 100%</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
 
       <div class="callout info">
         <span class="callout-icon">&#x1F9EE;</span>
@@ -2609,5 +3462,115 @@ tool_context.state["temp:scratchpad"]    <span class="cm"># temp: prefix</span><
 
   </main>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const layout = document.getElementById('main-layout');
+    const btnLeft = document.getElementById('btn-toggle-left');
+    const btnRight = document.getElementById('btn-toggle-right');
+    
+    // Toggle logic
+    btnLeft.addEventListener('click', () => {
+      layout.classList.toggle('left-collapsed');
+    });
+    
+    btnRight.addEventListener('click', () => {
+      layout.classList.toggle('right-expanded');
+    });
+    
+    // QnA Logic
+    const apiKeyInput = document.getElementById('qna-api-key');
+    const promptInput = document.getElementById('qna-prompt');
+    const sendBtn = document.getElementById('qna-send');
+    const chatBox = document.getElementById('qna-chat-box');
+    const typingInd = document.getElementById('qna-typing');
+    
+    // Attempt to load API key from localStorage
+    const savedKey = localStorage.getItem('adk_gemini_key');
+    if (savedKey) apiKeyInput.value = savedKey;
+    
+    apiKeyInput.addEventListener('change', () => {
+        localStorage.setItem('adk_gemini_key', apiKeyInput.value);
+    });
+
+    const formatMarkdown = (text) => {
+        // Super basic markdown parsing for bold and inline code
+        let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/`(.*?)`/g, '<code>$1</code>');
+        html = html.replace(/\n/g, '<br>');
+        return html;
+    };
+
+    const appendMessage = (role, text) => {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `qna-msg ${role}`;
+        msgDiv.innerHTML = role === 'bot' ? formatMarkdown(text) : text;
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    };
+
+    const askGemini = async () => {
+        const apiKey = apiKeyInput.value.trim();
+        const prompt = promptInput.value.trim();
+        
+        if (!apiKey) {
+            alert('Please enter a Gemini API Key first.');
+            return;
+        }
+        if (!prompt) return;
+        
+        appendMessage('user', prompt);
+        promptInput.value = '';
+        sendBtn.disabled = true;
+        typingInd.style.display = 'block';
+        
+        // Extract document content as context (stripping scripts and styles)
+        const clone = document.body.cloneNode(true);
+        const elementsToRemove = clone.querySelectorAll('script, style, .qna-sidebar, .sidebar');
+        elementsToRemove.forEach(el => el.remove());
+        const contextText = clone.innerText.substring(0, 100000); // Send up to 100k chars to be safe
+
+        const fullPrompt = `You are a helpful Q&A assistant for the Google ADK documentation. 
+Here is the raw text of the documentation you must answer questions about:
+-------------------
+${contextText}
+-------------------
+User Question: ${prompt}
+
+Answer the question clearly and concisely based ONLY on the documentation provided above. Use markdown formatting.`;
+
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: fullPrompt }] }]
+                })
+            });
+            
+            const data = await response.json();
+            if (data.error) throw new Error(data.error.message);
+            
+            const reply = data.candidates[0].content.parts[0].text;
+            appendMessage('bot', reply);
+            
+        } catch (error) {
+            appendMessage('bot', `**Error:** ${error.message}`);
+        } finally {
+            sendBtn.disabled = false;
+            typingInd.style.display = 'none';
+        }
+    };
+    
+    sendBtn.addEventListener('click', askGemini);
+    promptInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            askGemini();
+        }
+    });
+  });
+</script>
+
 </body>
 </html>
