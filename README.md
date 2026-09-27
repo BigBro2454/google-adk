@@ -313,11 +313,14 @@ python evals/evaluator.py --eval-set evals/hello_world.test.json
 
 # Run Model Benchmark comparison (Gemini 2.5 Flash vs. Flash-Lite vs. Ollama)
 python evals/model_benchmark.py
+
+# Run unified Evaluation Dashboard & export Markdown/JSON scorecards
+python -m evals.run_evals --all --export-dir evals/reports
 ```
 
 #### Option C: Run Full Automated Test Suite
 ```bash
-# Runs all 23 unit tests across Weeks 4-9
+# Runs all 26 unit tests across Weeks 4-9 and Evaluation Dashboard
 python -m unittest discover tests
 ```
 
@@ -325,6 +328,12 @@ python -m unittest discover tests
 ```bash
 # Launches interactive UI for all discovered agents at http://localhost:8000
 adk web
+```
+
+#### Option E: Open Interactive Architecture Documentation & PM Lens
+```bash
+# Opens interactive single-page app with First-Principles Journeys, PM Lens trade-offs, Trace Simulator & Gemini Q&A
+open docs/agents_documentation.html
 ```
 
 ---
@@ -356,7 +365,9 @@ google-adk/
 │   ├── hello_world.test.json      # 10 deterministic trajectory evaluation cases
 │   ├── evaluator.py               # AgentTrajectoryEvaluator engine & CLI
 │   ├── model_benchmark.py         # Model comparison runner across Flash & Ollama
-│   └── generate_eval_set.py       # Script to generate standard ADK test sets
+│   ├── generate_eval_set.py       # Script to generate standard ADK test sets
+│   ├── run_evals.py               # Unified evaluation & benchmark CLI runner
+│   └── reports/                   # Exported evaluation and benchmark scorecards
 ├── shared/
 │   ├── skills/                    # Reusable BaseSkill definitions (search_skill.py)
 │   └── utils/
@@ -374,9 +385,10 @@ google-adk/
 │   ├── test_week6_agent_as_tool.py    # Week 6 AgentTool & writer/reviewer tests
 │   ├── test_week7_orchestration.py    # Week 7 Sequential, Parallel, Dispatcher tests
 │   ├── test_week8_skills.py           # Week 8 Skills & dynamic instruction tests
-│   └── test_week9_eval_hitl.py        # Week 9 Evaluation & HITL confirmation tests
+│   ├── test_week9_eval_hitl.py        # Week 9 Evaluation & HITL confirmation tests
+│   └── test_eval_dashboard.py         # Evaluation dashboard and benchmark tests
 ├── docs/
-│   └── agents_documentation.html  # Interactive visual documentation suite
+│   └── agents_documentation.html  # Interactive visual documentation suite with PM Lens & Q&A
 ├── data/
 │   ├── sessions.db                # SQLite database (sessions, events, states)
 │   └── memory.json                # Disk-backed persistent memory store

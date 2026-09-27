@@ -118,14 +118,20 @@ def build_test_cases() -> list[EvalCase]:
     return eval_cases
 
 
-def generate():
+def get_default_eval_set() -> EvalSet:
+    """Return default Hello World agent EvalSet."""
     eval_cases = build_test_cases()
-    eval_set = EvalSet(
+    return EvalSet(
         eval_set_id="hello_world_eval_set",
         name="Hello World Agent Evaluation Suite",
         description="10 deterministic trajectory evaluation cases testing arithmetic tools and non-tool queries.",
         eval_cases=eval_cases,
     )
+
+
+def generate():
+    eval_set = get_default_eval_set()
+    eval_cases = eval_set.eval_cases
 
     out_dir = os.path.dirname(os.path.abspath(__file__))
     out_file = os.path.join(out_dir, "hello_world.test.json")
