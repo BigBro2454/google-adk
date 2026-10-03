@@ -8,12 +8,12 @@
 | | |
 |---|---|
 | **Started** | July 19, 2026 |
-| **Current Phase** | Phase 4 — Production |
-| **Current Week** | Week 10 — Observability and Guardrails 🔄 Up Next |
+| **Current Phase** | Phase 4 — Production & Capstone |
+| **Current Week** | Week 10 / Capstone Option B 🔄 |
 | **Weeks Completed** | 9 / 12 |
-| **Projects Completed** | 23 / 23 |
-| **Last Active** | September 14, 2026 |
-| **Streak** | 5 days 🔥 |
+| **Projects Completed** | 24 / 24 |
+| **Last Active** | September 28, 2026 |
+| **Streak** | 6 days 🔥 |
 
 ---
 
@@ -195,6 +195,7 @@
 | September 14, 2026 | Week 7 complete — Orchestration Patterns (Projects 6.1, 6.2, 6.3). Built news_pipeline (SequentialAgent 3-stage pipeline), parallel_researcher (ParallelAgent concurrent fanout to GitHub, ArXiv, and Blogs), and smart_dispatcher (Coordinator routing across code, research, and math specialists). |
 | September 14, 2026 | Week 8 complete — ADK Skills and Token Optimization (Projects 7.1 & 7.2). Implemented BaseSkill and developer_search_skill in shared/skills/, built dynamic_agent with callable dynamic instruction builder and persona management tools. Phase 3 100% complete! |
 | September 14, 2026 | Week 9 complete — Evaluation, Testing & HITL (Projects 8.1 & 8.2). Built 10-case deterministic trajectory evaluation suite (evals/hello_world.test.json, evals/evaluator.py), model benchmark comparator (evals/model_benchmark.py), and ADK 2.0 native Human-in-the-Loop approval workflows (agents/hitl_agent/, runners/hitl_runner.py). Phase 4 underway! |
+| September 28, 2026 | OpenDota Free API Integration & Capstone Option B (dota_match_analyst). Built shared/tools/opendota_tools.py with local hero/item JSON caching, upgraded dota_draft_analyzer with empirical counter matchup tools, created sequential 3-stage dota_match_analyst replay review pipeline for profile 453792187, and updated comprehensive docs in README.md and docs/agents_documentation.html. All 32 tests passing! |
 
 ---
 
@@ -226,6 +227,8 @@
 - **September 14** — Passing a callable `instruction=dynamic_instruction_builder` to an `Agent` allows compiling instructions dynamically from `context.state` (such as `user:role` or loaded skills).
 - **September 14** — Traditional input/output unit assertions fail on agents due to natural language variability; Trajectory Evaluation tests the exact sequence and parameter schemas of tool calls against ground truth.
 - **September 14** — ADK 2.0 `ToolConfirmation` enables enterprise Human-in-the-Loop (HITL) workflows: setting `FunctionTool(func, require_confirmation=True)` pauses execution before tool invocation until an explicit `ToolConfirmation(confirmed=True)` is submitted, protecting critical transactions and maintaining an audit trail.
+- **September 28** — Zero-key public telemetry APIs (like OpenDota free tier) can be combined with local JSON caching to protect against strict 60 req/min rate limits while grounding tactical LLM reasoning with empirical winrates and exact item frequencies.
+- **September 28** — Grounding game-coaching agents with empirical matchup winrates (`get_hero_matchups`) eliminates LLM hallucination of balance patches, allowing deterministic detection of hard counters (e.g. Timbersaw vs Centaur at 40% winrate) before the match starts.
 
 ---
 

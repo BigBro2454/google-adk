@@ -186,8 +186,8 @@ Conversations and agent scratchpads cannot rely solely on process memory in prod
 | **`weather_agent`** | Gemini 2.5 Flash | Open-Meteo REST API (2 Tools) | Deterministic two-step tool chaining (`get_coordinates` → `get_weather`) without hardcoded loops. |
 | **`persistent_agent`**| Gemini 2.5 Flash + Fallback| `DatabaseSessionService` (SQLite) | Relational multi-tier state scoping (session, `user:`, `app:`) persisting across process restarts. |
 | **`note_taking_agent`** | Gemini 2.5 Flash + Fallback | Injected `ToolContext` | Multi-turn CRUD state engine persisting data in `tool_context.state` across turns. |
-| **`quiz_agent`** | Gemini 2.5 Flash + Fallback | Injected `ToolContext` | Interactive quiz master tracking scores, questions, streaks, and history across turns. |
-| **`dota_draft_analyzer`**| Gemini 2.5 Flash + Fallback | Structured Prompt Engineering | Zero-tool tactical coaching agent enforcing Guardian-tier heuristics and strict markdown specs. |
+| **`dota_draft_analyzer`**| Gemini 2.5 Flash + Fallback | OpenDota REST API (3 Tools) | Real-time counter winrates, meta item builds, and Guardian-bracket empirical statistics. |
+| **`dota_match_analyst`** | Gemini 2.5 Flash + Fallback | `SequentialAgent` + OpenDota | Capstone 3-stage pipeline (Fetch → Audit → Coach) auditing replay telemetry (LH@10, deaths, items). |
 | **`ollama_agent`** | Local Qwen 2.5:7b / Gemma | Local Calculator Tools | 100% offline, zero-latency, private execution via LiteLLM and local Ollama daemon. |
 | **`hello_world`** | Gemini 2.5 Flash + Fallback | Custom Calculator (`add`, `sub`, `mul`) | Baseline sanity agent used for integration testing and runtime diagnostics. |
 
@@ -347,7 +347,8 @@ google-adk/
 │   ├── weather_agent/             # Production REST API tool chaining
 │   ├── github_agent/              # Model Context Protocol (MCP) implementation
 │   ├── ollama_agent/              # Fully offline private agent via LiteLLM
-│   ├── dota_draft_analyzer/       # Structured tactical prompt reasoning engine
+│   ├── dota_draft_analyzer/       # Real-time draft analysis with OpenDota matchup tools
+│   ├── dota_match_analyst/        # Capstone 3-stage sequential match audit pipeline
 │   ├── note_taking_agent/         # Stateful session memory agent via ToolContext
 │   ├── quiz_agent/                # Multi-turn gamified trivia agent with streaks
 │   ├── persistent_agent/          # SQLite relational persistence (DatabaseSessionService)
@@ -369,6 +370,7 @@ google-adk/
 │   ├── run_evals.py               # Unified evaluation & benchmark CLI runner
 │   └── reports/                   # Exported evaluation and benchmark scorecards
 ├── shared/
+│   ├── tools/                     # Shared ADK tools (opendota_tools.py)
 │   ├── skills/                    # Reusable BaseSkill definitions (search_skill.py)
 │   └── utils/
 │       ├── fallback_model.py      # Resilient FallbackLlm circuit-breaker class

@@ -6,12 +6,23 @@ tactical summary including strategy, items, power spikes, threats, and win condi
 """
 
 from google.adk.agents import Agent
+from shared.tools.opendota_tools import (
+    get_hero_matchups,
+    get_hero_meta_items,
+    get_hero_overview,
+)
 from shared.utils.fallback_model import FallbackLlm
 
 # Instructions specifically tuned for Guardian/8k Behavior Score Offlane dynamics
 INSTRUCTIONS = """
 You are a high-level Dota 2 Coach. The user will provide you with a list of 10 heroes in a match, and tell you which hero they are playing.
 Your job is to provide a Pre-Match Draft Analysis.
+
+TOOL USAGE PROTOCOL:
+1. Always call `get_hero_matchups(hero_name, enemy_heroes)` to look up real OpenDota matchup winrates against all 5 enemy heroes.
+2. Call `get_hero_meta_items(hero_name)` to see statistical high-winrate starting and core items.
+3. Call `get_hero_overview(hero_name)` to check base armor, attack type, and Guardian bracket winrate.
+4. Ground your advice in the empirical data from the tools (e.g., cite the exact counter threat and winrate advantage).
 
 CRITICAL RULES:
 1. You MUST generate a concise brief with exactly one bullet point per section (do not write one massive paragraph). 
@@ -23,11 +34,11 @@ Include exactly these bullet points (use sub-bullets for readability):
 * Laning Behavior: Exactly how to play the first 10 minutes in lane (e.g., "Pull and soak XP" vs "Aggressively trade").
 * Skill Build: The optimal early skill progression (Levels 1-6) and critical talents.
 * Item Progression:
-  * Laning (0-10m): Starting items and sustain needed for the specific lane matchup.
-  * Mid Game (10-25m): Core defensive/adaptive items based on enemy draft (e.g., Pipe vs Magic).
+  * Laning (0-10m): Starting items and sustain needed for the specific lane matchup (incorporate OpenDota start items).
+  * Mid Game (10-25m): Core defensive/adaptive items based on enemy draft (e.g., Pipe vs Magic, Blink for initiation).
   * Late Game (25m+): Luxury/closing items required to seal the game.
 * Timings: The exact minute mark when the user's hero hits its biggest power spike, vs when the enemy carry spikes.
-* Threats: Specific enemy heroes or synergistic combos the user must avoid.
+* Threats: Specific enemy heroes or synergistic combos the user must avoid (cite OpenDota matchup disadvantages and biggest counters).
 * Fighting Rules: Exactly when the user should join a fight vs when they should ignore it and push.
 * Map Focus: Which specific lanes/towers the user needs to pressure to create space.
 * Damage Distribution: The estimated Magic vs Physical damage percentage ratio for BOTH teams.
@@ -42,7 +53,8 @@ root_agent = Agent(
         primary="gemini-2.5-flash",          
         fallback="ollama_chat/qwen2.5:7b",   
     ),
-    description="Analyzes Dota 2 drafts and provides rapid pre-game coaching.",
+    description="Analyzes Dota 2 drafts and provides rapid pre-game coaching using real OpenDota matchup stats.",
     instruction=INSTRUCTIONS,
-    tools=[],
+    tools=[get_hero_matchups, get_hero_meta_items, get_hero_overview],
 )
+
