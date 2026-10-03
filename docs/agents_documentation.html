@@ -286,6 +286,7 @@
     <a class="nav-link" href="#skills-section"><span class="dot" style="background:var(--green)"></span>dynamic_agent &amp; skills</a>
     <a class="nav-link" href="#hitl-section"><span class="dot" style="background:var(--amber)"></span>hitl_agent (Approval HITL)</a>
     <a class="nav-link" href="#eval-section"><span class="dot" style="background:var(--teal)"></span>evaluation &amp; benchmarking</a>
+    <a class="nav-link" href="#dota-match-analyst"><span class="dot" style="background:var(--rose)"></span>dota_match_analyst (Capstone)</a>
     <span class="nav-section-label">Multi-Agent &amp; Internals</span>
     <a class="nav-link" href="#a2a"><span class="dot" style="background:var(--blue)"></span>A2A System</a>
     <a class="nav-link" href="#fallback"><span class="dot" style="background:var(--orange)"></span>FallbackLlm</a>
@@ -311,6 +312,7 @@
       <a href="#skills-section">skills</a>
       <a href="#hitl-section">hitl</a>
       <a href="#eval-section">eval</a>
+      <a href="#dota-match-analyst">dota-analyst</a>
       <a href="#a2a">a2a</a>
       <a href="#fallback">fallback</a>
       <a href="#primitives">primitives</a>
@@ -1430,11 +1432,12 @@ root_agent = <span class="cl">Agent</span>(
         <div class="agent-section-icon" style="background:var(--rose-dim)">&#x2694;&#xFE0F;</div>
         <div class="agent-section-meta">
           <h2>dota_draft_analyzer</h2>
-          <p>LLM-only agent with zero tools. All intelligence comes from a densely structured system prompt.</p>
+          <p>Real-time pre-match draft strategist powered by the OpenDota Free API and Guardian-tier heuristics.</p>
           <div class="agent-section-pills">
             <span class="meta-tag">agents/dota_draft_analyzer/agent.py</span>
-            <span class="meta-tag">prompt engineering</span>
-            <span class="meta-tag">tools=[]</span>
+            <span class="meta-tag">OpenDota REST API</span>
+            <span class="meta-tag">tools=[matchups, meta_items, overview]</span>
+            <span class="meta-tag">Guardian Mentality</span>
           </div>
         </div>
       </div>
@@ -1442,17 +1445,14 @@ root_agent = <span class="cl">Agent</span>(
       <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--rose); border-radius: 0 var(--radius) var(--radius) 0;">
         <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
 
-        <p><strong>The Requirement:</strong> An expert strategic analyzer for Dota 2 drafts that provides highly structured, deterministic advice.</p>
-        <p><strong>Solution Design:</strong> Unlike the calculator or weather agent, this task doesn't need external data fetching; all the knowledge is already encoded in the LLM's weights (its pre-trained brain). The challenge is extracting that knowledge in a rigorous, useful format rather than a generic conversational reply. The solution is pure, aggressive Prompt Engineering (writing incredibly strict instructions without giving it external tools).</p>
-        <p><strong>Implementation Plan:</strong></p>
+        <p><strong>The Evolution:</strong> In earlier iterations, this agent was LLM-only with zero tools. While Gemini possessed general Dota 2 knowledge, it suffered from subtle hallucination on recent patch winrates, exact counter percentages, and meta item popularity shifts.</p>
+        <p><strong>The OpenDota Integration:</strong> We augmented the agent with three targeted tools calling OpenDota's free tier (no API key required, 60 req/min): <code>get_hero_overview</code>, <code>get_hero_matchups</code>, and <code>get_hero_meta_items</code>. Now, before generating the tactical brief, the agent deterministically inspects empirical matchup win rates and real item build frequencies.</p>
+        <p><strong>Implementation Strategy:</strong></p>
         <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
-          <li>Design a heavily structured system instruction (a rigid prompt) that acts as a "contract" between the AI and the user.</li>
-          <li>Demand a specific 12-section markdown output (a standardized document format).</li>
-          <li>Define the exact tone (e.g., highly tactical and aggressive).</li>
-          <li>Use <code>FallbackLlm</code> (the backup router) to guarantee the lengthy response doesn't fail due to rate limits (API traffic jams).</li>
+          <li>Implement local JSON caching (<code>opendota_heroes_cache.json</code> and <code>opendota_items_cache.json</code>) so hero alias resolution (e.g. "centaur", "potm", "jugg") incurs zero network latency.</li>
+          <li>Pass empirical matchup winrates (e.g. Centaur vs Timbersaw: 40.0% counter threat) into the prompt context.</li>
+          <li>Enforce the strict 12-section Guardian-exploit formatting contract, guaranteeing a punchy, actionable read before the horn sounds.</li>
         </ol>
-
-
       </div>
 
       <div class="pm-lens">
@@ -1460,15 +1460,15 @@ root_agent = <span class="cl">Agent</span>(
         <div class="pm-grid">
           <div class="pm-box">
             <h5>&#x1F4B8; Business Value</h5>
-            <p>High-quality domain expertise guaranteed in a specific format via strict prompt contracts.</p>
+            <p>Empirical telemetry grounds LLM intuition. Prevents hallucinated advice while retaining natural language tactical synthesis.</p>
           </div>
           <div class="pm-box">
             <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
-            <p>Giving an expert a very strict fill-in-the-blank template to ensure they don't ramble.</p>
+            <p>A professional esports analyst opening the statistical matchup database before briefing the team in the booth.</p>
           </div>
           <div class="pm-box">
             <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
-            <p>Lengthy outputs hit API rate limits. (Mitigation: FallbackLLM seamlessly retries or swaps models).</p>
+            <p>OpenDota API latency delays the pre-horn brief. (Mitigation: 10s defensive timeout + local cache + FallbackLlm).</p>
           </div>
           <div class="pm-box trace-sim">
             <div class="trace-header">
@@ -1476,125 +1476,95 @@ root_agent = <span class="cl">Agent</span>(
               <span style="font-size:0.6rem">LIVE</span>
             </div>
             <div class="trace-body">
-              <div class="trace-msg trace-user">Analyze this draft</div>
-<div class="trace-msg trace-system">Applying 12-section formatting constraint</div>
-<div class="trace-msg trace-agent">## 1. Strategy...</div>
-
+              <div class="trace-msg trace-user">Centaur vs Juggernaut, Lion, Timbersaw, Sniper, Pudge</div>
+              <div class="trace-msg trace-tool">get_hero_matchups() &rarr; Biggest Counter: Timbersaw (40.0% WR)</div>
+              <div class="trace-msg trace-tool">get_hero_meta_items() &rarr; Blink Dagger, Heart, Blade Mail</div>
+              <div class="trace-msg trace-agent">## Pre-Match Draft Analysis... Threats: Timbersaw (Hard Counter)</div>
             </div>
           </div>
         </div>
       </div>
 
-
-
       <h3>Execution workflow</h3>
-      <p>No tool calls. No API calls. The entire execution is a single round-trip: user provides heroes &rarr; Gemini applies the structured INSTRUCTIONS prompt &rarr; structured 12-section analysis is returned immediately.</p>
+      <p>The agent first dispatches parallel tool requests to OpenDota to extract empirical matchup winrates and popular item builds, then compiles the tactical brief.</p>
 
       <div class="diagram-wrapper" style="margin:1rem 0">
         <div class="mermaid">
 sequenceDiagram
     participant U as User
-    participant ADK as ADK Runner
+    participant ADK as ADK Runner Core
     participant G as "Gemini 2.5 Flash (FallbackLlm)"
-    participant OL as "Ollama (fallback only)"
-    U->>ADK: "I am playing Axe. Heroes: Axe CM DP vs PA Tide Puck"
-    ADK->>G: INSTRUCTIONS system prompt + hero list
-    Note over G: All reasoning in LLM weights. No tools, no API calls.
-    G-->>ADK: 12-section pre-match analysis
-    ADK-->>U: Strategy, Laning, Skill Build, Items, Timings...
-    Note over G,OL: If rate-limited, FallbackLlm retries via Ollama silently
+    participant T as "shared/tools/opendota_tools.py"
+    participant Cache as "data/opendota_heroes_cache.json"
+    participant OD as "OpenDota Free API"
+
+    U->>ADK: "Playing Centaur vs Timbersaw, Lion, Juggernaut..."
+    ADK->>G: INSTRUCTIONS prompt + draft context
+    G->>ADK: tool_call: get_hero_matchups("Centaur Warrunner", ["Timbersaw", "Lion", "Juggernaut"])
+    ADK->>T: get_hero_matchups()
+    T->>Cache: resolve hero names & IDs locally (Centaur: 96, Timbersaw: 34)
+    T->>OD: GET /api/heroes/96/matchups
+    OD-->>T: Matchup statistics
+    T-->>ADK: {"biggest_counter": "Timbersaw (40.0% WR)", "easiest_matchup": "Lion (50.3% WR)"}
+    ADK->>G: matchup empirical telemetry injected into context
+    G->>ADK: tool_call: get_hero_meta_items("Centaur Warrunner")
+    ADK->>T: get_hero_meta_items()
+    T->>OD: GET /api/heroes/96/itemPopularity
+    OD-->>T: Popular item IDs
+    T-->>ADK: {"start_game_items": ["Bracer", "Tango"], "mid_game_items": ["Blink Dagger", "Heart"]}
+    ADK->>G: item builds injected into context
+    G-->>ADK: 12-section tactical pre-horn brief (Guardian exploit strategy)
+    ADK-->>U: Synthesized Pre-Match Tactical Brief
         </div>
       </div>
 
       <div class="diagram-wrapper" style="margin:1rem 0">
         <div class="mermaid">
-flowchart TD
-    subgraph Input["Matchup Draft Context"]
-        Match["Hero Selection Input\n(e.g., 'Playing Axe. Axe, CM, DP vs PA, Tide, Puck')"]
+flowchart LR
+    subgraph Client["Client Interface"]
+        U["User Input\n'Playing Centaur Offlane vs\nTimbersaw, Lion, Juggernaut, Sniper, Pudge'"]
     end
 
-    subgraph Core["dota_draft_analyzer Engine"]
-        Agent["dota_draft_analyzer (Zero Tools)"]
-        Router["FallbackLlm Router"]
-        Prompt["INSTRUCTIONS Prompt Contract\n- 1 bullet per section\n- Guardian-tier exploit mentality\n- Deterministic markdown structure"]
+    subgraph Core["dota_draft_analyzer Agent"]
+        ADK["ADK Runner Core"]
+        LLM["FallbackLlm Router\nPrimary: Gemini 2.5 Flash\nFailover: Ollama Qwen 2.5"]
+        Prompt["INSTRUCTIONS Contract\n- Guardian Mentality\n- Strict 12-Section Format"]
     end
 
-    subgraph LLMLayer["Reasoning Engine"]
-        Gemini["Primary: Gemini 2.5 Flash"]
-        Ollama["Local Failover: Qwen 2.5:7b"]
+    subgraph Tools["shared/tools/opendota_tools.py"]
+        T1["get_hero_overview(hero_name)\n(Armor, Roles, Guardian WR%)"]
+        T2["get_hero_matchups(hero_name, enemies)\n(Empirical Advantage & Counters)"]
+        T3["get_hero_meta_items(hero_name)\n(Start, Early, Mid, Late Popularity)"]
     end
 
-    subgraph Output["12-Section Tactical Blueprint"]
-        Sections["1. Strategy\n2. Laning Behavior\n3. Skill Build Priority\n4. Core Items & Counters\n5. Power Spikes & Timings\n6. Teamfight Positioning\n... 12. Win Conditions"]
+    subgraph DataStore["Local Cache & Free API"]
+        Cache["data/opendota_heroes_cache.json\ndata/opendota_items_cache.json"]
+        API["OpenDota REST API\n(60 calls/min, 0 key required)"]
     end
 
-    Input --> Agent
-    Agent --> Router
-    Router --> Prompt
-    Prompt --> Gemini
-    Gemini -.->|"HTTP 429 Failover"| Ollama
-    Gemini --> Sections
-    Ollama --> Sections
-    Sections --> Input
+    U --> ADK
+    ADK --> LLM
+    LLM --> Prompt
+    LLM -->|"tool_call: get_hero_matchups(Centaur, enemies)"| T2
+    LLM -->|"tool_call: get_hero_meta_items(Centaur)"| T3
+    T2 --> Cache
+    T2 --> API
+    T3 --> Cache
+    T3 --> API
+    T2 -->|"return: {'biggest_counter': 'Timbersaw 40%'}"| ADK
+    T3 -->|"return: {'mid_game_items': ['Blink', 'Heart']}"| ADK
+    ADK --> LLM
+    LLM -->|"Synthesized 12-Section Pre-Match Brief"| U
         </div>
       </div>
-
-      <h3>The pattern: structured prompt as the product</h3>
-      <p>This agent has <code>tools=[]</code>. It shows that when domain knowledge is the differentiator, not API access, the prompt itself <em>is</em> the feature. The <code>INSTRUCTIONS</code> constant enforces a strict 12-section output the LLM must produce every time.</p>
 
       <h3 style="margin-top:1rem">Code walkthrough</h3>
 
       <div class="snippet-block">
         <div class="snippet-header">
-          <span class="snippet-badge" style="background:var(--rose-dim);color:var(--rose)">Prompt</span>
-          <span class="snippet-title">INSTRUCTIONS &mdash; output schema enforced in natural language</span>
-          <span class="snippet-file">agent.py</span>
-        </div>
-        <div class="snippet-body">
-          <div class="snippet-code"><pre>INSTRUCTIONS = <span class="st">"""
-You are a high-level Dota 2 Coach.
-
-CRITICAL RULES:
-1. Exactly one bullet point per section.
-2. Keep it punchy - readable before horn.
-3. GUARDIAN MENTALITY: Write knowing
-   all players tunnel-vision on kills
-   and fail to coordinate combos.
-   Frame all advice around exploiting
-   this chaos and surviving your own
-   team's mistakes.
-
-Include exactly these sections:
-* Strategy
-* Laning Behavior
-* Skill Build
-* Item Progression
-  * Laning (0-10m)
-  * Mid Game (10-25m)
-  * Late Game (25m+)
-* Timings
-* Threats
-* Fighting Rules
-* Map Focus
-* Damage Distribution
-* Metrics Targets
-* Win Condition
-* Solo Carry Backup Plan
-"""</span></pre></div>
-          <div class="snippet-explain">
-            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>Module-level constant</strong> &mdash; separates the long prompt from the <code>Agent(...)</code> call. Keeps agent definition clean; the prompt is its own thing to edit.</span></div>
-            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>&ldquo;CRITICAL RULES&rdquo; in all-caps</strong> &mdash; a known prompting pattern. All-caps headers receive more attention from the LLM, enforcing non-negotiable constraints.</span></div>
-            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>Domain context baked in</strong> &mdash; &ldquo;GUARDIAN MENTALITY&rdquo; encodes the specific player profile (low-skill bracket, chaotic play). Makes output actionable vs generic.</span></div>
-            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>12 mandatory sections</strong> &mdash; constraining the output schema makes responses consistent and scannable. Crucial when the user has 30 seconds before a match starts.</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="snippet-block">
-        <div class="snippet-header">
           <span class="snippet-badge" style="background:var(--rose-dim);color:var(--rose)">Agent</span>
-          <span class="snippet-title">Agent definition &mdash; tools=[] is intentional</span>
-          <span class="snippet-file">agent.py</span>
+          <span class="snippet-title">Agent definition &mdash; Tool-augmented draft reasoning</span>
+          <span class="snippet-file">agents/dota_draft_analyzer/agent.py</span>
         </div>
         <div class="snippet-body">
           <div class="snippet-code"><pre>root_agent = <span class="cl">Agent</span>(
@@ -1603,24 +1573,168 @@ Include exactly these sections:
         primary=<span class="st">"gemini-2.5-flash"</span>,
         fallback=<span class="st">"ollama_chat/qwen2.5:7b"</span>,
     ),
-    description=(
-        <span class="st">"Analyzes Dota 2 drafts and provides"</span>
-        <span class="st">" rapid pre-game coaching."</span>
-    ),
+    description=<span class="st">"Analyzes Dota 2 drafts and provides rapid pre-game coaching using real OpenDota matchup stats."</span>,
     instruction=INSTRUCTIONS,
-    tools=[],  <span class="cm"># intentionally empty</span>
+    tools=[get_hero_matchups, get_hero_meta_items, get_hero_overview],
 )</pre></div>
           <div class="snippet-explain">
-            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>tools=[]</strong> &mdash; explicitly empty. All hero/item knowledge comes from Gemini&apos;s training data. No external data source needed.</span></div>
-            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>FallbackLlm</strong> &mdash; used because this runs live during a match draft. Rate limit fallback to local Ollama ensures it works even at peak API hours.</span></div>
-            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>instruction=INSTRUCTIONS</strong> &mdash; passes the constant defined above. Separating prompt from agent config is good practice for maintainability.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>tools=[...]</strong> &mdash; binds OpenDota API tools to fetch empirical counters, meta item progressions, and bracket winrates.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>FallbackLlm</strong> &mdash; provides circuit-breaker failover to local Qwen 2.5 on HTTP 429 quota exhaustion.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>Guardian Mentality</strong> &mdash; prompt specifically tunes recommendations to exploit low-bracket tendencies (tunnel-vision, mid stare-downs).</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- AGENT 5B — dota_match_analyst (Capstone Option B) -->
+    <section id="dota-match-analyst">
+      <div class="agent-section-header">
+        <div class="agent-section-icon" style="background:var(--rose-dim)">&#x1F3C6;</div>
+        <div class="agent-section-meta">
+          <h2>dota_match_analyst (Capstone Option B)</h2>
+          <p>Sequential 3-stage replay review &amp; post-match performance auditor connected to OpenDota Free API.</p>
+          <div class="agent-section-pills">
+            <span class="meta-tag">agents/dota_match_analyst/agent.py</span>
+            <span class="meta-tag">SequentialAgent</span>
+            <span class="meta-tag">OpenDota Telemetry</span>
+            <span class="meta-tag">Capstone Option B</span>
           </div>
         </div>
       </div>
 
-      <div class="callout info">
-        <span class="callout-icon">&#x1F3AE;</span>
-        <p>This agent is a preview of <strong>Capstone Option B</strong>. The full Dota 2 Match Analyst would add OpenDota API tools to fetch real match data &mdash; turning it from a pure LLM agent into a proper multi-tool pipeline.</p>
+      <div class="build-journey" style="margin: 2rem 0; padding: 1.5rem; background: var(--surface-2); border-left: 4px solid var(--rose); border-radius: 0 var(--radius) var(--radius) 0;">
+        <h3 style="margin-top: 0; margin-bottom: 1rem; color: inherit;">Building from First Principles</h3>
+
+        <p><strong>The Requirement:</strong> An automated replay review pipeline that transforms raw Dota 2 telemetry into structured coaching audits, measuring actual match metrics against Guardian climbing targets (LH@10, death streaks, GPM, and objective damage).</p>
+        <p><strong>Solution Architecture:</strong> A 3-stage assembly line utilizing ADK's <code>SequentialAgent</code>:</p>
+        <ol style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+          <li><strong>Stage 1 (telemetry_fetcher):</strong> Pulls match telemetry via <code>get_match_telemetry</code> or looks up recent games via <code>get_player_recent_matches(account_id=453792187)</code>.</li>
+          <li><strong>Stage 2 (tactical_auditor):</strong> Evaluates laning efficiency (55+ LH target), death discipline (&lt;4 deaths), item timings, and objective impact.</li>
+          <li><strong>Stage 3 (audit_reporter):</strong> Formats a standardized post-mortem scorecard with benchmark pass/fail results and 2 practical drills for the next game.</li>
+        </ol>
+      </div>
+
+      <div class="pm-lens">
+        <h4><span style="font-size:1.2rem">&#x1F4BC;</span> PM Lens: Business & Risks</h4>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h5>&#x1F4B8; Business Value</h5>
+            <p>End-to-end replay review pipeline providing institutional-grade esports analytics at $0 API cost.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x1F9D1;&#x200D;&#x1F3EB; Human Analogy</h5>
+            <p>A personal coach who watches the replay tape, marks down missed last hits and feeding habits, and gives you two homework drills.</p>
+          </div>
+          <div class="pm-box">
+            <h5>&#x26A0;&#xFE0F; What Could Go Wrong (Anti-Pattern)</h5>
+            <p>Unparsed turbo matches or missing <code>lh_t</code> telemetry. (Mitigation: graceful degradation with fallback indicators).</p>
+          </div>
+          <div class="pm-box trace-sim">
+            <div class="trace-header">
+              <span>Interactive Trace Simulator</span>
+              <span style="font-size:0.6rem">LIVE</span>
+            </div>
+            <div class="trace-body">
+              <div class="trace-msg trace-user">Audit match 8934277316</div>
+              <div class="trace-msg trace-tool">telemetry_fetcher &rarr; Centaur Warrunner, KDA 6/4/18, 1064 GPM, WIN</div>
+              <div class="trace-msg trace-system">tactical_auditor &rarr; Benchmarking: Tower Damage 2122 (Pass), Deaths 4 (Pass)</div>
+              <div class="trace-msg trace-agent"># Dota 2 Match Post-Mortem Audit Scorecard Generated</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Execution Workflow</h3>
+      <p>The sequential pipeline routes data linearly across three specialist agents: Telemetry Fetcher &rarr; Tactical Auditor &rarr; Audit Reporter.</p>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant ADK as ADK Runner Core
+    participant S1 as "Stage 1: telemetry_fetcher"
+    participant S2 as "Stage 2: tactical_auditor"
+    participant S3 as "Stage 3: audit_reporter"
+    participant T as "shared/tools/opendota_tools.py"
+    participant OD as "OpenDota Free API"
+
+    U->>ADK: "Audit match 8934277316" (or "Review my last match")
+    ADK->>S1: activate Stage 1 (default account: 453792187)
+    S1->>T: tool_call: get_match_telemetry(8934277316, 453792187)
+    T->>OD: GET /api/matches/8934277316
+    OD-->>T: raw telemetry data
+    T-->>S1: return: {hero: "Centaur", KDA: "6/4/18", GPM: 1064, items: ["Blink", "Heart", "Blade Mail"]}
+    S1-->>ADK: raw telemetry record
+    ADK->>S2: forward telemetry to Stage 2
+    Note over S2: Compares against Guardian benchmarks:<br/>Target: 55+ LH @ 10m, <4 deaths, >2000 tower damage
+    S2-->>ADK: tactical audit evaluation (strengths, leaks, throw points)
+    ADK->>S3: forward tactical evaluation to Stage 3
+    Note over S3: Formats standardized scorecard +<br/>2 concrete homework drills
+    S3-->>ADK: final markdown post-mortem report
+    ADK-->>U: Synthesized Replay Review Scorecard
+        </div>
+      </div>
+
+      <div class="diagram-wrapper" style="margin:1rem 0">
+        <div class="mermaid">
+flowchart LR
+    subgraph Client["Client Interface"]
+        U["User Input\n'Audit match 8934277316'\n(or 'Analyze my last match')"]
+    end
+
+    subgraph Pipeline["dota_match_analyst (SequentialAgent Core)"]
+        ADK["ADK Runner Pipeline Engine"]
+        F1["Stage 1: telemetry_fetcher\n(Data Ingestion Agent)"]
+        F2["Stage 2: tactical_auditor\n(Guardian Benchmark Evaluator)"]
+        F3["Stage 3: audit_reporter\n(Executive Post-Mortem Coach)"]
+        Router["FallbackLlm Router\nPrimary: Gemini 2.5 Flash\nFailover: Ollama Qwen 2.5"]
+    end
+
+    subgraph Tools["shared/tools/opendota_tools.py"]
+        T1["get_match_telemetry(match_id, account_id)\n(LH@10, KDA, GPM/XPM, Items, Damage)"]
+        T2["get_player_recent_matches(account_id, limit)\n(Auto-detect latest ranked match)"]
+    end
+
+    subgraph External["OpenDota Telemetry Core"]
+        OD["OpenDota Free REST API\n(/api/matches, /api/players)"]
+        Profile["Default Player Profile: 453792187\n(Ishan's Dota Account)"]
+    end
+
+    U --> ADK
+    ADK --> F1
+    F1 --> Router
+    F1 -->|"tool_call: get_match_telemetry(8934277316)"| T1
+    T1 --> OD
+    OD --> Profile
+    T1 -->|"return: {'hero': 'Centaur', 'KDA': '6/4/18', 'GPM': 1064}"| F1
+    F1 -->|"Sequential State Transfer: Raw Telemetry"| F2
+    F2 --> Router
+    F2 -->|"Benchmark Evaluation: Deaths < 4 (Pass)"| F3
+    F3 --> Router
+    F3 -->|"Synthesized Replay Review Scorecard"| U
+        </div>
+      </div>
+
+      <h3 style="margin-top:1rem">Code Walkthrough</h3>
+      <div class="snippet-block">
+        <div class="snippet-header">
+          <span class="snippet-badge" style="background:var(--rose-dim);color:var(--rose)">Pipeline</span>
+          <span class="snippet-title">SequentialAgent Definition</span>
+          <span class="snippet-file">agents/dota_match_analyst/agent.py</span>
+        </div>
+        <div class="snippet-body">
+          <div class="snippet-code"><pre>root_agent = <span class="cl">SequentialAgent</span>(
+    name=<span class="st">"dota_match_analyst"</span>,
+    description=<span class="st">"Sequential three-stage match analyst: Fetch Telemetry -> Audit Performance -> Generate Coaching Report."</span>,
+    sub_agents=[telemetry_fetcher, tactical_auditor, audit_reporter],
+)</pre></div>
+          <div class="snippet-explain">
+            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>SequentialAgent</strong> &mdash; enforces linear data-flow where telemetry is fetched first, evaluated second, and formatted into an audit scorecard third.</span></div>
+            <div class="explain-item"><span class="explain-dot" style="background:var(--rose)"></span><span class="explain-text"><strong>Pre-configured Profile</strong> &mdash; default player ID <code>453792187</code> allows reviewing matches without manually hunting for match IDs.</span></div>
+          </div>
+        </div>
       </div>
     </section>
 
