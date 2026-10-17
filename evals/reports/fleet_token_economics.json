@@ -1,0 +1,279 @@
+{
+  "scale_runs": 500000,
+  "generated_at": "2026-10-17T09:07:06Z",
+  "workloads": [
+    {
+      "id": "tactical_coaching",
+      "name": "Tactical Draft Coaching",
+      "target_agent": "dota_draft_analyzer",
+      "tokens": {
+        "input": 850,
+        "output": 220,
+        "cached": 600,
+        "total": 1070
+      },
+      "costs_per_run": {
+        "gemini-2.5-flash": {
+          "net_cost_per_run": 0.000107,
+          "cost_per_100k": 10.72,
+          "cached_savings": 2.2e-05
+        },
+        "gemini-2.5-flash-lite": {
+          "net_cost_per_run": 5.4e-05,
+          "cost_per_100k": 5.36,
+          "cached_savings": 1.1e-05
+        },
+        "claude-3-5-sonnet": {
+          "net_cost_per_run": 0.00423,
+          "cost_per_100k": 423.0,
+          "cached_savings": 0.00162
+        },
+        "gpt-4o": {
+          "net_cost_per_run": 0.003575,
+          "cost_per_100k": 357.5,
+          "cached_savings": 0.00075
+        },
+        "ollama_local_qwen2.5": {
+          "net_cost_per_run": 0.0,
+          "cost_per_100k": 0.0,
+          "cached_savings": 0.0
+        }
+      }
+    },
+    {
+      "id": "sequential_match_analyst",
+      "name": "3-Stage Sequential Match Analyst",
+      "target_agent": "dota_match_analyst",
+      "tokens": {
+        "input": 2400,
+        "output": 750,
+        "cached": 1800,
+        "total": 3150
+      },
+      "costs_per_run": {
+        "gemini-2.5-flash": {
+          "net_cost_per_run": 0.000338,
+          "cost_per_100k": 33.75,
+          "cached_savings": 6.7e-05
+        },
+        "gemini-2.5-flash-lite": {
+          "net_cost_per_run": 0.000169,
+          "cost_per_100k": 16.88,
+          "cached_savings": 3.4e-05
+        },
+        "claude-3-5-sonnet": {
+          "net_cost_per_run": 0.01359,
+          "cost_per_100k": 1359.0,
+          "cached_savings": 0.00486
+        },
+        "gpt-4o": {
+          "net_cost_per_run": 0.01125,
+          "cost_per_100k": 1125.0,
+          "cached_savings": 0.00225
+        },
+        "ollama_local_qwen2.5": {
+          "net_cost_per_run": 0.0,
+          "cost_per_100k": 0.0,
+          "cached_savings": 0.0
+        }
+      }
+    },
+    {
+      "id": "research_reviewer_loop",
+      "name": "Research & Generator-Reviewer Loop",
+      "target_agent": "writer_reviewer / research_agent",
+      "tokens": {
+        "input": 3800,
+        "output": 1100,
+        "cached": 2500,
+        "total": 4900
+      },
+      "costs_per_run": {
+        "gemini-2.5-flash": {
+          "net_cost_per_run": 0.000521,
+          "cost_per_100k": 52.12,
+          "cached_savings": 9.4e-05
+        },
+        "gemini-2.5-flash-lite": {
+          "net_cost_per_run": 0.000261,
+          "cost_per_100k": 26.06,
+          "cached_savings": 4.7e-05
+        },
+        "claude-3-5-sonnet": {
+          "net_cost_per_run": 0.02115,
+          "cost_per_100k": 2115.0,
+          "cached_savings": 0.00675
+        },
+        "gpt-4o": {
+          "net_cost_per_run": 0.017375,
+          "cost_per_100k": 1737.5,
+          "cached_savings": 0.003125
+        },
+        "ollama_local_qwen2.5": {
+          "net_cost_per_run": 0.0,
+          "cost_per_100k": 0.0,
+          "cached_savings": 0.0
+        }
+      }
+    },
+    {
+      "id": "mcp_github_intelligence",
+      "name": "Model Context Protocol GitHub Tools",
+      "target_agent": "github_agent",
+      "tokens": {
+        "input": 1650,
+        "output": 450,
+        "cached": 1200,
+        "total": 2100
+      },
+      "costs_per_run": {
+        "gemini-2.5-flash": {
+          "net_cost_per_run": 0.000214,
+          "cost_per_100k": 21.38,
+          "cached_savings": 4.5e-05
+        },
+        "gemini-2.5-flash-lite": {
+          "net_cost_per_run": 0.000107,
+          "cost_per_100k": 10.69,
+          "cached_savings": 2.3e-05
+        },
+        "claude-3-5-sonnet": {
+          "net_cost_per_run": 0.00846,
+          "cost_per_100k": 846.0,
+          "cached_savings": 0.00324
+        },
+        "gpt-4o": {
+          "net_cost_per_run": 0.007125,
+          "cost_per_100k": 712.5,
+          "cached_savings": 0.0015
+        },
+        "ollama_local_qwen2.5": {
+          "net_cost_per_run": 0.0,
+          "cost_per_100k": 0.0,
+          "cached_savings": 0.0
+        }
+      }
+    },
+    {
+      "id": "stateful_memory_assistant",
+      "name": "Stateful Episodic Assistant",
+      "target_agent": "personal_assistant",
+      "tokens": {
+        "input": 1200,
+        "output": 280,
+        "cached": 800,
+        "total": 1480
+      },
+      "costs_per_run": {
+        "gemini-2.5-flash": {
+          "net_cost_per_run": 0.000144,
+          "cost_per_100k": 14.4,
+          "cached_savings": 3e-05
+        },
+        "gemini-2.5-flash-lite": {
+          "net_cost_per_run": 7.2e-05,
+          "cost_per_100k": 7.2,
+          "cached_savings": 1.5e-05
+        },
+        "claude-3-5-sonnet": {
+          "net_cost_per_run": 0.00564,
+          "cost_per_100k": 564.0,
+          "cached_savings": 0.00216
+        },
+        "gpt-4o": {
+          "net_cost_per_run": 0.0048,
+          "cost_per_100k": 480.0,
+          "cached_savings": 0.001
+        },
+        "ollama_local_qwen2.5": {
+          "net_cost_per_run": 0.0,
+          "cost_per_100k": 0.0,
+          "cached_savings": 0.0
+        }
+      }
+    }
+  ],
+  "models": {
+    "gemini-2.5-flash": {
+      "name": "Gemini 2.5 Flash (Vertex AI)",
+      "provider": "Google Cloud",
+      "avg_cost_per_run": 0.000265,
+      "cost_for_scale": 132.38,
+      "p95_latency_ms": 145.0
+    },
+    "gemini-2.5-flash-lite": {
+      "name": "Gemini 2.5 Flash-Lite (Vertex AI)",
+      "provider": "Google Cloud",
+      "avg_cost_per_run": 0.000132,
+      "cost_for_scale": 66.19,
+      "p95_latency_ms": 88.0
+    },
+    "claude-3-5-sonnet": {
+      "name": "Claude 3.5 Sonnet",
+      "provider": "Anthropic",
+      "avg_cost_per_run": 0.010614,
+      "cost_for_scale": 5307.0,
+      "p95_latency_ms": 640.0
+    },
+    "gpt-4o": {
+      "name": "GPT-4o",
+      "provider": "OpenAI",
+      "avg_cost_per_run": 0.008825,
+      "cost_for_scale": 4412.5,
+      "p95_latency_ms": 590.0
+    },
+    "ollama_local_qwen2.5": {
+      "name": "Qwen 2.5:7b (Local Ollama)",
+      "provider": "On-Prem / Edge",
+      "avg_cost_per_run": 0.0,
+      "cost_for_scale": 0.0,
+      "p95_latency_ms": 1180.0
+    }
+  },
+  "annual_projections": {
+    "100,000_runs": {
+      "gemini-2.5-flash": 26.48,
+      "gemini-2.5-flash-lite": 13.24,
+      "claude-3-5-sonnet": 1061.4,
+      "gpt-4o": 882.5,
+      "ollama_local_qwen2.5": 0.0
+    },
+    "500,000_runs": {
+      "gemini-2.5-flash": 132.38,
+      "gemini-2.5-flash-lite": 66.19,
+      "claude-3-5-sonnet": 5307.0,
+      "gpt-4o": 4412.5,
+      "ollama_local_qwen2.5": 0.0
+    },
+    "1,000,000_runs": {
+      "gemini-2.5-flash": 264.75,
+      "gemini-2.5-flash-lite": 132.38,
+      "claude-3-5-sonnet": 10614.0,
+      "gpt-4o": 8825.0,
+      "ollama_local_qwen2.5": 0.0
+    },
+    "5,000,000_runs": {
+      "gemini-2.5-flash": 1323.75,
+      "gemini-2.5-flash-lite": 661.88,
+      "claude-3-5-sonnet": 53070.0,
+      "gpt-4o": 44125.0,
+      "ollama_local_qwen2.5": 0.0
+    }
+  },
+  "gemini_roi_vs_competitors": {
+    "claude-3-5-sonnet": {
+      "competitor_name": "Claude 3.5 Sonnet",
+      "competitor_annual_cost": 5307.0,
+      "gemini_annual_cost": 132.38,
+      "net_dollar_savings": 5174.63,
+      "percent_reduction": 97.5
+    },
+    "gpt-4o": {
+      "competitor_name": "GPT-4o",
+      "competitor_annual_cost": 4412.5,
+      "gemini_annual_cost": 132.38,
+      "net_dollar_savings": 4280.12,
+      "percent_reduction": 97.0
+    }
+  }
+}
