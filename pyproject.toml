@@ -1,6 +1,6 @@
 [project]
-name = "google-adk"
-version = "0.1.0"
+name = "google-adk-suite"
+version = "0.3.0"
 description = "Production multi-agent systems and MCP integration built on Google's Agent Development Kit (ADK) and Gemini 2.5 Flash with resilient local fallbacks."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -12,3 +12,6 @@ dependencies = [
     "requests>=2.31.0",
     "pydantic>=2.0.0",
 ]
+
+[project.scripts]
+adk-evals = "evals.run_evals:main"
